@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wenyan Source Simplify"
+  short_description: "Simplify .wy code with bootstrap-safe quality gates"
+  default_prompt: "Use $wenyan-quality-simplify to simplify Wenyan source files (especially wenyan.wy) while preserving behavior, reducing real complexity, and validating bootstrap compatibility under both wenyan.py and @wenyan/cli when applicable."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper Reviewer"
+  short_description: "Structured paper review with NeurIPS JSON + concise feedback"
+  default_prompt: "Extract paper text (PDF/LaTeX/Markdown), run a ScholarEval-inspired dimension pass (problem, literature, method, data, analysis, results, writing, citations), and produce both a NeurIPS-style review JSON and a concise evidence-linked review summary with prioritized recommendations."

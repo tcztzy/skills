@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nix"
+  short_description: "Nix language & flakes: nix CLI workflows"
+  default_prompt: "Use $nix to explain Nix language syntax and common nix (build/run/develop/profile/flake) workflows."

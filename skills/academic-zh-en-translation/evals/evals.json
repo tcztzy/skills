@@ -1,0 +1,38 @@
+{
+  "skill_name": "academic-zh-en-translation",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "请把下面这段博士论文中文摘要译成英文。要求：1）忠实原文，不得遗漏；2）不要写得像宣传稿；3）英文要像正式论文摘要；4）输出只给英文题目、Abstract 和 Keywords。原文：题目：复杂城市交通网络韧性的多尺度评估方法研究。摘要：针对极端天气条件下城市交通系统易出现级联失效的问题，本文构建了结合拓扑效率、运行负荷与恢复能力的多尺度韧性评估框架。基于北京市轨道交通与地面公交耦合网络数据，采用情景模拟与脆弱性分析相结合的方法，对不同扰动强度下网络功能退化与恢复过程进行了定量刻画。研究发现：（1）关键换乘节点受损会显著放大网络级联效应；（2）在中等扰动条件下，公交接驳能力的提升能够有效缩短系统恢复时间；（3）不同子网络之间存在明显的韧性差异。研究结果可为超大城市交通系统应急调度与冗余资源配置提供依据。关键词：城市交通；复杂网络；系统韧性；级联失效；恢复能力",
+      "expected_output": "An English dissertation-style abstract that preserves the title, objective, framework, data source, method, numbered findings, and keywords without hype or omission.",
+      "files": [],
+      "expectations": [
+        "Retains every explicit method, finding, and practical implication in the source abstract",
+        "Uses natural academic English instead of word-for-word calques",
+        "Keeps the five keywords aligned with the source keywords"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Translate the following paper discussion paragraph into Chinese for a dissertation chapter revision. Keep the hedging, the contrast with prior work, and the citation relations. Output only Chinese. Source: Although prior studies have generally treated platform governance as a compliance problem, the present findings suggest that the issue is better understood as a coordination problem under informational asymmetry. This interpretation is consistent with Chen (2021) and only partly compatible with the stronger causal claims advanced by Roberts and Hale (2023). Our interviews do not establish that transparency measures directly improved firm behavior; rather, they indicate that transparency may have altered the timing and credibility of inter-organizational responses.",
+      "expected_output": "A Chinese discussion paragraph that reads like academic Chinese, preserves the cautious stance, and does not overstrengthen the causal claims.",
+      "files": [],
+      "expectations": [
+        "Preserves the distinction between consistency, partial compatibility, and lack of direct causal proof",
+        "Reads as compact academic Chinese rather than Euro-Chinese",
+        "Maintains the citation structure and contrast markers"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "请把下面的方法与结果段落译成英文，保留统计信息、图表引用和缩写首次展开。输出只给英文。原文：我们在 2021 年 6 月至 2022 年 3 月期间，共招募 128 名受试者，其中实验组 64 人，对照组 64 人。采用事件相关电位（event-related potential, ERP）技术记录被试在任务执行过程中的神经活动，并结合反应时与正确率指标评估认知负荷变化。结果表明，实验组在高负荷条件下的平均反应时显著长于对照组（682 ms vs. 615 ms, p = 0.012），但两组在低负荷条件下差异不显著（见图 3-2）。此外，实验组在 P300 振幅上的下降幅度更大（表 4-1）。",
+      "expected_output": "An English methods-results paragraph that keeps the recruitment window, sample sizes, ERP expansion, numerical results, p-value, and figure/table references intact.",
+      "files": [],
+      "expectations": [
+        "Preserves all numbers, units, and statistical notation exactly",
+        "Expands ERP correctly at first mention and uses the abbreviation consistently thereafter",
+        "Keeps the references to Figure 3-2 and Table 4-1"
+      ]
+    }
+  ]
+}

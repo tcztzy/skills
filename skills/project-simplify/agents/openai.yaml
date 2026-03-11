@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Simplify"
+  short_description: "Shrink repo and externalize heavy upstream sources safely"
+  default_prompt: "Use $project-simplify to reduce repository weight by replacing vendored externals with pinned release archives, checksum verification, and minimal curated fixtures."

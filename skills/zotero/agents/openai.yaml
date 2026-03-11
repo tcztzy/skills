@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zotero"
+  short_description: "Capture (Connector), manage, and export Zotero libraries (Better BibTeX)"
+  default_prompt: "Use $zotero to capture papers into Zotero (via Zotero Connector), organize collections, and export a keep-updated BibTeX file using Better BibTeX."

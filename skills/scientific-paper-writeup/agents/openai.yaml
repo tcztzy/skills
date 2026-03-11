@@ -1,0 +1,4 @@
+interface:
+  display_name: "Scientific Paper Writeup"
+  short_description: "Draft and revise scientific papers with rigor"
+  default_prompt: "Draft or revise a scientific paper from ideas, summaries, plots, and citations. Keep claims grounded in evidence, follow section guidelines, and ensure LaTeX quality."

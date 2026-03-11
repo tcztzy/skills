@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thread-Grounded Answer Judging"
+  short_description: "Judge response quality from thread-only evidence"
+  default_prompt: "Use thread-grounded-answer-judging to classify answers as unanswered, nonresponsive, or responsive using only the provided thread/context, and return the required output format."

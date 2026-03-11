@@ -1,0 +1,4 @@
+interface:
+  display_name: "Python Performance Tuning"
+  short_description: "Profile-first workflow for writing faster Python"
+  default_prompt: "Use $python-performance-tuning to diagnose Python bottlenecks, benchmark changes fairly, and apply low-risk optimizations for runtime and memory."
