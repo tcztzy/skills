@@ -147,12 +147,57 @@
       ]
     },
     {
+      "name": "linear",
+      "description": "Manage issues, projects & team workflows in Linear.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/linear"
+      ]
+    },
+    {
       "name": "nix",
       "description": "Explain, write, and debug Nix expression language + common Nix workflows (flakes, nix CLI, nixpkgs).",
       "source": "./",
       "strict": false,
       "skills": [
         "./skills/nix"
+      ]
+    },
+    {
+      "name": "notion-knowledge-capture",
+      "description": "Capture conversations and decisions into structured Notion pages; use when turning chats/notes into wiki entries, how-tos, decisions, or FAQs with proper linking.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/notion-knowledge-capture"
+      ]
+    },
+    {
+      "name": "notion-meeting-intelligence",
+      "description": "Prepare meeting materials with Notion context and Codex research; use when gathering context, drafting agendas/pre-reads, and tailoring materials to attendees.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/notion-meeting-intelligence"
+      ]
+    },
+    {
+      "name": "notion-research-documentation",
+      "description": "Research across Notion and synthesize into structured documentation; use when gathering info from multiple Notion sources to produce briefs, comparisons, or reports with citations.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/notion-research-documentation"
+      ]
+    },
+    {
+      "name": "notion-spec-to-implementation",
+      "description": "Turn Notion specs into implementation plans, tasks, and progress tracking; use when implementing PRDs/feature specs and creating Notion plans + tasks from them.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/notion-spec-to-implementation"
       ]
     },
     {
