@@ -1,4 +1,4 @@
 interface:
   display_name: "Skill Manager"
-  short_description: "Manage, install, and convert Codex skills"
-  default_prompt: "Manage skills: inventory/install/update/customize, or convert a Claude Code skill into a Codex skill. Ask for the target skill name, source (curated/GitHub/local), and preferences (language/shell)."
+  short_description: "Author, audit, install, convert, and bundle Codex skills"
+  default_prompt: "Manage the full skill lifecycle: create or audit SKILL.md files and their scripts/references/assets, validate routing metadata, inventory/install/update skills, convert Claude Code skills into Codex skills, sync sources, build suites, or bootstrap shared runtimes. Ask for the target skill, desired output, and any source or compatibility constraints."

@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VizManifest",
+  "type": "object",
+  "required": [
+    "visualizations"
+  ],
+  "properties": {
+    "generated_at": {
+      "type": "string"
+    },
+    "figures_dir": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "apps_dir": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "visualizations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "filename",
+          "title",
+          "plot_system",
+          "data_sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "preview_filename": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "plot_system": {
+            "type": "string"
+          },
+          "chart_family": {
+            "type": "string"
+          },
+          "task_mode": {
+            "type": "string"
+          },
+          "interaction_level": {
+            "type": "string"
+          },
+          "script_path": {
+            "type": "string"
+          },
+          "data_sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "claim": {
+            "type": "string"
+          },
+          "caption_suggestion": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "checks": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
