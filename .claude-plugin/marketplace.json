@@ -1,0 +1,303 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "blackscience-tech-skills",
+  "description": "Research, evaluation, developer tooling, and document workflow skills.",
+  "owner": {
+    "name": "Tang Ziya",
+    "email": "tcztzy@gmail.com"
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Research, evaluation, developer tooling, and document workflow skills."
+  },
+  "plugins": [
+    {
+      "name": "academic-zh-en-translation",
+      "description": "Translate academic papers, theses, dissertations, abstracts, literature reviews, methods, results, captions, and reviewer responses between Chinese and English with source-faithful completeness, discipline-appropriate terminology, and target-language academic idiom.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/academic-zh-en-translation"
+      ]
+    },
+    {
+      "name": "answer-judging",
+      "description": "Judge response quality from thread-only evidence.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/answer-judging"
+      ]
+    },
+    {
+      "name": "benchmark-builder",
+      "description": "Build high-quality benchmark items, embedded scoring contracts, review examples, rubrics, evaluators, and release protocols for model and agent evaluation.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/benchmark-builder"
+      ]
+    },
+    {
+      "name": "bfts-config-prep",
+      "description": "Prepare a run directory and BFTS config for experiments from an idea JSON + idea.md. Use before running experiment-bfts-runner.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/bfts-config-prep"
+      ]
+    },
+    {
+      "name": "career-team-intel",
+      "description": "Proactively research target companies/teams and key hiring decision makers (EM/TL/HM/recruiters) for job seeking using public, explicitly professional sources; interpret hiring-intent signals (e.g., leader \"we're hiring\" posts), score confidence, and produce a team brief + contact map + outreach messages + resume alignment.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/career-team-intel"
+      ]
+    },
+    {
+      "name": "citation-harvest",
+      "description": "Query Semantic Scholar to collect citations and generate a deduplicated BibTeX file. Offline by default.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/citation-harvest"
+      ]
+    },
+    {
+      "name": "code-simplifier",
+      "description": "Safely simplify code with multi-metric quality gates.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/code-simplifier"
+      ]
+    },
+    {
+      "name": "doc",
+      "description": "Use when the task involves reading, creating, or editing `.docx` documents, especially when formatting or layout fidelity matters; prefer `python-docx` plus the bundled `scripts/render_docx.py` for visual checks.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/doc"
+      ]
+    },
+    {
+      "name": "experiment-bfts-runner",
+      "description": "Run the standalone BFTS experiment pipeline to execute multi-agent tree-search experiments from a prepared bfts_config.yaml. Use after idea-to-markdown and bfts-config-prep to produce logs, workspaces, and experiment artifacts.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/experiment-bfts-runner"
+      ]
+    },
+    {
+      "name": "experiment-log-summarizer",
+      "description": "Summarize an experiment run directory into a draft report (Markdown + JSON) by scanning logs, summary JSONs, figures, and artifacts without executing code.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/experiment-log-summarizer"
+      ]
+    },
+    {
+      "name": "figure-caption-ref-audit",
+      "description": "Extract figure screenshots, captions, and in-text figure references (figrefs) from a PDF into an audit bundle (images + figures.json).",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/figure-caption-ref-audit"
+      ]
+    },
+    {
+      "name": "idea-to-markdown",
+      "description": "Convert idea JSON into a structured idea.md (optionally embedding a code snippet).",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/idea-to-markdown"
+      ]
+    },
+    {
+      "name": "jupyter-notebook",
+      "description": "Use when the user asks to create, scaffold, or edit Jupyter notebooks (`.ipynb`) for experiments, explorations, or tutorials; prefer the bundled templates and run the helper script `new_notebook.py` to generate a clean starting notebook.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/jupyter-notebook"
+      ]
+    },
+    {
+      "name": "latex-to-word",
+      "description": "将 LaTeX (.tex) 文件转换为 Word (.docx) 格式。通过自动预处理解决 pandoc 对自定义命令、tabularx、resizebox 等的兼容性问题，最大限度减少后续手动调整。",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/latex-to-word"
+      ]
+    },
+    {
+      "name": "nix",
+      "description": "Explain, write, and debug Nix expression language + common Nix workflows (flakes, nix CLI, nixpkgs).",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/nix"
+      ]
+    },
+    {
+      "name": "paper-plot-aggregator",
+      "description": "Create publication-quality plots from experiment artifacts (.npy, JSON, CSV).",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/paper-plot-aggregator"
+      ]
+    },
+    {
+      "name": "paper-reviewer",
+      "description": "Review academic papers (PDF/LaTeX/Markdown) with a ScholarEval-inspired dimension pass and produce both structured peer-review JSON (NeurIPS-style fields) and a concise human-readable review with prioritized, actionable feedback. Use for comprehensive, targeted, or comparative paper evaluation while keeping output bounded.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/paper-reviewer"
+      ]
+    },
+    {
+      "name": "pdf",
+      "description": "Use when tasks involve reading, creating, or reviewing PDF files where rendering and layout matter; prefer visual checks by rendering pages (Poppler) and use Python tools such as `reportlab`, `pdfplumber`, and `pypdf` for generation and extraction.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/pdf"
+      ]
+    },
+    {
+      "name": "playwright",
+      "description": "Use when the task requires automating a real browser from the terminal (navigation, form filling, snapshots, screenshots, data extraction, UI-flow debugging) via `playwright-cli` or the bundled wrapper script.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/playwright"
+      ]
+    },
+    {
+      "name": "project-simplify",
+      "description": "Reduce repository complexity by de-vendoring large third-party sources and replacing them with pinned release artifacts, checksum verification, and minimal subset extraction.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/project-simplify"
+      ]
+    },
+    {
+      "name": "python-performance-tuning",
+      "description": "Improve Python runtime and memory performance with a profile-first workflow.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/python-performance-tuning"
+      ]
+    },
+    {
+      "name": "research-ideation-novelty-check",
+      "description": "Generate and refine research ideas and run a lightweight novelty sanity-check using Semantic Scholar.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/research-ideation-novelty-check"
+      ]
+    },
+    {
+      "name": "rust-quality-simplify",
+      "description": "Rust-focused alias of `code-simplifier`.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/rust-quality-simplify"
+      ]
+    },
+    {
+      "name": "scientific-paper-writeup",
+      "description": "Drafting or revising scientific papers (LaTeX or Markdown) from experiment logs, ideas, plots, and citations with section-by-section guidance, citation hygiene, page-limit constraints, and LaTeX QA.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/scientific-paper-writeup"
+      ]
+    },
+    {
+      "name": "screenshot",
+      "description": "Use when the user explicitly asks for a desktop or system screenshot (full screen, specific app or window, or a pixel region), or when tool-specific capture capabilities are unavailable and an OS-level capture is needed.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/screenshot"
+      ]
+    },
+    {
+      "name": "skill-management",
+      "description": "Create, audit, and evolve Agent Skills (SKILL.md) with correct frontmatter, routing-oriented descriptions, progressive disclosure, scripts/references/assets, and safety review.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/skill-management"
+      ]
+    },
+    {
+      "name": "spreadsheet",
+      "description": "Use when tasks involve creating, editing, analyzing, or formatting spreadsheets (`.xlsx`, `.csv`, `.tsv`) using Python (`openpyxl`, `pandas`), especially when formulas, references, and formatting need to be preserved and verified.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/spreadsheet"
+      ]
+    },
+    {
+      "name": "token-cost-tracker",
+      "description": "Summarize token usage and cost records from JSON or JSONL logs.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/token-cost-tracker"
+      ]
+    },
+    {
+      "name": "wenyan-quality-simplify",
+      "description": "Simplify Wenyan language source code (`.wy`, especially `wenyan.wy`) with strict quality gates while preserving semantics.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/wenyan-quality-simplify"
+      ]
+    },
+    {
+      "name": "writeup-icbinb",
+      "description": "Draft a 4-page ICBINB-style LaTeX paper from idea JSON, summary artifacts, and plot manifest. Offline by default.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/writeup-icbinb"
+      ]
+    },
+    {
+      "name": "writeup-normal",
+      "description": "Draft a normal-length LaTeX paper from idea JSON, summary artifacts, and plot manifest. Offline by default.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/writeup-normal"
+      ]
+    },
+    {
+      "name": "zotero",
+      "description": "Capture (Zotero Connector), manage, search, and export Zotero libraries and citations using Zotero desktop + Better BibTeX, the Zotero Web API, a local Zotero data directory, or user-provided export files.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/zotero"
+      ]
+    }
+  ]
+}
