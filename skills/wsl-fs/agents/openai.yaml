@@ -1,0 +1,4 @@
+interface:
+  display_name: "WSL FS"
+  short_description: "Work with projects inside WSL filesystems"
+  default_prompt: "Use $wsl-fs to auto-discover the right WSL project, select the distro, and run commands inside the Linux filesystem."
