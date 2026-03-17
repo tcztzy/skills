@@ -31,97 +31,37 @@ This skill should be used when:
 - Ensuring proper use of field-specific terminology and nomenclature
 - Addressing reviewer comments and revising manuscripts
 
-## Visual Enhancement with Scientific Schematics
+## Visual Enhancement with Optional Figures
 
-**⚠️ MANDATORY: Every scientific paper MUST include a graphical abstract plus 1-2 additional AI-generated figures using the scientific-schematics skill.**
+Figures often improve scientific communication, but they are not universally mandatory. Match the visual plan to the venue, the data, and the available tooling instead of assuming every paper must include AI-generated artwork.
 
-This is not optional. Scientific papers without visual elements are incomplete. Before finalizing any document:
-1. **ALWAYS generate a graphical abstract** as the first visual element
-2. Generate at minimum ONE additional schematic or diagram using scientific-schematics
-3. Prefer 3-4 total figures for comprehensive papers (graphical abstract + methods flowchart + results visualization + conceptual diagram)
+Before finalizing a document:
+1. Check the target venue or deliverable requirements for figures, graphical abstracts, or highlights.
+2. Prefer figures that clarify methods, results, or key takeaways; skip decorative visuals that do not improve understanding.
+3. If the local repo does not provide figure-generation helpers, describe the intended figure or leave a clear placeholder rather than inventing missing scripts.
 
-### Graphical Abstract (REQUIRED)
+### Graphical Abstract (When Appropriate)
 
-**Every scientific writeup MUST include a graphical abstract.** This is a visual summary of your paper that:
-- Appears before or immediately after the text abstract
-- Captures the entire paper's key message in one image
-- Is suitable for journal table of contents display
-- Uses landscape orientation (typically 1200x600px)
+Consider a graphical abstract when the journal, conference, or report format explicitly asks for one, or when a one-image overview would materially help the audience.
 
-**Generate the graphical abstract FIRST:**
-```bash
-python scripts/generate_schematic.py "Graphical abstract for [paper title]: [brief description showing workflow from input → methods → key findings → conclusions]" -o figures/graphical_abstract.png
-```
+Suggested properties:
+- **Content**: concise visual summary of workflow, key methods, findings, and conclusion
+- **Style**: clean and publication-appropriate
+- **Elements**: only the core steps needed to explain the story
+- **Text**: minimal labels with readable typography
 
-**Graphical Abstract Requirements:**
-- **Content**: Visual summary showing workflow, key methods, main findings, and conclusions
-- **Style**: Clean, professional, suitable for journal TOC
-- **Elements**: Include 3-5 key steps/concepts with connecting arrows or flow
-- **Text**: Minimal labels, large readable fonts
-- Log: `[HH:MM:SS] GENERATED: Graphical abstract for paper summary`
+### Additional Figures
 
-### Additional Figures (GENERATE EXTENSIVELY)
-
-**⚠️ CRITICAL: Use BOTH scientific-schematics AND generate-image EXTENSIVELY throughout all documents.**
-
-Every document should be richly illustrated. Generate figures liberally - when in doubt, add a visual.
-
-**MINIMUM Figure Requirements:**
-
-| Document Type | Minimum | Recommended |
-|--------------|---------|-------------|
-| Research Papers | 5 | 6-8 |
-| Literature Reviews | 4 | 5-7 |
-| Market Research | 20 | 25-30 |
-| Presentations | 1/slide | 1-2/slide |
-| Posters | 6 | 8-10 |
-| Grants | 4 | 5-7 |
-| Clinical Reports | 3 | 4-6 |
-
-**Use scientific-schematics EXTENSIVELY for technical diagrams:**
-```bash
-python scripts/generate_schematic.py "your diagram description" -o figures/output.png
-```
-
-- Study design and methodology flowcharts (CONSORT, PRISMA, STROBE)
+Prefer figures and schematics when they make a specific section easier to understand:
+- Study design and methodology flowcharts
 - Conceptual framework diagrams
 - Experimental workflow illustrations
 - Data analysis pipeline diagrams
 - Biological pathway or mechanism diagrams
 - System architecture visualizations
-- Neural network architectures
-- Decision trees, algorithm flowcharts
-- Comparison matrices, timeline diagrams
-- Any technical concept that benefits from schematic visualization
+- Comparison matrices or timelines
 
-**Use generate-image EXTENSIVELY for visual content:**
-```bash
-python scripts/generate_image.py "your image description" -o figures/output.png
-```
-
-- Photorealistic illustrations of concepts
-- Medical/anatomical illustrations
-- Environmental/ecological scenes
-- Equipment and lab setup visualizations
-- Artistic visualizations, infographics
-- Cover images, header graphics
-- Product mockups, prototype visualizations
-- Any visual that enhances understanding or engagement
-
-The AI will automatically:
-- Create publication-quality images with proper formatting
-- Review and refine through multiple iterations
-- Ensure accessibility (colorblind-friendly, high contrast)
-- Save outputs in the figures/ directory
-
-**When in Doubt, Generate a Figure:**
-- Complex concept → generate a schematic
-- Data discussion → generate a visualization
-- Process description → generate a flowchart
-- Comparison → generate a comparison diagram
-- Reader benefit → generate a visual
-
-For detailed guidance, refer to the scientific-schematics and generate-image skill documentation.
+If a figure would help but no supported generator is available in the repo, document the desired figure in prose and keep the writing workflow moving.
 
 ---
 
@@ -715,4 +655,3 @@ This skill includes LaTeX style packages and templates for professional report f
 **For venue-specific writing styles** (tone, voice, abstract format, reviewer expectations), see the **venue-templates** skill which provides comprehensive style guides for Nature/Science, Cell Press, medical journals, ML conferences, and CS conferences.
 
 Load these references as needed when working on specific aspects of scientific writing.
-

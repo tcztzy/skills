@@ -21,7 +21,7 @@ Usage (standalone):
 Usage (via HF Jobs):
     hf jobs uv run inspect_vllm_uv.py \\
         --flavor a10g-small \\
-        --secret HF_TOKEN=$HF_TOKEN \\
+        --secrets HF_TOKEN=$HF_TOKEN \\
         -- --model "meta-llama/Llama-3.2-1B" --task "mmlu"
 
 Model backends:
@@ -208,9 +208,10 @@ Available tasks (from inspect-evals):
   - humaneval: Code generation (HumanEval)
 
 Via HF Jobs:
-  hf jobs uv run inspect_vllm_uv.py \\
+  hf jobs uv run \\
       --flavor a10g-small \\
-      --secret HF_TOKEN=$HF_TOKEN \\
+      --secrets HF_TOKEN=$HF_TOKEN \\
+      inspect_vllm_uv.py \\
       -- --model meta-llama/Llama-3.2-1B --task mmlu
         """,
     )

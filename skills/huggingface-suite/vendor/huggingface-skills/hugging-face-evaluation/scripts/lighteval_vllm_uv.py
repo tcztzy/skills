@@ -19,9 +19,10 @@ Usage (standalone):
     python lighteval_vllm_uv.py --model "meta-llama/Llama-3.2-1B" --tasks "leaderboard|mmlu|5"
 
 Usage (via HF Jobs):
-    hf jobs uv run lighteval_vllm_uv.py \\
+    hf jobs uv run \\
         --flavor a10g-small \\
-        --secret HF_TOKEN=$HF_TOKEN \\
+        --secrets HF_TOKEN=$HF_TOKEN \\
+        lighteval_vllm_uv.py \\
         -- --model "meta-llama/Llama-3.2-1B" --tasks "leaderboard|mmlu|5"
 """
 
@@ -300,4 +301,3 @@ Task format:
 
 if __name__ == "__main__":
     main()
-

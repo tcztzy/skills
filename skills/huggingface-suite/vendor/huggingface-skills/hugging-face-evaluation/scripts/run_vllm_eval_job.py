@@ -102,9 +102,9 @@ def create_lighteval_job(
 
     cmd = [
         "hf", "jobs", "uv", "run",
-        str(LIGHTEVAL_SCRIPT),
         "--flavor", hardware,
         "--secrets", f"HF_TOKEN={token}",
+        str(LIGHTEVAL_SCRIPT),
         "--",
         "--model", model_id,
         "--tasks", tasks,
@@ -158,9 +158,9 @@ def create_inspect_job(
 
     cmd = [
         "hf", "jobs", "uv", "run",
-        str(INSPECT_SCRIPT),
         "--flavor", hardware,
         "--secrets", f"HF_TOKEN={token}",
+        str(INSPECT_SCRIPT),
         "--",
         "--model", model_id,
         "--task", task,
@@ -328,4 +328,3 @@ Task formats:
 
 if __name__ == "__main__":
     main()
-

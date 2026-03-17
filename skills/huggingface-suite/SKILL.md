@@ -15,7 +15,7 @@ description: "Hugging Face Hub / datasets / training / evaluation / tracking / G
 - 模型评测结果写入 model card / model-index → `hugging-face-evaluation`
 - TRL + HF Jobs 训练/对齐、GGUF 转换 → `hugging-face-model-trainer`
 - 实验指标记录/告警/仪表盘（Trackio）→ `hugging-face-trackio`
-- Gradio demo / Blocks UI → `huggingface-gradio`（skill 名称通常是 `gradio`）
+- Gradio demo / Blocks UI → `gradio`
 
 ## 包含的 vendored skills
 
@@ -26,7 +26,7 @@ description: "Hugging Face Hub / datasets / training / evaluation / tracking / G
 | `hugging-face-evaluation` | `hugging-face-evaluation` | Add and manage evaluation results in Hugging Face model cards. Supports extracting eval tables from README content, importing scores from Artificial Analysis API, and running custom model evaluations with vLLM/lighteval. Works with the model-index metadata format. |
 | `hugging-face-model-trainer` | `hugging-face-model-trainer` | This skill should be used when users want to train or fine-tune language models using TRL (Transformer Reinforcement Learning) on Hugging Face Jobs infrastructure. Covers SFT, DPO, GRPO and reward modeling training methods, plus GGUF conversion for local deployment. Includes guidance on the TRL Jobs package, UV scripts with PEP 723 format, dataset preparation and validation, hardware selection, cost estimation, Trackio monitoring, Hub authentication, and model persistence. Should be invoked for tasks involving cloud GPU training, GGUF conversion, or when users mention training on Hugging Face Jobs without local GPU setup. |
 | `hugging-face-trackio` | `hugging-face-trackio` | Track and visualize ML training experiments with Trackio. Use when logging metrics during training (Python API), firing alerts for training diagnostics, or retrieving/analyzing logged metrics (CLI). Supports real-time dashboard visualization, alerts with webhooks, HF Space syncing, and JSON output for automation. |
-| `huggingface-gradio` | `gradio` | Build Gradio web UIs and demos in Python. Use when creating or editing Gradio apps, components, event listeners, layouts, or chatbots. |
+| `gradio` | `gradio` | Build Gradio web UIs and demos in Python. Use when creating or editing Gradio apps, components, event listeners, layouts, or chatbots. |
 
 ## 许可与来源
 - 上游仓库：`https://github.com/huggingface/skills.git@main`

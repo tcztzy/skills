@@ -221,9 +221,10 @@ Submit an evaluation job on Hugging Face infrastructure using the `hf jobs uv ru
 **Direct CLI Usage:**
 ```bash
 HF_TOKEN=$HF_TOKEN \
-hf jobs uv run hf-evaluation/scripts/inspect_eval_uv.py \
+hf jobs uv run \
   --flavor cpu-basic \
-  --secret HF_TOKEN=$HF_TOKEN \
+  --secrets HF_TOKEN=$HF_TOKEN \
+  hf-evaluation/scripts/inspect_eval_uv.py \
   -- --model "meta-llama/Llama-2-7b-hf" \
      --task "mmlu"
 ```
@@ -231,9 +232,10 @@ hf jobs uv run hf-evaluation/scripts/inspect_eval_uv.py \
 **GPU Example (A10G):**
 ```bash
 HF_TOKEN=$HF_TOKEN \
-hf jobs uv run hf-evaluation/scripts/inspect_eval_uv.py \
+hf jobs uv run \
   --flavor a10g-small \
-  --secret HF_TOKEN=$HF_TOKEN \
+  --secrets HF_TOKEN=$HF_TOKEN \
+  hf-evaluation/scripts/inspect_eval_uv.py \
   -- --model "meta-llama/Llama-2-7b-hf" \
      --task "gsm8k"
 ```
@@ -291,9 +293,10 @@ uv run scripts/lighteval_vllm_uv.py \
 
 **Via HF Jobs:**
 ```bash
-hf jobs uv run scripts/lighteval_vllm_uv.py \
+hf jobs uv run \
   --flavor a10g-small \
   --secrets HF_TOKEN=$HF_TOKEN \
+  scripts/lighteval_vllm_uv.py \
   -- --model meta-llama/Llama-3.2-1B \
      --tasks "leaderboard|mmlu|5"
 ```
@@ -348,9 +351,10 @@ uv run scripts/inspect_vllm_uv.py \
 
 **Via HF Jobs:**
 ```bash
-hf jobs uv run scripts/inspect_vllm_uv.py \
+hf jobs uv run \
   --flavor a10g-small \
   --secrets HF_TOKEN=$HF_TOKEN \
+  scripts/inspect_vllm_uv.py \
   -- --model meta-llama/Llama-3.2-1B \
      --task mmlu
 ```
@@ -447,9 +451,10 @@ Lists all open pull requests for the model repository. Shows PR number, title, a
 
 **Run Evaluation Job (Inference Providers):**
 ```bash
-hf jobs uv run scripts/inspect_eval_uv.py \
+hf jobs uv run \
   --flavor "cpu-basic|t4-small|..." \
-  --secret HF_TOKEN=$HF_TOKEN \
+  --secrets HF_TOKEN=$HF_TOKEN \
+  scripts/inspect_eval_uv.py \
   -- --model "model-id" \
      --task "task-name"
 ```
@@ -466,16 +471,18 @@ uv run scripts/run_eval_job.py \
 **Run vLLM Evaluation (Custom Models):**
 ```bash
 # lighteval with vLLM
-hf jobs uv run scripts/lighteval_vllm_uv.py \
+hf jobs uv run \
   --flavor "a10g-small" \
   --secrets HF_TOKEN=$HF_TOKEN \
+  scripts/lighteval_vllm_uv.py \
   -- --model "model-id" \
      --tasks "leaderboard|mmlu|5"
 
 # inspect-ai with vLLM
-hf jobs uv run scripts/inspect_vllm_uv.py \
+hf jobs uv run \
   --flavor "a10g-small" \
   --secrets HF_TOKEN=$HF_TOKEN \
+  scripts/inspect_vllm_uv.py \
   -- --model "model-id" \
      --task "mmlu"
 
