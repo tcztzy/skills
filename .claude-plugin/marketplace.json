@@ -300,6 +300,15 @@
       ]
     },
     {
+      "name": "skill-manager",
+      "description": "管理 Codex skills：盘点/安装/更新/定制（语言与命令风格），以及将 Claude Code 的 skill（通常位于 ~/.claude/skills）转换为 Codex skill（~/.codex/skills），包括清理不兼容 frontmatter、替换常见占位符并生成 agents/openai.yaml。",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/skill-manager"
+      ]
+    },
+    {
       "name": "spreadsheet",
       "description": "Use when tasks involve creating, editing, analyzing, or formatting spreadsheets (`.xlsx`, `.csv`, `.tsv`) using Python (`openpyxl`, `pandas`), especially when formulas, references, and formatting need to be preserved and verified.",
       "source": "./",

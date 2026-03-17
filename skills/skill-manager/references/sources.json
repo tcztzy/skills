@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "cache_root": "~/.codex/tmp/skill-sources",
+  "sources": [
+    {
+      "id": "openai-skills",
+      "type": "git",
+      "repo": "https://github.com/openai/skills.git",
+      "ref": "main",
+      "purpose": "Codex 官方 skills 源（.curated/.system/.experimental）",
+      "skill_roots": [
+        "skills/.curated",
+        "skills/.experimental",
+        "skills/.system"
+      ],
+      "restricted": false,
+      "sync": true
+    },
+    {
+      "id": "huggingface-skills",
+      "type": "git",
+      "repo": "https://github.com/huggingface/skills.git",
+      "ref": "main",
+      "purpose": "Hugging Face 官方 skills 源（Hub/Datasets/Training/Eval/Tracking/Gradio 等）",
+      "skill_roots": [
+        "skills"
+      ],
+      "license_files": [
+        "LICENSE",
+        "NOTICE"
+      ],
+      "restricted": false,
+      "sync": true
+    },
+    {
+      "id": "k-dense-claude-scientific-skills",
+      "type": "git",
+      "repo": "https://github.com/K-Dense-AI/claude-scientific-skills.git",
+      "ref": "main",
+      "purpose": "K-Dense 科研写作/分析/可视化 skills（MIT）",
+      "skill_roots": [
+        "scientific-skills"
+      ],
+      "license_files": [
+        "LICENSE.md",
+        "LICENSE"
+      ],
+      "restricted": false,
+      "sync": true
+    },
+    {
+      "id": "anthropics-skills",
+      "type": "git",
+      "repo": "https://github.com/anthropics/skills.git",
+      "ref": "main",
+      "purpose": "Anthropic 官方 skills（许可限制：不在本地安装/合并；通常也不应本地缓存）",
+      "skill_roots": [
+        "skills"
+      ],
+      "restricted": true,
+      "sync": false
+    },
+    {
+      "id": "anthropics-claude-plugins-official",
+      "type": "git",
+      "repo": "https://github.com/anthropics/claude-plugins-official.git",
+      "ref": "main",
+      "purpose": "Claude plugins（非 skills，仅供参考）",
+      "skill_roots": [],
+      "restricted": false,
+      "sync": true
+    }
+  ]
+}

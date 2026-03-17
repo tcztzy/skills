@@ -1,0 +1,9 @@
+{
+  "language": "zh-CN",
+  "shell": "bash",
+  "insert_codex_notes": true,
+  "skip_rewrites_in_fenced_code_blocks": true,
+  "variable_rewrites": {
+    "$ARGUMENTS": "用户提供的参数"
+  }
+}
