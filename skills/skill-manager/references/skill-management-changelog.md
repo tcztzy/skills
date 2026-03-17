@@ -6,6 +6,14 @@ and this project adheres to Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+- Added task-first skill-organization guidance covering decision ladders, cross-cutting standards layers, and when tool-first splits are justified.
+- Added `references/task-first-skill-design.md` as a repo-specific authoring reference.
+
+### Changed
+- Updated the main workflow, template, and checklist to prefer task / family / semantics first and treat tools as second-layer implementation options by default.
+
+
 ## [2026-03-11]
 ### Added
 - Added guidance that `description` is routing metadata and should state trigger timing, task phase, and expected outputs.
