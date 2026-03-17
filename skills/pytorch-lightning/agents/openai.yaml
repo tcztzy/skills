@@ -1,0 +1,4 @@
+interface:
+  display_name: "PyTorch Lightning"
+  short_description: "PyTorch Lightning 工程与训练框架（standalone skill）。"
+  default_prompt: "使用该 skill 完成相关任务。请先说明你的代码结构、训练目标与运行环境。"

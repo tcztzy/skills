@@ -120,6 +120,15 @@
       ]
     },
     {
+      "name": "huggingface-suite",
+      "description": "Hugging Face Hub / datasets / training / evaluation / tracking / Gradio 的统一入口（vendored）。",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/huggingface-suite"
+      ]
+    },
+    {
       "name": "idea-to-markdown",
       "description": "Convert idea JSON into a structured idea.md (optionally embedding a code snippet).",
       "source": "./",
@@ -201,12 +210,12 @@
       ]
     },
     {
-      "name": "paper-plot-aggregator",
-      "description": "Create publication-quality plots from experiment artifacts (.npy, JSON, CSV).",
+      "name": "openai-docs",
+      "description": "Use when the user asks how to build with OpenAI products or APIs and needs up-to-date official documentation with citations (for example: Codex, Responses API, Chat Completions, Apps SDK, Agents SDK, Realtime, model capabilities or limits); prioritize OpenAI docs MCP tools and restrict any fallback browsing to official OpenAI domains.",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/paper-plot-aggregator"
+        "./skills/openai-docs"
       ]
     },
     {
@@ -237,6 +246,15 @@
       ]
     },
     {
+      "name": "plot-aggregator",
+      "description": "Create publication-ready scientific figures from experiment outputs using matplotlib or ggplot2.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/plot-aggregator"
+      ]
+    },
+    {
       "name": "project-simplify",
       "description": "Reduce repository complexity by de-vendoring large third-party sources and replacing them with pinned release artifacts, checksum verification, and minimal subset extraction.",
       "source": "./",
@@ -255,12 +273,30 @@
       ]
     },
     {
+      "name": "pytorch-lightning",
+      "description": "Deep learning framework (PyTorch Lightning). Organize PyTorch code into LightningModules, configure Trainers for multi-GPU/TPU, implement data pipelines, callbacks, logging (W&B, TensorBoard), distributed training (DDP, FSDP, DeepSpeed), for scalable neural network training.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/pytorch-lightning"
+      ]
+    },
+    {
       "name": "research-ideation-novelty-check",
       "description": "Generate and refine research ideas and run a lightweight novelty sanity-check using Semantic Scholar.",
       "source": "./",
       "strict": false,
       "skills": [
         "./skills/research-ideation-novelty-check"
+      ]
+    },
+    {
+      "name": "research-suite",
+      "description": "科研写作、EDA、统计分析、可视化统一入口（vendored）。",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/research-suite"
       ]
     },
     {
