@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data-to-Viz: Map"
+  short_description: "Point maps, choropleths, dense geographic views"
+  default_prompt: "Handle map visualization tasks. Choose among point maps, choropleths, and dense geographic views, and route to the shared GeoViews-compatible generator path or a publication-first doc-only backend."

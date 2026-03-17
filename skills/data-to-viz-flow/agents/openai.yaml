@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data-to-Viz: Flow"
+  short_description: "Sankey, alluvial, chord, transition views"
+  default_prompt: "Handle flow visualization tasks. Choose among Sankey, alluvial, chord, or network-oriented flow views, and return a doc-first backend recommendation without overpromising generator-backed support."

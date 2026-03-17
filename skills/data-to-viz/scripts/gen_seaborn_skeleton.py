@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate a runnable plotnine data-viz skeleton from a tabular inventory.
+Generate a runnable seaborn data-to-viz skeleton from a tabular inventory.
 """
 
 import argparse
@@ -10,10 +10,12 @@ from pathlib import Path
 
 TEMPLATE = """#!/usr/bin/env python3
 \"\"\"
-Auto-generated plotnine data-viz skeleton.
+Auto-generated seaborn data-to-viz skeleton.
+
+This script is intended as a starting point for tidy tabular data.
 
 To run:
-  uv run --with pandas --with plotnine -s auto_data_viz.py --figures-dir "__FIGURES_DIR__" --manifest viz_manifest.json
+  uv run --with pandas --with seaborn --with matplotlib -s auto_data_to_viz.py --figures-dir "__FIGURES_DIR__" --manifest viz_manifest.json
 \"\"\"
 
 import argparse
@@ -23,23 +25,12 @@ import shutil
 from pathlib import Path
 
 import pandas as pd
-from plotnine import (
-    aes,
-    element_text,
-    geom_bar,
-    facet_wrap,
-    geom_col,
-    geom_histogram,
-    geom_line,
-    geom_point,
-    ggplot,
-    labs,
-    theme,
-    theme_bw,
-)
+import seaborn as sns
 
 
 DEFAULT_MAX_PLOTS = __MAX_PLOTS__
+MM_TO_INCH = 1 / 25.4
+SINGLE_COLUMN_SIZE = (90 * MM_TO_INCH, 65 * MM_TO_INCH)
 INVENTORY_JSON = r'''__INVENTORY_JSON__'''
 INVENTORY = json.loads(INVENTORY_JSON)
 
@@ -128,59 +119,90 @@ def _sanitize_stem(text: str) -> str:
     return "".join(out).strip("-") or "visualization"
 
 
+def _is_evolution(entry: dict) -> bool:
+    families = entry.get("recommended_chart_families", [])
+    return isinstance(families, list) and "evolution" in families
+
+
 def _build_plot(entry: dict, data_frame: pd.DataFrame):
+    import matplotlib.pyplot as plt
+
     x_column = entry.get("likely_x")
     y_column = entry.get("likely_y")
-    group_column = entry.get("likely_group")
+    hue_column = entry.get("likely_group")
     facet_column = entry.get("likely_facet")
-    families = entry.get("recommended_chart_families", [])
     title = Path(entry.get("rel_path") or "visualization").stem.replace("_", " ").replace("-", " ")
 
-    if x_column and y_column and "evolution" in families:
-        mapping = {"x": x_column, "y": y_column}
-        if group_column:
-            mapping["color"] = group_column
-        plot = ggplot(data_frame, aes(**mapping)) + geom_line() + geom_point(size=1.2)
+    if x_column and y_column and _is_evolution(entry):
+        grid = sns.relplot(
+            data=data_frame,
+            x=x_column,
+            y=y_column,
+            hue=hue_column,
+            col=facet_column,
+            kind="line",
+            height=2.6,
+            aspect=1.35,
+        )
         chart_family = "evolution"
     elif x_column and y_column and x_column in entry.get("categorical_columns", []):
-        mapping = {"x": x_column, "y": y_column}
-        if group_column:
-            mapping["fill"] = group_column
-        plot = ggplot(data_frame, aes(**mapping)) + geom_col(position="dodge")
+        grid = sns.catplot(
+            data=data_frame,
+            x=x_column,
+            y=y_column,
+            hue=hue_column,
+            col=facet_column,
+            kind="bar",
+            height=2.6,
+            aspect=1.35,
+        )
         chart_family = "comparison/ranking"
     elif x_column and y_column:
-        mapping = {"x": x_column, "y": y_column}
-        if group_column:
-            mapping["color"] = group_column
-        plot = ggplot(data_frame, aes(**mapping)) + geom_point(size=1.6, alpha=0.75)
+        grid = sns.relplot(
+            data=data_frame,
+            x=x_column,
+            y=y_column,
+            hue=hue_column,
+            col=facet_column,
+            kind="scatter",
+            height=2.6,
+            aspect=1.35,
+        )
         chart_family = "correlation"
     elif y_column:
-        plot = ggplot(data_frame, aes(x=y_column)) + geom_histogram(bins=30, fill="#4c78a8", color="white")
+        grid = sns.displot(
+            data=data_frame,
+            x=y_column,
+            hue=hue_column,
+            col=facet_column,
+            kind="hist",
+            height=2.6,
+            aspect=1.35,
+        )
         chart_family = "distribution"
     else:
         category = entry.get("categorical_columns", [None])[0]
         if category is None:
             raise RuntimeError("No plottable columns found")
-        plot = ggplot(data_frame, aes(x=category)) + geom_bar(fill="#4c78a8")
+        grid = sns.catplot(
+            data=data_frame,
+            x=category,
+            kind="count",
+            height=2.6,
+            aspect=1.35,
+        )
         chart_family = "comparison/ranking"
 
-    plot = (
-        plot
-        + labs(title=title, caption=f"Source: {entry.get('rel_path')}")
-        + theme_bw()
-        + theme(text=element_text(size=8, family="sans"), plot_title=element_text(weight="bold"))
-    )
-    if facet_column:
-        plot = plot + facet_wrap(f"~ {facet_column}")
-
-    return plot, chart_family, title
+    grid.figure.suptitle(title)
+    grid.figure.tight_layout()
+    return grid, chart_family, title
 
 
-def _save_bundle(plot, stem: str, figures_dir: Path) -> dict[str, str]:
+def _save_bundle(grid, stem: str, figures_dir: Path) -> dict[str, str]:
     pdf_path = figures_dir / f"{stem}.pdf"
     png_path = figures_dir / f"{stem}.png"
-    plot.save(filename=str(pdf_path), width=3.54, height=2.56, units="in", verbose=False)
-    plot.save(filename=str(png_path), width=3.54, height=2.56, units="in", dpi=300, verbose=False)
+    grid.figure.savefig(pdf_path, format="pdf")
+    grid.figure.savefig(png_path, format="png", dpi=300)
     return {
         "filename": pdf_path.name,
         "preview_filename": png_path.name,
@@ -188,7 +210,7 @@ def _save_bundle(plot, stem: str, figures_dir: Path) -> dict[str, str]:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Run the auto plotnine data-viz script.")
+    ap = argparse.ArgumentParser(description="Run the auto seaborn data-to-viz script.")
     ap.add_argument("--figures-dir", default="__FIGURES_DIR__", help="Output figures directory.")
     ap.add_argument("--clean", action="store_true", help="Clean figures-dir before plotting.")
     ap.add_argument("--max-plots", type=int, default=DEFAULT_MAX_PLOTS, help="Max quicklook plots to attempt.")
@@ -196,6 +218,7 @@ def main() -> int:
     args = ap.parse_args()
 
     _configure_matplotlib()
+    sns.set_theme(style="whitegrid", context="paper")
     figures_dir = _ensure_figures_dir(Path(args.figures_dir), clean=bool(args.clean))
 
     entries = INVENTORY.get("entries", [])
@@ -208,16 +231,16 @@ def main() -> int:
         entry = entries[index]
         try:
             data_frame = _read_entry(entry)
-            plot, chart_family, title = _build_plot(entry, data_frame)
+            grid, chart_family, title = _build_plot(entry, data_frame)
             stem = f"{index + 1:02d}-{_sanitize_stem(title)}"
-            exported = _save_bundle(plot, stem, figures_dir)
+            exported = _save_bundle(grid, stem, figures_dir)
             items.append(
                 {
                     "id": f"viz-{index + 1:02d}",
                     "filename": exported["filename"],
                     "preview_filename": exported["preview_filename"],
                     "title": title,
-                    "plot_system": "plotnine",
+                    "plot_system": "seaborn",
                     "chart_family": chart_family,
                     "task_mode": "static",
                     "interaction_level": "static",
@@ -226,6 +249,7 @@ def main() -> int:
                     "caption_suggestion": f"Quicklook {chart_family} view of {title}. Replace with a claim-driven caption before publication.",
                 }
             )
+            grid.figure.clf()
         except Exception as exc:
             print(f"[WARN] Plot {index + 1} failed: {exc}")
 
@@ -250,9 +274,9 @@ if __name__ == "__main__":
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Generate auto_data_viz.py plotnine skeleton.")
+    ap = argparse.ArgumentParser(description="Generate auto_data_to_viz.py seaborn skeleton.")
     ap.add_argument("--inventory", required=True, help="Input inventory JSON from tabular_inventory.py.")
-    ap.add_argument("--out", required=True, help="Output path for auto_data_viz.py.")
+    ap.add_argument("--out", required=True, help="Output path for auto_data_to_viz.py.")
     ap.add_argument("--figures-dir", default="figures", help="Figures directory (default: figures).")
     ap.add_argument("--max-plots", type=int, default=12, help="Max quicklook plots the script will attempt.")
     args = ap.parse_args(argv)

@@ -75,6 +75,87 @@
       ]
     },
     {
+      "name": "data-to-viz",
+      "description": "Route visualization tasks by Data-to-Viz chart family instead of choosing a library first.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/data-to-viz"
+      ]
+    },
+    {
+      "name": "data-to-viz-comparison-ranking",
+      "description": "Design comparison and ranking visuals such as bars, lollipops, Cleveland dots, grouped intervals, and leaderboard-style summaries. Use after `data-to-viz` routes a task to comparison/ranking or when prompts ask who is bigger, what is the order, grouped bar chart, lollipop chart, or benchmark comparison; output a comparison-chart shortlist or a backend recommendation plus the shared generator path.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/data-to-viz-comparison-ranking"
+      ]
+    },
+    {
+      "name": "data-to-viz-correlation",
+      "description": "Design correlation visuals such as scatter plots, hexbins, 2D density views, and dense-point compatibility paths. Use after `data-to-viz` routes a task to correlation or when prompts ask about relationships between numeric variables, scatter plots, dense point clouds, or regression-style comparison; output a correlation-chart shortlist or a backend recommendation plus the shared generator path.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/data-to-viz-correlation"
+      ]
+    },
+    {
+      "name": "data-to-viz-distribution",
+      "description": "Design distribution visuals such as histograms, density curves, box plots, violin plots, beeswarms, and ridgelines. Use after `data-to-viz` routes a task to distribution or when prompts ask about spread, skew, tails, outliers, or grouped distributions; output a distribution-chart shortlist or a backend recommendation plus the shared generator path.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/data-to-viz-distribution"
+      ]
+    },
+    {
+      "name": "data-to-viz-evolution",
+      "description": "Design evolution visuals such as line charts, connected trajectories, and ordered-step summaries. Use after `data-to-viz` routes a task to evolution or when prompts ask how something changes over time, epoch, step, iteration, or sequence order; output an evolution-chart shortlist or a backend recommendation plus the shared generator path.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/data-to-viz-evolution"
+      ]
+    },
+    {
+      "name": "data-to-viz-flow",
+      "description": "Design flow visuals such as Sankey, alluvial, chord, and transition-oriented network views. Use after `data-to-viz` routes a task to flow or when prompts ask about movement, transfer, transition, or connection volume; output a flow-chart shortlist and a backend recommendation. This family is doc-first in v1.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/data-to-viz-flow"
+      ]
+    },
+    {
+      "name": "data-to-viz-map",
+      "description": "Design map visuals such as point maps, choropleths, and dense geographic views. Use after `data-to-viz` routes a task to map or when prompts ask for locations, stations, spatial density, choropleths, or geospatial overlays; output a map-chart shortlist or a backend recommendation plus the shared map generator path.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/data-to-viz-map"
+      ]
+    },
+    {
+      "name": "data-to-viz-multivariate",
+      "description": "Design multivariate visuals such as heatmaps, small multiples, pair plots, correlograms, and other many-variable layouts. Use after `data-to-viz` routes a task to multivariate or when prompts ask to show several variables together and no simpler chart family is enough; output a multivariate-chart shortlist or a backend recommendation plus the shared minimal generator path.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/data-to-viz-multivariate"
+      ]
+    },
+    {
+      "name": "data-to-viz-part-to-whole",
+      "description": "Design part-to-whole visuals such as stacked bars, normalized bars, treemaps, and sunburst-like composition views. Use after `data-to-viz` routes a task to part-to-whole or when prompts ask how a total is composed; output a composition-chart shortlist and a backend recommendation. This family is doc-first in v1.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/data-to-viz-part-to-whole"
+      ]
+    },
+    {
       "name": "doc",
       "description": "Use when the task involves reading, creating, or editing `.docx` documents, especially when formatting or layout fidelity matters; prefer `python-docx` plus the bundled `scripts/render_docx.py` for visual checks.",
       "source": "./",
@@ -246,15 +327,6 @@
       ]
     },
     {
-      "name": "plot-aggregator",
-      "description": "Create publication-ready scientific figures from experiment outputs using matplotlib or ggplot2.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/plot-aggregator"
-      ]
-    },
-    {
       "name": "project-simplify",
       "description": "Reduce repository complexity by de-vendoring large third-party sources and replacing them with pinned release artifacts, checksum verification, and minimal subset extraction.",
       "source": "./",
@@ -328,7 +400,7 @@
     },
     {
       "name": "skill-management",
-      "description": "Create, audit, and evolve Agent Skills (SKILL.md) with correct frontmatter, routing-oriented descriptions, progressive disclosure, scripts/references/assets, and safety review.",
+      "description": "Deprecated compatibility alias for skill-manager. Use only when older prompts or notes mention skill-management; immediately switch to skill-manager for all skill authoring, audit, conversion, suite, and runtime tasks.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -337,7 +409,7 @@
     },
     {
       "name": "skill-manager",
-      "description": "管理 Codex skills：盘点已安装 skills、校验和转换 Claude Code skills、同步来源并构建 vendored suites，同时检查共享 runtime 的准备情况。",
+      "description": "管理和演进 Codex skills：创建/更新/审计 SKILL.md 与配套 scripts/references/assets，盘点已安装 skills，校验和转换 Claude Code skills，同步来源并构建 vendored suites，并检查共享 runtime 的准备情况.",
       "source": "./",
       "strict": false,
       "skills": [

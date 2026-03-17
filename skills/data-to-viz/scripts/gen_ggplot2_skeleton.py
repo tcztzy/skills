@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate a runnable ggplot2 data-viz skeleton from a tabular inventory.
+Generate a runnable ggplot2 data-to-viz skeleton from a tabular inventory.
 
 The generated R script expects ggplot2, readr, and jsonlite.
 """
@@ -233,7 +233,7 @@ main <- function() {
       chart_family = built$chart_family,
       task_mode = "static",
       interaction_level = "static",
-      script_path = "auto_data_viz.R",
+      script_path = "auto_data_to_viz.R",
       data_sources = list(resolve_path(entry)),
       caption_suggestion = sprintf("Quicklook %s view of %s. Replace with a claim-driven caption before publication.", built$chart_family, built$title)
     )
@@ -258,9 +258,9 @@ main()
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Generate auto_data_viz.R ggplot2 skeleton.")
+    ap = argparse.ArgumentParser(description="Generate auto_data_to_viz.R ggplot2 skeleton.")
     ap.add_argument("--inventory", required=True, help="Input inventory JSON from tabular_inventory.py.")
-    ap.add_argument("--out", required=True, help="Output path for auto_data_viz.R.")
+    ap.add_argument("--out", required=True, help="Output path for auto_data_to_viz.R.")
     ap.add_argument("--figures-dir", default="figures", help="Figures directory (default: figures).")
     ap.add_argument("--max-plots", type=int, default=12, help="Max quicklook plots the script will attempt.")
     args = ap.parse_args(argv)

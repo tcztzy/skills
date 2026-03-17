@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate a runnable matplotlib data-viz skeleton from an inventory.json file.
+Generate a runnable matplotlib data-to-viz skeleton from an inventory.json file.
 
 This generator is intentionally dependency-light. The generated script requires
 numpy + matplotlib to render figures.
@@ -13,7 +13,7 @@ from pathlib import Path
 
 TEMPLATE = """#!/usr/bin/env python3
 \"\"\"
-Auto-generated matplotlib data-viz skeleton.
+Auto-generated matplotlib data-to-viz skeleton.
 
 This script is intended as a starting point. It will:
 - load existing .npy data only
@@ -22,7 +22,7 @@ This script is intended as a starting point. It will:
 - optionally write viz_manifest.json
 
 To run:
-  uv run --with numpy --with matplotlib -s auto_data_viz.py --figures-dir "__FIGURES_DIR__" --manifest viz_manifest.json
+  uv run --with numpy --with matplotlib -s auto_data_to_viz.py --figures-dir "__FIGURES_DIR__" --manifest viz_manifest.json
 \"\"\"
 
 import argparse
@@ -197,7 +197,7 @@ def _quicklook_plot(entry: dict, figures_dir: Path, idx: int) -> dict[str, objec
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Run the auto matplotlib data-viz script.")
+    ap = argparse.ArgumentParser(description="Run the auto matplotlib data-to-viz script.")
     ap.add_argument("--figures-dir", default="__FIGURES_DIR__", help="Output figures directory.")
     ap.add_argument("--clean", dest="clean", action="store_true", default=DEFAULT_CLEAN, help="Clean figures-dir before plotting.")
     ap.add_argument("--no-clean", dest="clean", action="store_false", help="Do not clean figures-dir before plotting.")
@@ -241,9 +241,9 @@ if __name__ == "__main__":
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Generate auto_data_viz.py matplotlib skeleton.")
+    ap = argparse.ArgumentParser(description="Generate auto_data_to_viz.py matplotlib skeleton.")
     ap.add_argument("--inventory", required=True, help="Input inventory.json from npy_inventory.py.")
-    ap.add_argument("--out", required=True, help="Output path for auto_data_viz.py.")
+    ap.add_argument("--out", required=True, help="Output path for auto_data_to_viz.py.")
     ap.add_argument("--figures-dir", default="figures", help="Figures directory (default: figures).")
     ap.add_argument(
         "--clean",

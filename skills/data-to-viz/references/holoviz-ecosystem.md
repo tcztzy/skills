@@ -2,6 +2,8 @@
 
 Use this file to decide how deep into the HoloViz stack to go.
 
+In this repo, HoloViz is treated as a family-level compatibility backend, mainly for map and dense-data paths. It is no longer the top-level organizing principle for the entire `data-to-viz` skill.
+
 ## hvPlot
 
 - The default entrypoint for interactive exploration on pandas/xarray-like data.

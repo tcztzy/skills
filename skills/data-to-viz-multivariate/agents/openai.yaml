@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data-to-Viz: Multivariate"
+  short_description: "Heatmaps, pair plots, correlograms, small multiples"
+  default_prompt: "Handle multivariate visualization tasks. Choose among heatmaps, small multiples, pair plots, correlograms, or parallel coordinates, and route to the minimal shared generator-backed heatmap path or a doc-first backend recommendation."

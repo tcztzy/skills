@@ -21,7 +21,7 @@ The generators in this skill do not write `viz_manifest.json` by themselves; the
       "chart_family": "comparison/ranking",
       "task_mode": "static",
       "interaction_level": "static",
-      "script_path": "auto_data_viz.py",
+      "script_path": "auto_data_to_viz.py",
       "data_sources": [
         "results/metrics.csv"
       ],
