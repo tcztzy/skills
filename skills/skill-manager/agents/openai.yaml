@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Manager"
+  short_description: "Manage, install, and convert Codex skills"
+  default_prompt: "Manage skills: inventory/install/update/customize, or convert a Claude Code skill into a Codex skill. Ask for the target skill name, source (curated/GitHub/local), and preferences (language/shell)."

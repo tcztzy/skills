@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "suites": [
+    {
+      "id": "huggingface-suite",
+      "display_name": "Hugging Face Suite",
+      "description": "Hugging Face Hub / datasets / training / evaluation / tracking / Gradio 的统一入口（vendored）。",
+      "source_id": "huggingface-skills",
+      "source_subdir": "skills",
+      "vendor_subdir": "huggingface-skills",
+      "members": [
+        "hugging-face-cli",
+        "hugging-face-datasets",
+        "hugging-face-evaluation",
+        "hugging-face-model-trainer",
+        "hugging-face-trackio",
+        "huggingface-gradio"
+      ]
+    },
+    {
+      "id": "research-suite",
+      "display_name": "Research Suite",
+      "description": "科研写作、EDA、统计分析、可视化统一入口（vendored）。",
+      "source_id": "k-dense-claude-scientific-skills",
+      "source_subdir": "scientific-skills",
+      "vendor_subdir": "k-dense-claude-scientific-skills",
+      "members": [
+        "scientific-writing",
+        "exploratory-data-analysis",
+        "statistical-analysis",
+        "scientific-visualization"
+      ]
+    }
+  ],
+  "standalone": [
+    {
+      "id": "pytorch-lightning",
+      "display_name": "PyTorch Lightning",
+      "description": "PyTorch Lightning 工程与训练框架（standalone skill）。",
+      "source_id": "k-dense-claude-scientific-skills",
+      "source_subdir": "scientific-skills",
+      "source_path": "pytorch-lightning"
+    }
+  ]
+}
+

@@ -1,0 +1,527 @@
+#!/usr/bin/env python3
+"""Shared WSL2 runtime bootstrap and probe helpers for Codex skills."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any
+
+DEFAULT_RUNTIME_ROOT = Path.home() / ".codex" / "skill-runtimes"
+REGISTRY_FILENAME = "registry.json"
+SHELL_INIT_FILENAME = "shell-init.sh"
+
+DOCS_SKILLS = {"doc", "pdf", "latex-to-word"}
+SCIENCE_SKILLS = {
+    "jupyter-notebook",
+    "research-suite",
+    "exploratory-data-analysis",
+    "scientific-visualization",
+    "scientific-writing",
+    "statistical-analysis",
+}
+ML_SKILLS = {
+    "huggingface-suite",
+    "hugging-face-cli",
+    "hugging-face-datasets",
+    "hugging-face-evaluation",
+    "hugging-face-model-trainer",
+    "hugging-face-trackio",
+    "gradio",
+    "pytorch-lightning",
+}
+NOTION_SKILLS = {
+    "notion-knowledge-capture",
+    "notion-meeting-intelligence",
+    "notion-research-documentation",
+    "notion-spec-to-implementation",
+}
+
+DOMAIN_SPECS: dict[str, dict[str, Any]] = {
+    "core-tools": {
+        "kind": "tools",
+        "skills": sorted(
+            {
+                "skill-creator",
+                "skill-installer",
+                "skill-manager",
+                "gh-fix-ci",
+                "openai-docs",
+                "playwright",
+                "screenshot",
+                "yeet",
+            }
+            | NOTION_SKILLS
+        ),
+        "required_commands": ["codex", "gh", "pandoc", "scrot", "playwright"],
+        "optional_commands": ["soffice", "gnome-screenshot", "import"],
+    },
+    "docs-python": {
+        "kind": "python",
+        "skills": sorted(DOCS_SKILLS),
+        "packages": [
+            "python-docx",
+            "pdf2image",
+            "pdfplumber",
+            "pypdf",
+            "reportlab",
+            "pypdfium2",
+        ],
+        "probe_modules": {
+            "docx": "python-docx",
+            "pdf2image": "pdf2image",
+            "pdfplumber": "pdfplumber",
+            "pypdf": "pypdf",
+            "reportlab": "reportlab",
+            "pypdfium2": "pypdfium2",
+        },
+    },
+    "science-python": {
+        "kind": "python",
+        "skills": sorted(SCIENCE_SKILLS),
+        "packages": [
+            "jupyter",
+            "jupyterlab",
+            "ipykernel",
+            "numpy",
+            "pandas",
+            "scipy",
+            "matplotlib",
+            "seaborn",
+            "plotly",
+            "statsmodels",
+            "scikit-learn",
+        ],
+        "probe_modules": {
+            "numpy": "numpy",
+            "pandas": "pandas",
+            "scipy": "scipy",
+            "matplotlib": "matplotlib",
+            "seaborn": "seaborn",
+            "plotly": "plotly",
+            "statsmodels": "statsmodels",
+            "sklearn": "scikit-learn",
+        },
+        "probe_commands": ["jupyter"],
+    },
+    "ml-python": {
+        "kind": "python",
+        "skills": sorted(ML_SKILLS),
+        "install_groups": [
+            ["torch"],
+            [
+                "lightning",
+                "huggingface_hub",
+                "datasets",
+                "gradio",
+                "trl",
+                "trackio",
+                "lighteval",
+            ],
+        ],
+        "probe_modules": {
+            "torch": "torch",
+            "lightning": "lightning",
+            "huggingface_hub": "huggingface_hub",
+            "datasets": "datasets",
+            "gradio": "gradio",
+            "trl": "trl",
+            "trackio": "trackio",
+            "lighteval": "lighteval",
+        },
+    },
+}
+
+
+def resolve_runtime_root(root: str | Path | None = None) -> Path:
+    raw = root or os.environ.get("CODEX_SKILL_RUNTIME_ROOT")
+    if raw:
+        return Path(raw).expanduser().resolve()
+    return DEFAULT_RUNTIME_ROOT.resolve()
+
+
+def registry_path(root: str | Path | None = None) -> Path:
+    return resolve_runtime_root(root) / REGISTRY_FILENAME
+
+
+def shell_init_path(root: str | Path | None = None) -> Path:
+    return resolve_runtime_root(root) / SHELL_INIT_FILENAME
+
+
+def refresh_helper_path() -> Path:
+    return Path.home() / ".local" / "bin" / "codex-skill-runtime-refresh"
+
+
+def runtime_python_path(root: str | Path | None, domain: str) -> Path:
+    return resolve_runtime_root(root) / domain / ".venv" / "bin" / "python"
+
+
+def _shell_prepend_block(path_value: str) -> str:
+    return (
+        f'if [ -d {json.dumps(path_value)} ]; then\n'
+        f'  case ":${{PATH:-}}:" in\n'
+        f'    *:{path_value}:*) ;;\n'
+        f'    *) PATH={json.dumps(path_value)}${{PATH:+":$PATH"}} ;;\n'
+        f'  esac\n'
+        f'fi\n'
+    )
+
+
+def render_shell_init(root: str | Path | None = None) -> str:
+    resolved = resolve_runtime_root(root)
+    docs_python = runtime_python_path(resolved, "docs-python")
+    science_python = runtime_python_path(resolved, "science-python")
+    ml_python = runtime_python_path(resolved, "ml-python")
+    parts = [
+        "# Generated by bootstrap-global-skill-runtime.py.\n",
+        _shell_prepend_block(str(Path.home() / ".nix-profile" / "bin")),
+        _shell_prepend_block(str(Path.home() / ".npm-global" / "bin")),
+        f'export CODEX_SKILL_RUNTIME_ROOT={json.dumps(str(resolved))}\n',
+        f'export CODEX_DOCS_RUNTIME_PYTHON={json.dumps(str(docs_python))}\n',
+        f'export CODEX_SCIENCE_RUNTIME_PYTHON={json.dumps(str(science_python))}\n',
+        f'export CODEX_ML_RUNTIME_PYTHON={json.dumps(str(ml_python))}\n',
+    ]
+    return "".join(parts)
+
+
+def write_shell_init(root: str | Path | None = None) -> Path:
+    target = shell_init_path(root)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(render_shell_init(root), encoding="utf-8")
+    return target
+
+
+def write_refresh_helper() -> Path:
+    target = refresh_helper_path()
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(
+        "#!/usr/bin/env bash\n"
+        "set -euo pipefail\n"
+        'exec python3 "$HOME/.codex/skills/skill-manager/scripts/bootstrap-global-skill-runtime.py" "$@"\n',
+        encoding="utf-8",
+    )
+    target.chmod(0o755)
+    return target
+
+
+def command_exists(command: str) -> bool:
+    return shutil.which(command) is not None
+
+
+def run_command(command: list[str], *, timeout: int | None = None, check: bool = False, env: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        command,
+        check=check,
+        text=True,
+        capture_output=True,
+        timeout=timeout,
+        env=env,
+    )
+
+
+def truncate(text: str, limit: int = 800) -> str:
+    if len(text) <= limit:
+        return text
+    return text[: limit - 3] + "..."
+
+
+def base_python_executable() -> Path:
+    candidate = Path(sys.base_prefix) / "bin" / "python3"
+    if candidate.exists():
+        return candidate
+    return Path(sys.executable).resolve()
+
+
+def ensure_venv(venv_dir: Path) -> Path:
+    python_bin = venv_dir / "bin" / "python"
+    if python_bin.exists():
+        return python_bin
+    venv_dir.parent.mkdir(parents=True, exist_ok=True)
+    base_python = base_python_executable()
+    run_command([str(base_python), "-m", "venv", str(venv_dir)], check=True)
+    return python_bin
+
+
+def install_python_group(python_bin: Path, packages: list[str]) -> dict[str, Any]:
+    if not packages:
+        return {"requested": [], "installed": [], "failed": {}, "group_success": True}
+
+    if command_exists("uv"):
+        group_cmd = ["uv", "pip", "install", "-p", str(python_bin), *packages]
+    else:
+        group_cmd = [str(python_bin), "-m", "pip", "install", *packages]
+
+    result = run_command(group_cmd)
+    if result.returncode == 0:
+        return {
+            "requested": packages,
+            "installed": packages,
+            "failed": {},
+            "group_success": True,
+            "stdout": truncate(result.stdout),
+            "stderr": truncate(result.stderr),
+        }
+
+    installed: list[str] = []
+    failed: dict[str, str] = {}
+    for package in packages:
+        if command_exists("uv"):
+            command = ["uv", "pip", "install", "-p", str(python_bin), package]
+        else:
+            command = [str(python_bin), "-m", "pip", "install", package]
+        single = run_command(command)
+        if single.returncode == 0:
+            installed.append(package)
+        else:
+            failed[package] = truncate(single.stderr or single.stdout or f"install exited {single.returncode}")
+    return {
+        "requested": packages,
+        "installed": installed,
+        "failed": failed,
+        "group_success": False,
+        "stdout": truncate(result.stdout),
+        "stderr": truncate(result.stderr),
+    }
+
+
+def install_python_runtime(domain: str, root: Path) -> dict[str, Any]:
+    spec = DOMAIN_SPECS[domain]
+    venv_dir = root / domain / ".venv"
+    python_bin = ensure_venv(venv_dir)
+    groups = spec.get("install_groups") or [spec.get("packages", [])]
+    installs = [install_python_group(python_bin, list(group)) for group in groups]
+    return {
+        "python": str(python_bin),
+        "venv_dir": str(venv_dir),
+        "installs": installs,
+    }
+
+
+def module_probe_script(modules: list[str]) -> str:
+    return (
+        "import importlib.util, json\n"
+        f"mods={modules!r}\n"
+        "print(json.dumps({m: bool(importlib.util.find_spec(m)) for m in mods}))\n"
+    )
+
+
+def probe_python_runtime(domain: str, root: Path) -> dict[str, Any]:
+    spec = DOMAIN_SPECS[domain]
+    venv_dir = root / domain / ".venv"
+    python_bin = venv_dir / "bin" / "python"
+    probe_modules = list(spec.get("probe_modules", {}).keys())
+    modules: dict[str, bool] = {name: False for name in probe_modules}
+    commands: dict[str, bool] = {}
+    details: dict[str, str] = {}
+    if python_bin.exists():
+        result = run_command([str(python_bin), "-c", module_probe_script(probe_modules)], timeout=120)
+        if result.returncode == 0:
+            try:
+                modules = json.loads(result.stdout)
+            except json.JSONDecodeError:
+                details["probe_error"] = truncate(result.stdout or result.stderr)
+        else:
+            details["probe_error"] = truncate(result.stderr or result.stdout or f"probe exited {result.returncode}")
+    for command in spec.get("probe_commands", []):
+        command_path = shutil.which(command, path=str(venv_dir / "bin"))
+        commands[command] = bool(command_path)
+        if command_path:
+            details[f"{command}_path"] = command_path
+    available = python_bin.exists() and all(modules.values()) and all(commands.values())
+    return {
+        "available": available,
+        "python": str(python_bin) if python_bin.exists() else None,
+        "venv_dir": str(venv_dir),
+        "modules": modules,
+        "commands": commands,
+        "details": details,
+    }
+
+
+def probe_core_tools() -> dict[str, Any]:
+    config_path = Path.home() / ".codex" / "config.toml"
+    credentials_path = Path.home() / ".codex" / ".credentials.json"
+    config_text = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
+
+    gh_authenticated = False
+    gh_auth_message = "gh missing"
+    if command_exists("gh"):
+        gh_status = run_command(["gh", "auth", "status"], timeout=20)
+        gh_authenticated = gh_status.returncode == 0
+        gh_auth_message = truncate(gh_status.stdout or gh_status.stderr or f"gh auth status exited {gh_status.returncode}")
+
+    notion_credentials_present = False
+    if credentials_path.exists():
+        try:
+            credentials = json.loads(credentials_path.read_text(encoding="utf-8"))
+            notion_credentials_present = any(str(key).startswith("notion|") for key in credentials.keys())
+        except json.JSONDecodeError:
+            notion_credentials_present = False
+
+    browser_cache_root = Path.home() / ".cache" / "ms-playwright"
+    playwright_browser_cache_present = any(browser_cache_root.glob("chromium*"))
+    codex_present = command_exists("codex")
+    mcp_configured = "[mcp_servers.playwright]" in config_text or "[mcp_servers.notion]" in config_text
+
+    command_paths: dict[str, str | None] = {}
+    for command in [*DOMAIN_SPECS["core-tools"]["required_commands"], *DOMAIN_SPECS["core-tools"]["optional_commands"]]:
+        command_paths[command] = shutil.which(command)
+
+    return {
+        "available": codex_present,
+        "command_paths": command_paths,
+        "codex_present": codex_present,
+        "gh_present": bool(command_paths.get("gh")),
+        "gh_authenticated": gh_authenticated,
+        "gh_auth_message": gh_auth_message,
+        "pandoc_present": bool(command_paths.get("pandoc")),
+        "scrot_present": bool(command_paths.get("scrot")),
+        "playwright_present": bool(command_paths.get("playwright")),
+        "playwright_browser_cache_present": playwright_browser_cache_present,
+        "libreoffice_present": bool(command_paths.get("soffice")),
+        "linux_screenshot_tools": {
+            "scrot": bool(command_paths.get("scrot")),
+            "gnome-screenshot": bool(command_paths.get("gnome-screenshot")),
+            "import": bool(command_paths.get("import")),
+        },
+        "mcp_config_path": str(config_path),
+        "playwright_mcp_configured": "[mcp_servers.playwright]" in config_text or 'playwright' in config_text,
+        "notion_mcp_configured": "[mcp_servers.notion]" in config_text or 'notion' in config_text,
+        "notion_credentials_present": notion_credentials_present,
+        "rmcp_enabled": "experimental_use_rmcp_client = true" in config_text or "rmcp_client" in config_text,
+        "playwright_browser_cache_root": str(browser_cache_root),
+        "credentials_path": str(credentials_path),
+        "mcp_configured": mcp_configured,
+    }
+
+
+def ensure_core_tools(root: Path) -> dict[str, Any]:
+    installs: list[dict[str, Any]] = []
+    if not command_exists("soffice") and command_exists("nix"):
+        result = run_command(["nix", "profile", "install", "--accept-flake-config", "nixpkgs#libreoffice"], timeout=None)
+        installs.append({
+            "target": "libreoffice",
+            "returncode": result.returncode,
+            "stdout": truncate(result.stdout),
+            "stderr": truncate(result.stderr),
+        })
+    return {
+        "runtime_root": str(root),
+        "installs": installs,
+    }
+
+
+def runtime_domain_for_skill(skill_name: str) -> str:
+    if skill_name in DOCS_SKILLS:
+        return "docs-python"
+    if skill_name in SCIENCE_SKILLS:
+        return "science-python"
+    if skill_name in ML_SKILLS:
+        return "ml-python"
+    return "core-tools"
+
+
+def ambient_python_state() -> dict[str, Any]:
+    executable = Path(sys.executable).resolve()
+    cwd = Path.cwd().resolve()
+    in_cwd = cwd in executable.parents
+    in_dot_venv = any(part == ".venv" for part in executable.parts)
+    return {
+        "executable": str(executable),
+        "base_prefix": str(Path(sys.base_prefix).resolve()),
+        "cwd": str(cwd),
+        "project_local_dependency_leak": in_cwd or in_dot_venv,
+    }
+
+
+def build_registry(*, runtime_root: str | Path | None = None, install_missing: bool = True, domains: set[str] | None = None) -> dict[str, Any]:
+    root = resolve_runtime_root(runtime_root)
+    root.mkdir(parents=True, exist_ok=True)
+    selected = domains or set(DOMAIN_SPECS)
+    registry: dict[str, Any] = {
+        "generated_at": __import__("datetime").datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "runtime_root": str(root),
+        "registry_path": str(registry_path(root)),
+        "base_python": str(base_python_executable()),
+        "ambient_python": ambient_python_state(),
+        "domains": {},
+    }
+
+    for domain in ["core-tools", "docs-python", "science-python", "ml-python"]:
+        if domain not in selected:
+            continue
+        spec = DOMAIN_SPECS[domain]
+        if spec["kind"] == "tools":
+            install_info = ensure_core_tools(root) if install_missing else {"runtime_root": str(root), "installs": []}
+            probe = probe_core_tools()
+            registry["domains"][domain] = {
+                "kind": "tools",
+                "skills": spec["skills"],
+                "install": install_info,
+                "probe": probe,
+                "status": "ready" if probe.get("available") else "env_blocked",
+            }
+            continue
+        install_info = install_python_runtime(domain, root) if install_missing else {
+            "python": str(root / domain / ".venv" / "bin" / "python"),
+            "venv_dir": str(root / domain / ".venv"),
+            "installs": [],
+        }
+        probe = probe_python_runtime(domain, root)
+        registry["domains"][domain] = {
+            "kind": "python",
+            "skills": spec["skills"],
+            "packages": spec.get("packages") or [pkg for group in spec.get("install_groups", []) for pkg in group],
+            "probe_modules": spec.get("probe_modules", {}),
+            "install": install_info,
+            "probe": probe,
+            "status": "ready" if probe.get("available") else "conditional_ready",
+        }
+
+    registry_path(root).write_text(json.dumps(registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    registry["shell_init_path"] = str(write_shell_init(root))
+    registry["refresh_helper_path"] = str(write_refresh_helper())
+    registry_path(root).write_text(json.dumps(registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return registry
+
+
+def load_registry(runtime_root: str | Path | None = None) -> dict[str, Any] | None:
+    path = registry_path(runtime_root)
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_or_probe_registry(*, runtime_root: str | Path | None = None, install_missing: bool = False, domains: set[str] | None = None) -> dict[str, Any]:
+    existing = load_registry(runtime_root)
+    if existing and not install_missing:
+        return build_registry(runtime_root=runtime_root, install_missing=False, domains=domains)
+    return build_registry(runtime_root=runtime_root, install_missing=install_missing, domains=domains)
+
+
+def runtime_probe_passed(registry: dict[str, Any], domain: str) -> bool:
+    return bool(registry.get("domains", {}).get(domain, {}).get("probe", {}).get("available"))
+
+
+def main(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(description="Bootstrap or probe shared WSL2 skill runtimes")
+    parser.add_argument("--runtime-root", default=None)
+    parser.add_argument("--domain", action="append", dest="domains", default=None)
+    parser.add_argument("--no-install", action="store_true")
+    args = parser.parse_args(argv)
+    registry = build_registry(
+        runtime_root=args.runtime_root,
+        install_missing=not args.no_install,
+        domains=set(args.domains) if args.domains else None,
+    )
+    print(json.dumps(registry, indent=2, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))
