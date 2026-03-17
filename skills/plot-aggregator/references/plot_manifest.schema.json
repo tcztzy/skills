@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PlotManifest",
+  "type": "object",
+  "required": [
+    "figures"
+  ],
+  "properties": {
+    "generated_at": {
+      "type": "string"
+    },
+    "figures_dir": {
+      "type": "string"
+    },
+    "figures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "filename",
+          "title",
+          "plot_system",
+          "data_sources",
+          "caption_suggestion"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "preview_filename": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "plot_system": {
+            "type": "string"
+          },
+          "script_path": {
+            "type": "string"
+          },
+          "data_sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "claim": {
+            "type": "string"
+          },
+          "caption_suggestion": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "checks": {
+            "type": "object",
+            "properties": {
+              "vector_export": {
+                "type": "boolean"
+              },
+              "grayscale_ok": {
+                "type": "boolean"
+              },
+              "red_green_safe": {
+                "type": "boolean"
+              },
+              "legend_non_overlapping": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

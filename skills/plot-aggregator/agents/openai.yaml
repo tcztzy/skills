@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper Plot Aggregator"
+  short_description: "Aggregate results and scaffold matplotlib or ggplot2 figure pipelines"
+  default_prompt: "Inspect experiment outputs (.npy, CSV, TSV, JSON, JSONL), choose matplotlib for array-centric figures or ggplot2 for tidy tabular figures, and generate a safe, runnable plotting skeleton plus a plot manifest and paper-ready figure checklist."
