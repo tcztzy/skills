@@ -111,6 +111,15 @@
       ]
     },
     {
+      "name": "gh-fix-ci",
+      "description": "Use when a user asks to debug or fix failing GitHub PR checks that run in GitHub Actions; use `gh` to inspect checks and logs, summarize failure context, draft a fix plan, and implement only after explicit approval. Treat external providers (for example Buildkite) as out of scope and report only the details URL.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/gh-fix-ci"
+      ]
+    },
+    {
       "name": "idea-to-markdown",
       "description": "Convert idea JSON into a structured idea.md (optionally embedding a code snippet).",
       "source": "./",
@@ -288,6 +297,24 @@
       "strict": false,
       "skills": [
         "./skills/writeup-normal"
+      ]
+    },
+    {
+      "name": "wsl-fs",
+      "description": "Use when the task needs to work with projects stored in the WSL Linux filesystem, including path translation, entering a distro, finding repos under /home, and running build or git commands in WSL instead of on Windows.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/wsl-fs"
+      ]
+    },
+    {
+      "name": "yeet",
+      "description": "Use only when the user explicitly asks to stage, commit, push, and open a GitHub pull request in one flow using the GitHub CLI (`gh`).",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/yeet"
       ]
     },
     {

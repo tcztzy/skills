@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "name": "discover-wsl-projects",
+    "prompt": "Use $wsl-fs to discover likely WSL projects and report the distro plus Linux repo paths.",
+    "expected_output": "A list of discovered WSL projects with distro and Linux path information.",
+    "expectations": [
+      {
+        "type": "text_contains",
+        "path": "final_message.txt",
+        "substring": "distro",
+        "text": "The final message mentions which distro was used."
+      },
+      {
+        "type": "text_contains",
+        "path": "final_message.txt",
+        "substring": "/home/",
+        "text": "The final message includes Linux-style project paths."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "resolve-project-name",
+    "prompt": "Use $wsl-fs to resolve a WSL project name to the best distro and repo root, then report both Linux and Windows-visible paths.",
+    "expected_output": "A resolved distro and project root with both Linux and translated Windows paths.",
+    "expectations": [
+      {
+        "type": "text_contains",
+        "path": "final_message.txt",
+        "substring": "LinuxPath",
+        "text": "The final message includes a Linux path."
+      },
+      {
+        "type": "text_contains",
+        "path": "final_message.txt",
+        "substring": "WindowsPath",
+        "text": "The final message includes a Windows-visible path."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "exec-in-repo",
+    "prompt": "Use $wsl-fs to find a WSL project and run a command inside its repo root rather than from PowerShell.",
+    "expected_output": "A result that makes it clear the command ran inside the resolved WSL repo.",
+    "expectations": [
+      {
+        "type": "text_contains",
+        "path": "final_message.txt",
+        "substring": "git",
+        "text": "The final message references the repo command that was run."
+      }
+    ]
+  }
+]
