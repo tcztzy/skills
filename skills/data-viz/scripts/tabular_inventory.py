@@ -277,8 +277,6 @@ def _supported_task_modes(
     modes = ["static", "explore", "app"]
     if likely_lat and likely_lon:
         modes.append("geo")
-    if row_count is not None and row_count >= 100_000:
-        modes.append("large-data")
     return modes
 
 

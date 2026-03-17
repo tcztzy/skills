@@ -1,4 +1,4 @@
 interface:
   display_name: "Data Viz"
   short_description: "Route chart choice, static figures, and interactive HoloViz workflows"
-  default_prompt: "Classify the visualization task, choose a chart family using Data to Viz style decision rules and caveats, then either return a chart shortlist or generate runnable matplotlib, seaborn, plotnine, ggplot2, or HoloViz skeletons with viz_manifest.json."
+  default_prompt: "Classify the visualization task, choose a chart family using Data to Viz style decision rules and caveats, then either return a chart shortlist or generate runnable matplotlib, seaborn, plotnine, ggplot2, or HoloViz skeletons. If a full deliverable is requested, run the generated script and write viz_manifest.json with --manifest."

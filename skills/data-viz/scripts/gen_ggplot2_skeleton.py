@@ -32,10 +32,36 @@ sanitize_stem <- function(text) {
   text
 }
 
+ensure_figures_dir <- function(figures_dir, clean) {
+  cwd <- normalizePath(getwd(), mustWork = TRUE)
+  if (!grepl("^(/|[A-Za-z]:[/\\\\])", figures_dir)) {
+    figures_dir <- normalizePath(file.path(cwd, figures_dir), winslash = "/", mustWork = FALSE)
+  } else {
+    figures_dir <- normalizePath(figures_dir, winslash = "/", mustWork = FALSE)
+  }
+
+  if (clean) {
+    parent_dir <- dirname(figures_dir)
+    if (!(identical(figures_dir, cwd) || startsWith(figures_dir, paste0(cwd, "/")))) {
+      stop(sprintf("Refusing to clean figures outside CWD: %s", figures_dir))
+    }
+    if (dir.exists(figures_dir)) {
+      unlink(figures_dir, recursive = TRUE)
+    }
+    if (!dir.exists(parent_dir)) {
+      dir.create(parent_dir, recursive = TRUE, showWarnings = FALSE)
+    }
+  }
+
+  dir.create(figures_dir, recursive = TRUE, showWarnings = FALSE)
+  figures_dir
+}
+
 parse_args <- function() {
   figures_dir <- "__FIGURES_DIR__"
   manifest <- NULL
   max_plots <- default_max_plots
+  clean <- FALSE
   args <- commandArgs(trailingOnly = TRUE)
   index <- 1
 
@@ -57,9 +83,7 @@ parse_args <- function() {
     } else if (startsWith(arg, "--max-plots=")) {
       max_plots <- as.integer(sub("^--max-plots=", "", arg))
     } else if (arg == "--clean") {
-      if (dir.exists(figures_dir)) {
-        unlink(figures_dir, recursive = TRUE)
-      }
+      clean <- TRUE
     } else {
       stop(sprintf("Unknown argument: %s", arg))
     }
@@ -69,7 +93,8 @@ parse_args <- function() {
   list(
     figures_dir = figures_dir,
     manifest = manifest,
-    max_plots = max_plots
+    max_plots = max_plots,
+    clean = clean
   )
 }
 
@@ -184,7 +209,7 @@ save_plot_bundle <- function(plot, stem, figures_dir) {
 
 main <- function() {
   options <- parse_args()
-  dir.create(options$figures_dir, recursive = TRUE, showWarnings = FALSE)
+  figures_dir <- ensure_figures_dir(options$figures_dir, options$clean)
 
   entries <- inventory$entries
   if (is.null(entries) || length(entries) == 0) {
@@ -198,7 +223,7 @@ main <- function() {
     entry <- entries[[index]]
     built <- build_plot(entry, read_entry(entry))
     stem <- sprintf("%02d-%s", index, sanitize_stem(built$title))
-    saved <- save_plot_bundle(built$plot, stem, options$figures_dir)
+    saved <- save_plot_bundle(built$plot, stem, figures_dir)
     items[[index]] <- list(
       id = sprintf("viz-%02d", index),
       filename = saved$filename,
@@ -217,7 +242,7 @@ main <- function() {
   if (!is.null(options$manifest)) {
     manifest <- list(
       generated_at = inventory$generated_at,
-      figures_dir = normalizePath(options$figures_dir, mustWork = FALSE),
+      figures_dir = figures_dir,
       apps_dir = NULL,
       visualizations = items
     )
@@ -225,7 +250,7 @@ main <- function() {
     message(sprintf("[OK] Wrote manifest: %s", options$manifest))
   }
 
-  message(sprintf("[OK] Wrote figures to: %s", normalizePath(options$figures_dir, mustWork = FALSE)))
+  message(sprintf("[OK] Wrote figures to: %s", figures_dir))
 }
 
 main()

@@ -2,6 +2,8 @@
 
 Use `viz_manifest.json` to track provenance, chart-family choice, route, and output artifacts for both static and interactive workflows.
 
+The generators in this skill do not write `viz_manifest.json` by themselves; the generated plotting/app script writes it when executed with `--manifest`.
+
 ## Suggested JSON format
 
 ```json
@@ -43,3 +45,4 @@ Use `viz_manifest.json` to track provenance, chart-family choice, route, and out
 - `task_mode` should be `static`, `explore`, `geo`, `app`, or another explicit route.
 - `interaction_level` should describe the artifact honestly: `static`, `interactive`, or `server-required`.
 - `data_sources` must reference real files.
+- Use `notes` for caveats such as tile-backed maps needing network access at view time.

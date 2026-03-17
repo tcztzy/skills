@@ -1,7 +1,7 @@
 ---
 name: data-viz
-description: Route data-visualization tasks from chart choice to implementation across matplotlib, seaborn, plotnine, ggplot2, hvPlot, HoloViews, GeoViews, Panel, and Datashader. Use when prompts mention chart selection, chart critique, publication figures, dashboards, maps, gallery-style reproduction, or large-data plotting; output either a chart shortlist with caveats or runnable script(s)/app(s) plus `viz_manifest.json`.
-compatibility: Requires uv and Python 3.12+. Static Python workflows need pandas/numpy/matplotlib/seaborn/plotnine as appropriate. R workflows need Rscript with ggplot2 + readr + jsonlite. Interactive workflows need hvplot + holoviews + panel + bokeh, with geoviews/cartopy for geo mode and datashader for large-data mode.
+description: Route data-visualization tasks from chart choice to implementation across matplotlib, seaborn, plotnine, ggplot2, hvPlot, HoloViews, GeoViews, Panel, and Datashader. Use when prompts mention chart selection, chart critique, publication figures, dashboards, maps, gallery-style reproduction, or large-data plotting; output either a chart shortlist with caveats or runnable script(s)/app(s), and write `viz_manifest.json` when the generated script is executed with `--manifest`.
+compatibility: Requires uv and Python 3.12+. Static Python workflows need pandas/numpy/matplotlib/seaborn/plotnine as appropriate. R workflows need Rscript with ggplot2 + readr + jsonlite. Interactive workflows need hvplot + holoviews + panel + bokeh; geo mode additionally needs geoviews + cartopy; large-data HoloViz rendering additionally needs datashader.
 metadata:
   short_name: dataviz
   aliases: data to viz,chart chooser,chart critique,matplotlib,seaborn,plotnine,ggplot2,holoviz,hvplot,holoviews,geoviews,panel,datashader
@@ -26,7 +26,7 @@ This skill covers five output modes:
    - If the user wants a figure for a paper, report, or slide deck, route to a static workflow.
    - If the user wants "something like this example" from a gallery, route through the recipe index and adapt the closest example instead of inventing a new chart from scratch.
    - If the user wants hover, zoom, linked views, widgets, filters, dashboards, or map tiles, route to HoloViz.
-   - If the data is too dense for ordinary scatter/line plots, route to a HoloViz workflow with Datashader.
+   - If the data is too dense for ordinary scatter/line plots, route to a HoloViz workflow with Datashader. Keep the task mode as `explore`, `geo`, or `app`; treat large-data as a rendering hint, not a separate mode.
 
 2. Choose the chart family before the library
    - Use `references/chart-selection-guide.md` to map the question to one of the Data-to-Viz families: comparison/ranking, distribution, correlation, evolution, part-to-whole, map, flow, or multivariate.
@@ -90,10 +90,27 @@ This skill covers five output modes:
      ```bash
      UV_CACHE_DIR=/tmp/uv-cache XDG_CACHE_HOME=/tmp uv run --with pandas,hvplot,holoviews,panel,bokeh -s scripts/gen_holoviz_skeleton.py --inventory tabular_inventory.json --mode app --out auto_data_viz.py --apps-dir apps
      ```
+   - If `tabular_inventory.json` reports `large_dataset_hint: true`, add `datashader` to the HoloViz runtime used to execute the generated script.
 
-7. Finalize and validate
-   - Static workflows should write plot scripts, `figures/`, and `viz_manifest.json`.
-   - Interactive workflows should write app scripts, `apps/`, and `viz_manifest.json`.
+7. Execute the generated script to produce artifacts
+   - Static matplotlib example:
+     ```bash
+     UV_CACHE_DIR=/tmp/uv-cache XDG_CACHE_HOME=/tmp uv run --with numpy,matplotlib -s auto_data_viz.py --figures-dir figures --manifest viz_manifest.json
+     ```
+   - Static seaborn example:
+     ```bash
+     UV_CACHE_DIR=/tmp/uv-cache XDG_CACHE_HOME=/tmp uv run --with pandas,seaborn,matplotlib -s auto_data_viz.py --figures-dir figures --manifest viz_manifest.json
+     ```
+   - Interactive HoloViz example:
+     ```bash
+     UV_CACHE_DIR=/tmp/uv-cache XDG_CACHE_HOME=/tmp uv run --with pandas,hvplot,holoviews,panel,bokeh -s auto_data_viz.py --mode explore --apps-dir apps --manifest viz_manifest.json
+     ```
+   - For geo execution, add `geoviews,cartopy`.
+   - For large-data HoloViz execution, add `datashader`.
+
+8. Finalize and validate
+   - If you only scaffolded, return runnable script(s) and explain what command will produce `figures/`, `apps/`, and `viz_manifest.json`.
+   - If the user asked for a full deliverable, run the generated script, then return the written `figures/` or `apps/` bundle and `viz_manifest.json`.
    - Use `references/static-figure-guidelines.md` for static export quality.
    - Use `references/viz-manifest.md` for provenance and output metadata.
 
@@ -103,13 +120,13 @@ This skill covers five output modes:
   - return a chart shortlist with caveats
   - do not generate code unless the user asks for it
 - If the task is static graphics:
-  - output runnable script(s)
-  - output `figures/`
-  - output `viz_manifest.json`
+  - always output runnable script(s)
+  - if you execute the generated script, output `figures/`
+  - write `viz_manifest.json` when you execute the generated script with `--manifest`
 - If the task is interactive or dashboarding:
-  - output runnable script(s)
-  - output `apps/`
-  - output `viz_manifest.json`
+  - always output runnable script(s)
+  - if you execute the generated script, output `apps/`
+  - write `viz_manifest.json` when you execute the generated script with `--manifest`
 
 ## Safeguards
 
@@ -118,6 +135,7 @@ This skill covers five output modes:
 - Do not keep exploratory quicklooks in a final paper figure folder.
 - Do not overwrite existing `figures/` or `apps/` unless the user explicitly asks for cleaning or passes `--clean`.
 - For interactive exports, prefer self-contained HTML where feasible and note when live Python callbacks are required.
+- For geo exports, do not claim the artifact is fully offline if it still depends on external tile servers at view time.
 
 ## Examples
 
@@ -149,8 +167,8 @@ This skill covers five output modes:
 1. Run `scripts/tabular_inventory.py`
 2. Route to `seaborn` or `plotnine`
 3. Generate the skeleton
-4. Replace quicklook defaults with a claim-driven grouped summary
-5. Export PDF + PNG and write `viz_manifest.json`
+4. Run the generated script with `--manifest viz_manifest.json`
+5. Replace quicklook defaults with a claim-driven grouped summary before publication
 
 ### Example C: gallery-style adaptation
 
@@ -177,7 +195,8 @@ This skill covers five output modes:
 2. Detect `lat/lon`
 3. Route to HoloViz geo mode
 4. Generate `auto_data_viz.py` with `--mode geo`
-5. Export an HTML app and write `viz_manifest.json`
+5. Run the generated script with `geoviews,cartopy` and `--manifest viz_manifest.json`
+6. Export an HTML app and note whether map tiles still require network access
 
 ## FAQ
 

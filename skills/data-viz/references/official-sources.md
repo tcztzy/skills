@@ -63,6 +63,8 @@ Refreshed on 2026-03-17.
   [https://hvplot.holoviz.org/ref/api/index.html](https://hvplot.holoviz.org/ref/api/index.html)
 - hvPlot pandas compatibility:
   [https://hvplot.holoviz.org/en/docs/latest/ref/api_compatibility/pandas/index.html](https://hvplot.holoviz.org/en/docs/latest/ref/api_compatibility/pandas/index.html)
+- hvPlot resampling / rasterize / datashade options:
+  [https://hvplot.holoviz.org/en/docs/latest/ref/plotting_options/resampling.html](https://hvplot.holoviz.org/en/docs/latest/ref/plotting_options/resampling.html)
 - HoloViews user guide:
   [https://holoviews.org/user_guide](https://holoviews.org/user_guide)
 - HoloViews composing elements:
@@ -73,12 +75,18 @@ Refreshed on 2026-03-17.
   [https://geoviews.org/](https://geoviews.org/)
 - GeoViews projections:
   [https://geoviews.org/user_guide/Projections.html](https://geoviews.org/user_guide/Projections.html)
+- GeoViews offline features:
+  [https://geoviews.org/user_guide/Using_Features_Offline.html](https://geoviews.org/user_guide/Using_Features_Offline.html)
+- GeoViews offline WMTS:
+  [https://geoviews.org/user_guide/Using_WMTS_Offline.html](https://geoviews.org/user_guide/Using_WMTS_Offline.html)
 - Panel home and package docs:
   [https://panel.holoviz.org/api/panel.html](https://panel.holoviz.org/api/panel.html)
 - Panel save-to-file guide:
   [https://panel.holoviz.org/how_to/export/saving.html](https://panel.holoviz.org/how_to/export/saving.html)
 - Panel save API:
   [https://panel.holoviz.org/api/panel.io.save.html](https://panel.holoviz.org/api/panel.io.save.html)
+- Panel cheat sheet:
+  [https://panel.holoviz.org/api/cheatsheet.html](https://panel.holoviz.org/api/cheatsheet.html)
 - Datashader home:
   [https://datashader.org/](https://datashader.org/)
 - Datashader introduction:
