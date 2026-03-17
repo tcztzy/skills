@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Suite"
+  short_description: "科研写作、EDA、统计分析、可视化统一入口（vendored）。"
+  default_prompt: "使用该套件入口完成任务。先确认目标（Hub/数据集/训练/评测/出图/写作等），然后按 suite 的路由规则选择对应的 vendored skill。"
