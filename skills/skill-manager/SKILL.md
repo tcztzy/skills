@@ -1,6 +1,6 @@
 ---
 name: skill-manager
-description: 管理 Codex skills：盘点/安装/更新/定制（语言与命令风格），以及将 Claude Code 的 skill（通常位于 ~/.claude/skills）转换为 Codex skill（~/.codex/skills），包括清理不兼容 frontmatter、替换常见占位符并生成 agents/openai.yaml。
+description: 管理 Codex skills：盘点已安装 skills、校验和转换 Claude Code skills、同步来源并构建 vendored suites，同时检查共享 runtime 的准备情况。
 ---
 
 # Skill Manager
@@ -81,11 +81,34 @@ Codex skill 建议提供 `agents/openai.yaml` 以便 UI 展示。转换脚本会
 
 ### `scripts/validate-skill.py`
 
+兼容 CLI 入口；真实实现位于 `scripts/validate_skill.py`。
+
+### `scripts/validate_skill.py`
+
 无需额外依赖的轻量校验器（避免依赖 PyYAML），用于快速检查：
 
 - `SKILL.md` frontmatter 是否存在、是否包含 `name` / `description`
 - `name` 是否为 hyphen-case
 - `description` 长度与字符限制（不包含 `<`/`>`）
+
+### `scripts/audit-installed-skills.py`
+
+盘点当前 `skills` 根目录下的顶层和 vendored skills，并结合共享 runtime registry 输出 readiness 摘要：
+
+- 发现已安装 skills（包含 suite 下的 vendored leaf skills）
+- 根据 `runtime_registry.py` 的域映射判断 readiness
+- 输出 JSON / Markdown 报告
+
+这个脚本只做当前仓库可自洽的 inventory + runtime 检查，不依赖外部 benchmark/retirement 框架。
+
+### `scripts/audit-migrated-skills.py`
+
+读取迁移 manifest，对已迁移 skills 做本地可执行的后验检查：
+
+- 复用 `validate_skill.py` 做基础结构校验
+- 结合共享 runtime probe 生成 readiness 结论
+- 对低副作用 skills 生成安全的本地 eval pack；对 `yeet` / Notion 类外部写操作 skill 只做 skip 型审计
+- 输出 readiness / retirement 风格报告
 
 ## 来源登记（Sources Registry）
 

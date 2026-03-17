@@ -68,7 +68,7 @@ class AuditInstalledSkillsTests(unittest.TestCase):
     def test_audit_installed_skills_writes_summary(self) -> None:
         fake_skills = [
             {"skill_name": "doc", "skill_path": str(SKILLS_ROOT / "doc"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
-            {"skill_name": "gradio", "skill_path": str(SKILLS_ROOT / "huggingface-suite/vendor/huggingface-skills/huggingface-gradio"), "skill_kind": "vendored", "entry_type": "leaf_skill"},
+            {"skill_name": "gradio", "skill_path": str(SKILLS_ROOT / "huggingface-suite/vendor/huggingface-skills/gradio"), "skill_kind": "vendored", "entry_type": "leaf_skill"},
             {"skill_name": "skill-manager", "skill_path": str(SKILLS_ROOT / "skill-manager"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
             {"skill_name": "screenshot", "skill_path": str(SKILLS_ROOT / "screenshot"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
         ]

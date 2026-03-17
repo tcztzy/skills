@@ -14,7 +14,10 @@
         "hugging-face-evaluation",
         "hugging-face-model-trainer",
         "hugging-face-trackio",
-        "huggingface-gradio"
+        {
+          "source_path": "huggingface-gradio",
+          "dest_name": "gradio"
+        }
       ]
     },
     {
@@ -43,4 +46,3 @@
     }
   ]
 }
-

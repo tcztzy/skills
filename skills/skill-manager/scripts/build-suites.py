@@ -223,7 +223,7 @@ def _suite_skill_md(
                 "- 模型评测结果写入 model card / model-index → `hugging-face-evaluation`",
                 "- TRL + HF Jobs 训练/对齐、GGUF 转换 → `hugging-face-model-trainer`",
                 "- 实验指标记录/告警/仪表盘（Trackio）→ `hugging-face-trackio`",
-                "- Gradio demo / Blocks UI → `huggingface-gradio`（skill 名称通常是 `gradio`）",
+                "- Gradio demo / Blocks UI → `gradio`",
                 "",
             ]
         )
@@ -307,7 +307,16 @@ def _build_suite(
     members_raw = suite.get("members")
     if not isinstance(members_raw, list) or not members_raw:
         raise BuildError(f"Suite '{suite_id}' has no members.")
-    members_list = [str(x).strip() for x in members_raw if isinstance(x, str) and x.strip()]
+    members_list: list[dict[str, str]] = []
+    for raw_member in members_raw:
+        if isinstance(raw_member, str) and raw_member.strip():
+            members_list.append({"source_path": raw_member.strip(), "dest_name": raw_member.strip()})
+            continue
+        if isinstance(raw_member, dict):
+            source_path = str(raw_member.get("source_path") or raw_member.get("id") or "").strip()
+            dest_name = str(raw_member.get("dest_name") or source_path).strip()
+            if source_path and dest_name:
+                members_list.append({"source_path": source_path, "dest_name": dest_name})
     if not members_list:
         raise BuildError(f"Suite '{suite_id}' has no valid members.")
 
@@ -329,14 +338,18 @@ def _build_suite(
 
     member_meta: list[dict[str, str]] = []
     for member in members_list:
-        src = source_root / source_subdir / member
-        dest = vendor_source_root / member
-        print(f"[VENDOR] {suite_id}: {member}")
+        source_path = member["source_path"]
+        dest_name = member["dest_name"]
+        src = source_root / source_subdir / source_path
+        dest = vendor_source_root / dest_name
+        if not src.is_dir():
+            raise BuildError(f"Missing suite member source for '{suite_id}': {src}")
+        print(f"[VENDOR] {suite_id}: {source_path} -> {dest_name}")
         _copytree(src, dest)
         fm = _parse_frontmatter(dest / "SKILL.md")
         member_meta.append(
             {
-                "dir_name": member,
+                "dir_name": dest_name,
                 "skill_name": fm.get("name", ""),
                 "description": fm.get("description", ""),
             }
@@ -478,4 +491,3 @@ def main(argv: list[str]) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv[1:]))
-

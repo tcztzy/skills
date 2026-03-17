@@ -9,11 +9,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-SKILL_CREATOR_ROOT = Path.home() / ".codex" / "skills" / ".system" / "skill-creator"
-SCRIPT_ROOT = Path(__file__).resolve().parent
-for candidate in (SCRIPT_ROOT, SKILL_CREATOR_ROOT):
-    if str(candidate) not in sys.path:
-        sys.path.insert(0, str(candidate))
+if __package__ is None or __package__ == "":
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from runtime_registry import (  # type: ignore  # noqa: E402
     DOCS_SKILLS,
@@ -26,8 +23,8 @@ from runtime_registry import (  # type: ignore  # noqa: E402
     resolve_runtime_root,
     runtime_domain_for_skill,
 )
-from scripts.skill_inventory import discover_skills  # type: ignore  # noqa: E402
-from scripts.utils import dump_json, dump_text, ensure_lab_workspace, utc_now_iso  # type: ignore  # noqa: E402
+from skill_inventory import discover_skills  # type: ignore  # noqa: E402
+from utils import dump_json, dump_text, ensure_lab_workspace, utc_now_iso  # type: ignore  # noqa: E402
 
 DEFAULT_SKILLS_ROOT = Path.home() / ".codex" / "skills"
 
