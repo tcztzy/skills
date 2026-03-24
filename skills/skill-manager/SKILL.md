@@ -123,10 +123,11 @@ ls -1 "$codex_home/skills" | sort
 
 ### 获取 / 安装开源 skills
 
-优先复用系统自带的 `skill-installer`（会走网络）：
+优先复用 `skill-manager` 自带的来源同步与 suite 构建脚本：
 
-- 列表：`~/.codex/skills/.system/skill-installer/scripts/list-skills.py`
-- 安装：`~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py`
+- 同步来源缓存：`python3 "$HOME/.codex/skills/skill-manager/scripts/sync-sources.py" --all`
+- 构建 vendored suites / standalone：`python3 "$HOME/.codex/skills/skill-manager/scripts/build-suites.py" --all`
+- 来源清单：`references/sources.json`
 
 ### 将 Claude Code skill 转为 Codex skill
 

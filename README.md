@@ -5,7 +5,6 @@ This repository keeps installable Agent Skills under a single [`skills/`](./skil
 ## Layout
 
 - [`skills/`](./skills): all discoverable skills
-- [`skills/.system/`](./skills/.system): system-level helper skills
 - [`skills/<skill-name>/`](./skills): user-installable skills
 
 ## Local Usage
