@@ -381,6 +381,15 @@
       ]
     },
     {
+      "name": "research-impact-strategy",
+      "description": "Decide whether a research idea, experiment thread, or paper draft is worth pursuing and how to sharpen it into one high-impact claim.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/research-impact-strategy"
+      ]
+    },
+    {
       "name": "research-suite",
       "description": "科研写作、EDA、统计分析、可视化统一入口（vendored）。",
       "source": "./",

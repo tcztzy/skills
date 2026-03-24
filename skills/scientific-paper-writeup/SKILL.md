@@ -8,6 +8,8 @@ description: Drafting or revising scientific papers (LaTeX or Markdown) from exp
 ## Overview
 Turn experiment artifacts (idea notes, logs/summaries, plots, and references) into a coherent scientific paper with rigorous citation, honest reporting, and LaTeX-quality checks.
 
+If the main problem is that the paper lacks a single strong story, or you need to decide the core claim, title/introduction/conclusion positioning, or whether the project should be reframed before drafting, use `research-impact-strategy` first.
+
 ## Workflow
 1. **Collect inputs**
    - Required: research idea or problem statement, experiment summaries/results, and available plots/tables.

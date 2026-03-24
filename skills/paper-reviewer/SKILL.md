@@ -12,6 +12,8 @@ Default behavior is dual output:
 - `review.json` for machine parsing and automation.
 - A concise, human-readable review in the conversation.
 
+If the user is doing pre-submission self-positioning and mainly wants to decide whether to go, kill, pivot, or reshape the story before formal review, route to `research-impact-strategy` instead.
+
 ## Workflow
 1. Extract text from PDF (if needed).
    ~~~bash

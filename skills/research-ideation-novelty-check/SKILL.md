@@ -10,6 +10,8 @@ Turn a short topic brief into structured research ideas, then run targeted Seman
 
 This skill is intentionally tool-agnostic and does not depend on this repo. Use the scripts for Semantic Scholar search and idea JSON schema validation.
 
+If the main question is whether an idea is worth pursuing at all, or whether it has enough impact to justify more work, route to `research-impact-strategy` first. This skill assumes you already want to ideate or novelty-check.
+
 ## Workflow
 1. Draft a topic brief
    - Use the template in references/prompt-templates.md (keep it concrete: task, constraints, evaluation, compute budget).

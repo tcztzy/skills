@@ -10,6 +10,7 @@ description: "科研写作、EDA、统计分析、可视化统一入口（vendor
 - vendored skills 存放在：`vendor/k-dense-claude-scientific-skills/`（不会作为顶层 skill 被单独触发）。
 
 ## 路由规则（推荐）
+- 研究选题价值判断、项目 `go/kill/pivot/scope-down`、论文定位与故事收束 → 顶层 `research-impact-strategy`（不走本 suite）
 - 论文/报告写作（IMRAD、引用格式、审稿回复）→ `scientific-writing`
 - 数据探索与质量检查（EDA 报告）→ `exploratory-data-analysis`
 - 统计检验/效应量/假设检验与规范化汇报 → `statistical-analysis`
