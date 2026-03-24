@@ -1,0 +1,26 @@
+{
+  "skill_name": "hpc-batch",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I launched a Slurm array with 96 inputs but only 83 output files showed up. `sacct` shows some tasks as COMPLETED and a few as FAILED, but I only have one shared log file because I forgot `%A_%a` in the path. What should I check first?",
+      "expected_output": "Prioritizes per-task accounting and output-path collision triage, explains why a shared log file is a problem, and suggests a safe targeted rerun strategy.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 2,
+      "prompt": "Our LSF job array has 400 tasks. Some are stuck PEND for hours, a few RUN, and the cluster is busy. I need help deciding whether this is scheduler backlog, quota, or something wrong with my submission.",
+      "expected_output": "Separates scheduler-side pending reasons from job-side failures, asks for the right queue/account evidence, and avoids guessing cluster policy.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 3,
+      "prompt": "A batch pipeline hits intermittent HTTP 503s from an external API, then some tasks never produce outputs even though the wrapper says requests were accepted. I need a practical triage plan for retries, logging, and proving which tasks actually finished.",
+      "expected_output": "Distinguishes accepted from completed work, recommends idempotent retry and provenance checks, and focuses on observable evidence rather than assumptions.",
+      "files": [],
+      "expectations": []
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Client Protocol"
+  short_description: "Implement ACP integrations for Codex, Claude, OpenClaw, and editors"
+  default_prompt: "Use $agent-client-protocol to check ACP compatibility or implement ACP flows for Codex, Claude Agent/Claude Code, OpenClaw, editors, and the official SDKs."

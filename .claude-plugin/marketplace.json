@@ -21,6 +21,15 @@
       ]
     },
     {
+      "name": "agent-client-protocol",
+      "description": "Implement or debug Agent Client Protocol (ACP) integrations between coding agents and clients/editors.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/agent-client-protocol"
+      ]
+    },
+    {
       "name": "answer-judging",
       "description": "Judge response quality from thread-only evidence.",
       "source": "./",
@@ -198,6 +207,15 @@
       "strict": false,
       "skills": [
         "./skills/gh-fix-ci"
+      ]
+    },
+    {
+      "name": "hpc-batch",
+      "description": "Troubleshoot Slurm/LSF batch jobs, arrays, and stuck-job issues.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/hpc-batch"
       ]
     },
     {

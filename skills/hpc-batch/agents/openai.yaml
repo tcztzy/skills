@@ -1,0 +1,4 @@
+interface:
+  display_name: "HPC Batch + Job Array Triage (Slurm/LSF)"
+  short_description: "End-to-end Slurm/LSF batch job, array, and stuck-job troubleshooting"
+  default_prompt: "Use $hpc-batch to debug Slurm/LSF batch & array jobs: accepted-vs-completed, missing outputs, N inputs < N outputs, pending reasons, exit codes, overload, and safe retries."
