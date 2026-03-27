@@ -165,15 +165,6 @@
       ]
     },
     {
-      "name": "doc",
-      "description": "Use when the task involves reading, creating, or editing `.docx` documents, especially when formatting or layout fidelity matters; prefer `python-docx` plus the bundled `scripts/render_docx.py` for visual checks.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/doc"
-      ]
-    },
-    {
       "name": "experiment-bfts-runner",
       "description": "Run the standalone BFTS experiment pipeline to execute multi-agent tree-search experiments from a prepared bfts_config.yaml. Use after idea-to-markdown and bfts-config-prep to produce logs, workspaces, and experiment artifacts.",
       "source": "./",
@@ -198,15 +189,6 @@
       "strict": false,
       "skills": [
         "./skills/figure-caption-ref-audit"
-      ]
-    },
-    {
-      "name": "gh-fix-ci",
-      "description": "Use when a user asks to debug or fix failing GitHub PR checks that run in GitHub Actions; use `gh` to inspect checks and logs, summarize failure context, draft a fix plan, and implement only after explicit approval. Treat external providers (for example Buildkite) as out of scope and report only the details URL.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/gh-fix-ci"
       ]
     },
     {
@@ -237,30 +219,12 @@
       ]
     },
     {
-      "name": "jupyter-notebook",
-      "description": "Use when the user asks to create, scaffold, or edit Jupyter notebooks (`.ipynb`) for experiments, explorations, or tutorials; prefer the bundled templates and run the helper script `new_notebook.py` to generate a clean starting notebook.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/jupyter-notebook"
-      ]
-    },
-    {
       "name": "latex-to-word",
       "description": "将 LaTeX (.tex) 文件转换为 Word (.docx) 格式。通过自动预处理解决 pandoc 对自定义命令、tabularx、resizebox 等的兼容性问题，最大限度减少后续手动调整。",
       "source": "./",
       "strict": false,
       "skills": [
         "./skills/latex-to-word"
-      ]
-    },
-    {
-      "name": "linear",
-      "description": "Manage issues, projects & team workflows in Linear.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/linear"
       ]
     },
     {
@@ -273,75 +237,12 @@
       ]
     },
     {
-      "name": "notion-knowledge-capture",
-      "description": "Capture conversations and decisions into structured Notion pages; use when turning chats/notes into wiki entries, how-tos, decisions, or FAQs with proper linking.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/notion-knowledge-capture"
-      ]
-    },
-    {
-      "name": "notion-meeting-intelligence",
-      "description": "Prepare meeting materials with Notion context and Codex research; use when gathering context, drafting agendas/pre-reads, and tailoring materials to attendees.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/notion-meeting-intelligence"
-      ]
-    },
-    {
-      "name": "notion-research-documentation",
-      "description": "Research across Notion and synthesize into structured documentation; use when gathering info from multiple Notion sources to produce briefs, comparisons, or reports with citations.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/notion-research-documentation"
-      ]
-    },
-    {
-      "name": "notion-spec-to-implementation",
-      "description": "Turn Notion specs into implementation plans, tasks, and progress tracking; use when implementing PRDs/feature specs and creating Notion plans + tasks from them.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/notion-spec-to-implementation"
-      ]
-    },
-    {
-      "name": "openai-docs",
-      "description": "Use when the user asks how to build with OpenAI products or APIs and needs up-to-date official documentation with citations, help choosing the latest model for a use case, or explicit GPT-5.4 upgrade and prompt-upgrade guidance; prioritize OpenAI docs MCP tools, use bundled references only as helper context, and restrict any fallback browsing to official OpenAI domains.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/openai-docs"
-      ]
-    },
-    {
       "name": "paper-reviewer",
       "description": "Review academic papers (PDF/LaTeX/Markdown) with a ScholarEval-inspired dimension pass and produce both structured peer-review JSON (NeurIPS-style fields) and a concise human-readable review with prioritized, actionable feedback. Use for comprehensive, targeted, or comparative paper evaluation while keeping output bounded.",
       "source": "./",
       "strict": false,
       "skills": [
         "./skills/paper-reviewer"
-      ]
-    },
-    {
-      "name": "pdf",
-      "description": "Use when tasks involve reading, creating, or reviewing PDF files where rendering and layout matter; prefer visual checks by rendering pages (Poppler) and use Python tools such as `reportlab`, `pdfplumber`, and `pypdf` for generation and extraction.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/pdf"
-      ]
-    },
-    {
-      "name": "playwright",
-      "description": "Use when the task requires automating a real browser from the terminal (navigation, form filling, snapshots, screenshots, data extraction, UI-flow debugging) via `playwright-cli` or the bundled wrapper script.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/playwright"
       ]
     },
     {
@@ -417,39 +318,12 @@
       ]
     },
     {
-      "name": "screenshot",
-      "description": "Use when the user explicitly asks for a desktop or system screenshot (full screen, specific app or window, or a pixel region), or when tool-specific capture capabilities are unavailable and an OS-level capture is needed.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/screenshot"
-      ]
-    },
-    {
-      "name": "skill-management",
-      "description": "Deprecated compatibility alias for skill-manager. Use only when older prompts or notes mention skill-management; immediately switch to skill-manager for all skill authoring, audit, conversion, suite, and runtime tasks.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/skill-management"
-      ]
-    },
-    {
       "name": "skill-manager",
-      "description": "管理和演进 Codex skills：创建/更新/审计 SKILL.md 与配套 scripts/references/assets，盘点已安装 skills，校验和转换 Claude Code skills，同步来源并构建 vendored suites，并检查共享 runtime 的准备情况.",
+      "description": "管理和演进 Codex skills：创建/更新/审计 SKILL.md 与配套 scripts/references/assets，盘点已安装 skills，校验和转换 Claude Code skills，同步来源并构建 vendored suites，检查共享 runtime 的准备情况，并避免在本仓库重复维护 openai/skills 已提供的官方技能.",
       "source": "./",
       "strict": false,
       "skills": [
         "./skills/skill-manager"
-      ]
-    },
-    {
-      "name": "spreadsheet",
-      "description": "Use when tasks involve creating, editing, analyzing, or formatting spreadsheets (`.xlsx`, `.csv`, `.tsv`) using Python (`openpyxl`, `pandas`), especially when formulas, references, and formatting need to be preserved and verified.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/spreadsheet"
       ]
     },
     {
@@ -495,15 +369,6 @@
       "strict": false,
       "skills": [
         "./skills/wsl-fs"
-      ]
-    },
-    {
-      "name": "yeet",
-      "description": "Use only when the user explicitly asks to stage, commit, push, and open a GitHub pull request in one flow using the GitHub CLI (`gh`).",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/yeet"
       ]
     },
     {

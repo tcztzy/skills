@@ -2,6 +2,8 @@
 
 This repository keeps installable Agent Skills under a single [`skills/`](./skills) entrypoint, following the layout used by [openai/skills](https://github.com/openai/skills) and [anthropics/skills](https://github.com/anthropics/skills).
 
+It intentionally does not duplicate official skills that already exist in `openai/skills`. OpenAI-owned curated/system skills should come from the upstream repository or Codex's built-in system skill set; this repository focuses on project-owned skills plus non-OpenAI vendored suites.
+
 ## Layout
 
 - [`skills/`](./skills): all discoverable skills
@@ -14,10 +16,12 @@ Point your local skill roots at this directory:
 - `~/.codex/skills -> /Users/tcztzy/skills/skills`
 - `~/.claude/skills -> /Users/tcztzy/skills/skills`
 
-That keeps runtime lookup paths stable, for example:
+That keeps runtime lookup paths stable for repository-local skills, for example:
 
-- `$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh`
-- `$CODEX_HOME/skills/jupyter-notebook/scripts/new_notebook.py`
+- `$CODEX_HOME/skills/skill-manager/scripts/validate-skill.py`
+- `$CODEX_HOME/skills/data-to-viz/scripts/gen_matplotlib_skeleton.py`
+
+If you also need official OpenAI skills such as `playwright`, `pdf`, or `openai-docs`, install them from [openai/skills](https://github.com/openai/skills) or use the built-in system skills that ship with Codex.
 
 ## Claude -> Codex Projection
 
