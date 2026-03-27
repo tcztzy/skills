@@ -7,6 +7,8 @@
 ## Factuality
 - Keep all critiques grounded in the provided text.
 - If the paper omits details, ask questions instead of assuming.
+- If rendered page images are available, do not judge layout, figures, tables, or charts from extracted text alone.
+- If image quality is insufficient, state that limitation and lower confidence instead of guessing.
 
 ## Plagiarism / quoting
 - Avoid long verbatim excerpts.

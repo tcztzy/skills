@@ -28,6 +28,7 @@ If the main problem is that the paper lacks a single strong story, or you need t
    - Write section by section.
    - Cite related work using existing references only. If new citations are needed, follow `references/citation-workflow.md`.
    - Do not invent results or citations.
+   - Do not write local repository or filesystem paths in the manuscript body (for example `/Users/...` or checkout-specific paths). Refer to artifacts, scripts, or resources in paper-appropriate prose instead.
 
 5. **LaTeX QA and formatting**
    - Follow `references/latex-quality.md` for common issues.
@@ -47,6 +48,7 @@ If the main problem is that the paper lacks a single strong story, or you need t
 - A complete manuscript (LaTeX or Markdown), with all sections filled.
 - Citations only from provided references.bib or vetted sources.
 - Honest reporting of negative or inconclusive results.
+- The main text must not include local repository or filesystem paths; rewrite them as reader-facing descriptions if the source material contains such paths.
 
 ## References
 - Section guidance: `references/section-guidelines.md`
