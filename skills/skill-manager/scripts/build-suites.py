@@ -207,9 +207,9 @@ def _suite_skill_md(
             "",
             f"# {display_name}",
             "",
-            "## 用途",
-            "- 这是一个 **套件入口 skill**：把同域技能合并到一个入口，避免触发分裂。",
-            f"- vendored skills 存放在：`vendor/{vendor_subdir}/`（不会作为顶层 skill 被单独触发）。",
+            "## Purpose",
+            "- This is a **suite entry skill**: it consolidates related skills behind one entry point and avoids fragmented triggering.",
+            f"- Vendored skills live in `vendor/{vendor_subdir}/` and are not triggered independently as top-level skills.",
             "",
         ]
     )
@@ -217,37 +217,37 @@ def _suite_skill_md(
     if suite_id == "huggingface-suite":
         lines.extend(
             [
-                "## 路由规则（推荐）",
-                "- Hub/CLI 认证、下载/上传、缓存、repo 管理 → `hugging-face-cli`",
-                "- 数据集创建/维护/模板/SQL 查询/推送 → `hugging-face-datasets`",
-                "- 模型评测结果写入 model card / model-index → `hugging-face-evaluation`",
-                "- TRL + HF Jobs 训练/对齐、GGUF 转换 → `hugging-face-model-trainer`",
-                "- 实验指标记录/告警/仪表盘（Trackio）→ `hugging-face-trackio`",
-                "- Gradio demo / Blocks UI → `gradio`",
+                "## Recommended routing",
+                "- Hub or CLI auth, download/upload, cache, and repo management -> `hugging-face-cli`",
+                "- Dataset creation, maintenance, templates, SQL queries, and publishing -> `hugging-face-datasets`",
+                "- Writing model evaluation results into model cards or model-index -> `hugging-face-evaluation`",
+                "- TRL plus HF Jobs training or alignment, and GGUF conversion -> `hugging-face-model-trainer`",
+                "- Experiment metric logging, alerts, and dashboards with Trackio -> `hugging-face-trackio`",
+                "- Gradio demos or Blocks UI -> `gradio`",
                 "",
             ]
         )
     elif suite_id == "research-suite":
         lines.extend(
             [
-                "## 路由规则（推荐）",
-                "- 论文/报告写作（IMRAD、引用格式、审稿回复）→ `scientific-writing`",
-                "- 数据探索与质量检查（EDA 报告）→ `exploratory-data-analysis`",
-                "- 统计检验/效应量/假设检验与规范化汇报 → `statistical-analysis`",
-                "- 期刊级出图（多面板、显著性标注、色盲友好）→ `scientific-visualization`",
+                "## Recommended routing",
+                "- Paper or report writing, including IMRAD structure, citation style, and reviewer responses -> `scientific-writing`",
+                "- Data exploration and quality checks, including EDA reports -> `exploratory-data-analysis`",
+                "- Statistical tests, effect sizes, hypothesis testing, and standardized reporting -> `statistical-analysis`",
+                "- Journal-grade figures, including multi-panel layouts, significance annotations, and colorblind-safe design -> `scientific-visualization`",
                 "",
-                "## 重要说明",
-                "- vendored 文档里可能含有较强硬的流程建议（例如“必须画图形摘要”等）。本 suite 只把它们当作 **可选策略**，不作为硬性要求。",
+                "## Important note",
+                "- Vendored documentation may contain more prescriptive workflow advice, such as requiring graphical abstracts. This suite treats those suggestions as **optional strategies**, not hard requirements.",
                 "",
             ]
         )
 
     lines.extend(
         [
-            "## 包含的 vendored skills",
+            "## Included vendored skills",
             "",
-            "| 目录 | skill.name | 描述 |",
-            "|------|------------|------|",
+            "| Directory | skill.name | Description |",
+            "|-----------|------------|-------------|",
         ]
     )
     for m in members:
@@ -260,14 +260,14 @@ def _suite_skill_md(
     lines.extend(
         [
             "",
-            "## 许可与来源",
-            f"- 上游仓库：`{source_repo}`",
-            f"- License/NOTICE：见 `vendor/{vendor_subdir}/` 下的相关文件（若存在）。",
+            "## License and source",
+            f"- Upstream repository: `{source_repo}`",
+            f"- License or NOTICE files: see the relevant files under `vendor/{vendor_subdir}/` when present.",
             "",
-            "## 更新/重建",
-            "- 同步来源缓存：运行 `skill-manager/scripts/sync-sources.py --all`",
-            "- 重建套件：运行 `skill-manager/scripts/build-suites.py --all`",
-            "- 构建后重启 Codex 以加载新/更新的 skills。",
+            "## Update or rebuild",
+            "- Sync source cache: run `skill-manager/scripts/sync-sources.py --all`",
+            "- Rebuild suites: run `skill-manager/scripts/build-suites.py --all`",
+            "- Restart Codex after a build to load new or updated skills.",
             "",
         ]
     )
@@ -371,8 +371,9 @@ def _build_suite(
         display_name=display_name,
         short_description=suite_desc,
         default_prompt=(
-            "使用该套件入口完成任务。先确认目标（Hub/数据集/训练/评测/出图/写作等），"
-            "然后按 suite 的路由规则选择对应的 vendored skill。"
+            "Use this suite entry skill to complete the task. First confirm the goal "
+            "(for example Hub, datasets, training, evaluation, visualization, or writing), "
+            "then choose the corresponding vendored skill using the suite routing rules."
         ),
     )
 
@@ -420,7 +421,7 @@ def _build_standalone(
             dest_dir,
             display_name=display_name,
             short_description=short_desc,
-            default_prompt="使用该 skill 完成相关任务。请先说明你的代码结构、训练目标与运行环境。",
+            default_prompt="Use this skill for the relevant task. Start by describing your code structure, training goal, and runtime environment.",
         )
 
 

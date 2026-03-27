@@ -56,7 +56,7 @@ class AuditInstalledSkillsTests(unittest.TestCase):
 
     def test_skill_readiness_uses_shared_domains(self) -> None:
         registry = self.fake_registry()
-        verdict, _reason, probe, leak = MODULE.skill_readiness("doc", registry)
+        verdict, _reason, probe, leak = MODULE.skill_readiness("latex-to-word", registry)
         self.assertEqual(verdict, "ready")
         self.assertTrue(probe)
         self.assertFalse(leak)
@@ -67,10 +67,10 @@ class AuditInstalledSkillsTests(unittest.TestCase):
 
     def test_audit_installed_skills_writes_summary(self) -> None:
         fake_skills = [
-            {"skill_name": "doc", "skill_path": str(SKILLS_ROOT / "doc"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
+            {"skill_name": "latex-to-word", "skill_path": str(SKILLS_ROOT / "latex-to-word"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
             {"skill_name": "gradio", "skill_path": str(SKILLS_ROOT / "huggingface-suite/vendor/huggingface-skills/gradio"), "skill_kind": "vendored", "entry_type": "leaf_skill"},
             {"skill_name": "skill-manager", "skill_path": str(SKILLS_ROOT / "skill-manager"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
-            {"skill_name": "screenshot", "skill_path": str(SKILLS_ROOT / "screenshot"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
+            {"skill_name": "pytorch-lightning", "skill_path": str(SKILLS_ROOT / "pytorch-lightning"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
         ]
         with tempfile.TemporaryDirectory() as tmp:
             with patch.object(MODULE, "load_or_probe_registry", return_value=self.fake_registry()), patch.object(MODULE, "discover_skills", return_value=fake_skills):

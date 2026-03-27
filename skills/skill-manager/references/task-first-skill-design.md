@@ -1,107 +1,107 @@
 # Task-First Skill Design
 
-这个参考文件用于回答一个比“SKILL.md 怎么写”更前的问题：skill 应该按什么轴来组织。
+This reference answers a question that comes even before "How should I write SKILL.md?": along which axis should a skill be organized?
 
-## 核心判断
+## Core judgment
 
-默认优先级：
+Default priority order:
 
-1. 用户要解决什么任务或判断问题
-2. 输入长什么样
-3. 需要做哪一类语义选择或分析选择
-4. 有哪些横切质量 / 合规 / 发表 / 导出约束
-5. 最后才是用什么工具实现
+1. What task or judgment problem the user is trying to solve
+2. What the input looks like
+3. What semantic or analytical choice has to be made
+4. What cross-cutting quality, compliance, publication, or export constraints apply
+5. Only then, which tool should implement it
 
-如果一个 skill 树一开始就是按工具名展开，通常已经选错主轴了。
+If a skill tree starts by expanding tool names, it has usually chosen the wrong primary axis.
 
-## 推荐的决策链
+## Recommended decision chain
 
-把一个 skill 设计成下面这条链，而不是一串工具名：
+Design a skill around the following chain instead of a list of tool names:
 
-1. `研究问题 / 用户意图`
-   - 用户到底在判断什么、比较什么、产出什么
-2. `输入结构`
+1. `Research question / user intent`
+   - What is the user trying to judge, compare, or produce?
+2. `Input structure`
    - tabular / array / document / codebase / browser state / API response
-3. `语义家族`
-   - 比如 comparison、distribution、correlation；或者 create、audit、convert、install
-4. `横切约束`
-   - 论文规范、审计要求、accessibility、导出格式、权限、安全、determinism
-5. `实现后端`
-   - matplotlib、ggplot2、TikZ、Playwright、pandoc、特定 SDK 等
+3. `Semantic family`
+   - for example comparison, distribution, correlation; or create, audit, convert, install
+4. `Cross-cutting constraints`
+   - publication standards, audit requirements, accessibility, export format, permissions, safety, determinism
+5. `Implementation backend`
+   - matplotlib, ggplot2, TikZ, Playwright, pandoc, specific SDKs, and so on
 
-## 为什么不要默认 tool-first
+## Why tool-first should not be the default
 
-- 工具名并不能解释“为什么这样做”
-- 同一个任务经常有多个可替换工具
-- 用户真正关心的通常是结果正确、论证成立、交付合规，而不是某个库名
-- tool-first skill 很容易把“能做出来”误当成“应该这么做”
+- Tool names do not explain why the work should be done that way.
+- The same task often has multiple interchangeable tools.
+- What users actually care about is usually whether the result is correct, the reasoning holds, and the deliverable is compliant, not which library name was used.
+- Tool-first skills often confuse "can be done this way" with "should be done this way."
 
-## 什么时候可以 tool-first
+## When tool-first is justified
 
-只有当工具本身改变了下面至少一项时，才考虑单独做顶层 skill：
+Consider a separate top-level skill only when the tool changes at least one of the following:
 
-- 主产物类型变了
-- runtime / 安装依赖明显不同
-- 权限边界不同
-- 验证方式不同
-- 用户就是按该工具作为任务名来请求
+- the primary artifact type
+- the runtime or installation dependency profile
+- the permission boundary
+- the validation strategy
+- the user's own task name
 
-例子：
+Examples:
 
-- `pdf` 和 `doc` 可以分开，因为产物、工具链、验证方式不同
-- `playwright` 可以独立，因为它依赖真实浏览器和交互式页面状态
-- 单纯的 `matplotlib` / `seaborn` / `ggplot2`，若都在解决“做论文图”，通常不该先按工具拆
+- `pdf` and `doc` can be separate because the artifact, toolchain, and validation strategy differ.
+- `playwright` can stand alone because it depends on a real browser and interactive page state.
+- Plain `matplotlib`, `seaborn`, and `ggplot2` usually should not become top-level skills first if they are all solving "make a paper figure."
 
-## 把约束单列
+## Make constraints explicit
 
-很多仓库的问题不是没有工具说明，而是缺少“约束层”。
+Many repositories do not fail because they lack tool instructions. They fail because they lack a constraints layer.
 
-这些内容应单列为横切层，而不是藏在某个 backend 小节里：
+The following should be modeled explicitly as cross-cutting layers instead of being buried in a backend subsection:
 
-- 论文发表规范
-- 合规 / 审计要求
-- accessibility / 颜色 / 排版
-- 导出尺寸 / 分辨率 / 矢量格式
-- 安全与权限边界
+- publication standards
+- compliance or audit requirements
+- accessibility, color, and typography constraints
+- export size, resolution, and vector-format requirements
+- safety and permission boundaries
 
-## 应用于论文绘图
+## Applying this to paper figures
 
-推荐顺序：
+Recommended order:
 
-1. 研究问题
-2. 数据结构
-3. 图形任务 / 图形语法
-4. 投稿规范与图版约束
-5. 工具实现
+1. research question
+2. data structure
+3. figure task or visual grammar
+4. submission rules and figure-panel constraints
+5. tool implementation
 
-对应到 skill 树时，更好的模式是：
+In a skill tree, the better pattern is:
 
-- router：按研究问题与图形家族路由
-- family skills：解释何时用哪类图、哪些图会误导、需要哪些 caveat
-- backend：作为 family skill 内部的实现选项
+- router: route by research question and figure family
+- family skills: explain when to use which figure type, what can mislead, and which caveats are needed
+- backend: implementation options inside the family skill
 
-不推荐的模式是直接把顶层拆成：
+A worse pattern is to split the top level directly into:
 
 - `matplotlib`
 - `seaborn`
 - `ggplot2`
 - `plotly`
 
-因为这回答的是“怎么画”，不是“为什么该这样画”。
+That answers "how to draw it," not "why this is the right figure."
 
-## 写进 SKILL.md 的顺序
+## Order inside SKILL.md
 
-如果你采用 task-first 组织，正文通常也应该遵循类似顺序：
+If you adopt a task-first organization, the body should usually follow a similar order:
 
-1. 什么时候触发
-2. 先做哪种判断或分类
-3. 哪些语义选择是默认路线
-4. 哪些横切约束必须先检查
-5. 最后选哪类工具或脚本
+1. when the skill should trigger
+2. what judgment or classification should happen first
+3. which semantic choices are the default route
+4. which cross-cutting constraints must be checked first
+5. which tools or scripts should be chosen last
 
-## Authoring 自检
+## Authoring self-check
 
-- 这个 skill 的顶层名字是在描述任务，还是在描述库名？
-- 如果把工具名换掉，skill 的主体是否依然成立？
-- 约束层有没有被单独写清楚？
-- 示例是否体现了“问题 -> 选择 -> 实现”，而不只是“输入 -> 调一个脚本”？
+- Does the top-level skill name describe a task or just a library?
+- If you swapped out the tool, would the core of the skill still hold?
+- Is the constraints layer written explicitly?
+- Do the examples show "problem -> choice -> implementation" rather than just "input -> call a script"?

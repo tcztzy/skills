@@ -62,11 +62,11 @@ class ConvertError(Exception):
 
 @dataclass(frozen=True)
 class Preferences:
-    language: str = "zh-CN"
+    language: str = "en-US"
     shell: str = "powershell"
     insert_codex_notes: bool = True
     skip_rewrites_in_fenced_code_blocks: bool = True
-    variable_rewrites: dict[str, str] = field(default_factory=lambda: {"$ARGUMENTS": "用户提供的参数"})
+    variable_rewrites: dict[str, str] = field(default_factory=lambda: {"$ARGUMENTS": "user-provided arguments"})
 
 
 class Args(argparse.Namespace):
@@ -243,7 +243,7 @@ def _insert_notes_after_title(body: str, notes: str) -> str:
     if not notes_norm:
         return body_norm
 
-    if "## Codex 使用说明" in body_norm or "## Codex Notes" in body_norm:
+    if "## Codex Notes" in body_norm:
         return body_norm
 
     match = re.search(r"^# .*(?:\n|$)", body_norm, flags=re.MULTILINE)
@@ -316,18 +316,7 @@ def _codex_notes(frontmatter: dict[str, str], prefs: Preferences) -> str:
     for key in ("argument-hint", "disable-model-invocation"):
         if key in frontmatter:
             removed.append(key)
-    removed_text = "、".join(removed) if removed else ""
-
-    if prefs.language.lower().startswith("zh"):
-        bullets: list[str] = []
-        if arg_hint:
-            bullets.append(f"期望参数：{arg_hint}")
-        bullets.append("Codex 不会自动注入 `$ARGUMENTS`；请在对话中明确提供路径/参数，或直接写入命令。")
-        if removed_text:
-            bullets.append(f"已移除 Claude 专用 frontmatter：{removed_text}")
-        if prefs.shell.lower() == "powershell":
-            bullets.append("在 PowerShell 环境中，优先使用 `Get-Command` 替代 `which`。")
-        return "## Codex 使用说明\n" + "\n".join(f"- {b}" for b in bullets)
+    removed_text = ", ".join(removed) if removed else ""
 
     bullets_en: list[str] = []
     if arg_hint:
@@ -349,14 +338,9 @@ def _write_openai_yaml(skill_dir: Path, skill_name: str, prefs: Preferences) -> 
 
     display_name = _format_display_name(skill_name)
     short_description = _generate_short_description(display_name)
-    if prefs.language.lower().startswith("zh"):
-        default_prompt = (
-            "管理或转换该 skill。请先说明目标 skill 名称、来源（curated/GitHub/本地）和期望操作。"
-        )
-    else:
-        default_prompt = (
-            "Manage or convert this skill. Provide the skill name, source (curated/GitHub/local), and desired action."
-        )
+    default_prompt = (
+        "Manage or convert this skill. Provide the skill name, source (curated/GitHub/local), and desired action."
+    )
 
     content = "\n".join(
         [

@@ -7,10 +7,9 @@
       "type": "git",
       "repo": "https://github.com/openai/skills.git",
       "ref": "main",
-      "purpose": "Codex 官方 skills 源（.curated/.system/.experimental）",
+      "purpose": "Official Codex skills source for curated and system skills.",
       "skill_roots": [
         "skills/.curated",
-        "skills/.experimental",
         "skills/.system"
       ],
       "restricted": false,
@@ -21,7 +20,7 @@
       "type": "git",
       "repo": "https://github.com/huggingface/skills.git",
       "ref": "main",
-      "purpose": "Hugging Face 官方 skills 源（Hub/Datasets/Training/Eval/Tracking/Gradio 等）",
+      "purpose": "Official Hugging Face skills source for Hub, datasets, training, evaluation, tracking, and Gradio workflows.",
       "skill_roots": [
         "skills"
       ],
@@ -37,7 +36,7 @@
       "type": "git",
       "repo": "https://github.com/K-Dense-AI/claude-scientific-skills.git",
       "ref": "main",
-      "purpose": "K-Dense 科研写作/分析/可视化 skills（MIT）",
+      "purpose": "K-Dense scientific writing, analysis, and visualization skills under MIT-style licensing.",
       "skill_roots": [
         "scientific-skills"
       ],
@@ -53,7 +52,7 @@
       "type": "git",
       "repo": "https://github.com/anthropics/skills.git",
       "ref": "main",
-      "purpose": "Anthropic 官方 skills（许可限制：不在本地安装/合并；通常也不应本地缓存）",
+      "purpose": "Official Anthropic skills source. Restricted: do not install or vendor locally, and usually do not cache it locally either.",
       "skill_roots": [
         "skills"
       ],
@@ -65,7 +64,7 @@
       "type": "git",
       "repo": "https://github.com/anthropics/claude-plugins-official.git",
       "ref": "main",
-      "purpose": "Claude plugins（非 skills，仅供参考）",
+      "purpose": "Official Claude plugins repository. Not a skills source; keep only for reference.",
       "skill_roots": [],
       "restricted": false,
       "sync": true

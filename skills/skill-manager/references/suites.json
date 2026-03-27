@@ -4,7 +4,7 @@
     {
       "id": "huggingface-suite",
       "display_name": "Hugging Face Suite",
-      "description": "Hugging Face Hub / datasets / training / evaluation / tracking / Gradio 的统一入口（vendored）。",
+      "description": "Unified vendored entry point for Hugging Face Hub, datasets, training, evaluation, tracking, and Gradio workflows.",
       "source_id": "huggingface-skills",
       "source_subdir": "skills",
       "vendor_subdir": "huggingface-skills",
@@ -23,7 +23,7 @@
     {
       "id": "research-suite",
       "display_name": "Research Suite",
-      "description": "科研写作、EDA、统计分析、可视化统一入口（vendored）。",
+      "description": "Unified vendored entry point for scientific writing, EDA, statistical analysis, and visualization workflows.",
       "source_id": "k-dense-claude-scientific-skills",
       "source_subdir": "scientific-skills",
       "vendor_subdir": "k-dense-claude-scientific-skills",
@@ -39,7 +39,7 @@
     {
       "id": "pytorch-lightning",
       "display_name": "PyTorch Lightning",
-      "description": "PyTorch Lightning 工程与训练框架（standalone skill）。",
+      "description": "PyTorch Lightning engineering and training framework as a standalone skill.",
       "source_id": "k-dense-claude-scientific-skills",
       "source_subdir": "scientific-skills",
       "source_path": "pytorch-lightning"
