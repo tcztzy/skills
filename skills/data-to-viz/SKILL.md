@@ -28,7 +28,7 @@ Use this skill as the single entrypoint for visualization work. Do not choose a 
 ## Workflow
 
 1. Classify the request
-   - If the user says "帮我选图", "which chart", "is this chart good", or "critique this viz", do chart-choice-first routing. Do not generate code unless explicitly asked.
+   - If the user says "pick a chart for me", "which chart", "is this chart good", or "critique this viz", do chart-choice-first routing. Do not generate code unless explicitly asked.
    - If the user names a backend, treat that as a preference signal only. Still map the task to a chart family first.
    - If the user wants a full deliverable, choose a family first and then let the family skill decide whether there is a generator-backed path or a doc-only backend recommendation.
 
@@ -95,7 +95,7 @@ Use this skill as the single entrypoint for visualization work. Do not choose a 
 
 **Input**
 
-- "比较 6 个模型在 3 个数据集上的准确率和方差，最好是论文图。"
+- "Compare the accuracy and variance of 6 models on 3 datasets. I want a publication-ready figure."
 
 **Actions**
 

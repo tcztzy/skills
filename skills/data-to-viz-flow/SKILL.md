@@ -46,7 +46,7 @@ Use this skill when the message is about movement, transfer, transition, or conn
 
 **Input**
 
-- "我要一个 Sankey 图来展示用户从入口页面流向不同转化路径。"
+- "I need a Sankey diagram showing how users move from the landing page to different conversion paths."
 
 **Actions**
 

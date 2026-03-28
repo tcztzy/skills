@@ -46,7 +46,7 @@ Use this skill when the x-axis is ordered in time, epoch, step, iteration, or an
 
 **Input**
 
-- "看 loss 随 epoch 的变化，希望能做成论文里的训练曲线。"
+- "Show how loss changes over epochs. I want a publication-style training curve."
 
 **Actions**
 

@@ -68,22 +68,16 @@ Scope keywords: <...>
 
 ## outreach_messages.md (short, specific, non-creepy)
 
-English (leader/hiring manager):
+Leader / hiring manager:
 ```text
 Hi <Name> — I saw your post about hiring for <role/team> (<date>). I’ve worked on <1 matching area> and <2 matching area>, e.g. <metric/result>.
 If helpful, I can send a short resume/portfolio; is there a req ID/link you prefer I apply through?
 ```
 
-English (IC informational chat):
+IC informational chat:
 ```text
 Hi <Name> — I enjoyed your <talk/blog/repo> on <topic> (<date/link>). I’m exploring roles in <area> and built <proof/metric>.
 Would you be open to a 10–15 min chat about what your team values in candidates?
-```
-
-Chinese (leader/hiring manager):
-```text
-你好 <Name>，我看到你在 <date/link> 提到团队在招 <role/team>。我在 <匹配方向1/2> 有相关经验（例如 <指标/结果>）。
-方便的话我可以发一份简历/作品集；请问是否有对应的 req 链接/编号建议我走正式投递？
 ```
 
 ## interview_prep.md (from public signals)

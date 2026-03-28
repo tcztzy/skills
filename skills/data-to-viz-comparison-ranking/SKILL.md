@@ -53,7 +53,7 @@ Use this skill after the router has decided that the main question is comparativ
 
 **Input**
 
-- "比较 6 个模型在 3 个数据集上的准确率和方差，想要论文图。"
+- "Compare the accuracy and variance of 6 models on 3 datasets. I want a paper-style figure."
 
 **Actions**
 

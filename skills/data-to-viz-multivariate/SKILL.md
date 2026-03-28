@@ -44,7 +44,7 @@ Use this skill when several variables must be shown together and no simpler sing
 
 **Input**
 
-- "我有一个相关系数矩阵，想做成论文里的 heatmap。"
+- "I have a correlation matrix and want to turn it into a paper-style heatmap."
 
 **Actions**
 

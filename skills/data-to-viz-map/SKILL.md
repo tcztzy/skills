@@ -44,7 +44,7 @@ Use this skill when geographic location is part of the message.
 
 **Input**
 
-- "把站点经纬度和访问量画成一个可以探索的地图。"
+- "Plot station latitude, longitude, and traffic volume on an interactive map."
 
 **Actions**
 

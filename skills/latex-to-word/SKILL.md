@@ -1,84 +1,84 @@
 ---
 name: latex-to-word
-description: "将 LaTeX (.tex) 文件转换为 Word (.docx) 格式。通过自动预处理解决 pandoc 对自定义命令、tabularx、resizebox 等的兼容性问题，最大限度减少后续手动调整。"
+description: "Convert LaTeX (.tex) files to Word (.docx) using an automated preprocessing pipeline that resolves common pandoc incompatibilities such as custom commands, tabularx, and resizebox, minimizing manual cleanup afterward."
 ---
 
-# LaTeX → Word (.docx) 转换
+# LaTeX to Word (.docx) Conversion
 
-将用户指定的 `.tex` 文件转换为 `.docx`，通过预处理 + pandoc 流水线，最大限度保留内容结构并减少手动调整。
+Convert the user-specified `.tex` file to `.docx` using a preprocessing plus pandoc pipeline that preserves structure as much as possible and minimizes manual cleanup.
 
-## 输入
+## Input
 
-- `$ARGUMENTS`：要转换的 `.tex` 文件路径（相对或绝对均可）
+- `$ARGUMENTS`: path to the `.tex` file to convert, either relative or absolute
 
-## 前置检查
+## Preflight Checks
 
-1. 确认 `pandoc` 已安装（`which pandoc`）。如未安装，提示用户安装后重试。
-2. 确认 `python3` 或 `python` 可用。
-3. 确认用户指定的 `.tex` 文件存在且可读。
+1. Confirm that `pandoc` is installed by running `which pandoc`. If it is missing, ask the user to install it and retry.
+2. Confirm that `python3` or `python` is available.
+3. Confirm that the specified `.tex` file exists and is readable.
 
-## 流程
+## Workflow
 
-### Step 1：分析源文件
+### Step 1: Analyze the source file
 
-读取 `.tex` 文件**全文**，识别以下 pandoc 不兼容元素：
+Read the full `.tex` file and identify the following pandoc-incompatible elements:
 
-| 类别 | 识别方法 | 示例 |
+| Category | Detection method | Example |
 |------|----------|------|
-| 非标准文档类 | `\documentclass` 行中非 `article`/`report`/`book` | `ctexart`, `IEEEtran` |
-| 自定义列类型 | `\newcolumntype{X}` | `\newcolumntype{Y}{...}` |
-| `tabularx` 环境 | `\begin{tabularx}` | 需转为 `tabular` |
-| `\resizebox` 包裹 | `\resizebox{\textwidth}{!}{` 或 `\resizebox{\textwidth}{!}{%` | 需去掉包裹（注意两种写法） |
-| `\allowbreak` | 直接搜索 | 需删除 |
-| `\ignorespaces` | 直接搜索 | 需删除 |
-| `\cmidrule(lr)` | `\cmidrule` 后带 `(...)` 裁剪参数 | 去掉裁剪参数 |
-| `\path{...}` | 在 `\newcommand` 定义或正文中 | 改为 `\texttt{...}` |
-| 不必要的格式命令 | `\setlist`, `\captionsetup`, `\hypersetup` | 需删除 |
-| 枚举可选参数 | `\begin{enumerate}[label=...]` | 需简化 |
-| `\renewcommand\tabularxcolumn` | 直接搜索 | 需删除 |
+| Nonstandard document class | any class other than `article`, `report`, or `book` on the `\documentclass` line | `ctexart`, `IEEEtran` |
+| Custom column types | `\newcolumntype{X}` | `\newcolumntype{Y}{...}` |
+| `tabularx` environment | `\begin{tabularx}` | convert to `tabular` |
+| `\resizebox` wrapper | `\resizebox{\textwidth}{!}{` or `\resizebox{\textwidth}{!}{%` | remove the wrapper and support both forms |
+| `\allowbreak` | direct search | remove |
+| `\ignorespaces` | direct search | remove |
+| `\cmidrule(lr)` | `\cmidrule` followed by `(...)` trimming parameters | remove the trimming parameters |
+| `\path{...}` | inside `\newcommand` definitions or body text | convert to `\texttt{...}` |
+| Unnecessary formatting commands | `\setlist`, `\captionsetup`, `\hypersetup` | remove |
+| Enumerate optional parameters | `\begin{enumerate}[label=...]` | simplify |
+| `\renewcommand\tabularxcolumn` | direct search | remove |
 
-将所有发现的问题记录下来，用于生成预处理脚本。
+Record every issue you find so the preprocessing script can be generated accurately.
 
-### Step 2：生成预处理 Python 脚本
+### Step 2: Generate the preprocessing Python script
 
-在源文件同目录下生成 `_preprocess_for_pandoc.py`，脚本需：
+Generate `_preprocess_for_pandoc.py` in the same directory as the source file. The script must:
 
-**必做（通用规则）：**
+**Required general rules:**
 
 ```python
 import re, os
 
-src = r"<源文件绝对路径>"
-dst = r"<同目录>/_for_pandoc.tex"
+src = r"<absolute source file path>"
+dst = r"<same directory>/_for_pandoc.tex"
 
 with open(src, 'r', encoding='utf-8') as f:
     content = f.read()
 
-# === 通用规则 ===
+# === General rules ===
 
-# 1. 非标准文档类 → article
+# 1. Replace a nonstandard document class with article
 content = re.sub(
     r'\\documentclass(\[[^\]]*\])\{[^}]+\}',
     r'\\documentclass\1{article}',
     content
 )
 
-# 2. 删除 \newcolumntype 定义行（整行匹配）
+# 2. Remove \newcolumntype definition lines
 content = re.sub(r'\\newcolumntype\{.\}.*\n', '', content)
 
-# 3. 删除 \renewcommand\tabularxcolumn 及其上方的注释行
+# 3. Remove \renewcommand\tabularxcolumn and any directly related comment line above it
 content = re.sub(
     r'(%.*tabularx.*\n)?\\renewcommand\\tabularxcolumn.*\n',
     '', content
 )
 
-# 4. 全局替换自定义列标识符：C{...} → c（只出现在列规格中）
+# 4. Replace custom column markers such as C{...} with c inside column specs
 content = re.sub(r'C\{[^}]+\}', 'c', content)
 
-# 5. tabularx → tabular（先替换 C{} 后再做，此时列规格中无嵌套大括号）
+# 5. Convert tabularx to tabular after simplifying custom column markers
 def simplify_tabularx(m):
     colspec = m.group(1)
-    # 替换所有非标准列标识符（根据分析结果添加）
+    # Add more custom-column replacements here if the analysis found them
     colspec = colspec.replace('Y', 'l').replace('X', 'l')
     return r'\begin{tabular}{' + colspec + '}'
 
@@ -88,45 +88,45 @@ content = re.sub(
 )
 content = content.replace(r'\end{tabularx}', r'\end{tabular}')
 
-# 6. 删除 \resizebox{...}{!}{ 包裹（兼容带 % 和不带 % 两种写法）
+# 6. Remove \resizebox{...}{!}{ wrappers, supporting forms with and without %
 content = re.sub(r'\\resizebox\{[^}]+\}\{[^}]+\}\{%?\s*\n', '', content)
-# 修复对应的多余闭合大括号（两种模式）：
-# 模式 A：\end{tabular}} → \end{tabular}（同行双闭合）
+# Fix matching extra closing braces
+# Pattern A: \end{tabular}} -> \end{tabular}
 content = re.sub(r'(\\end\{tabular\})\}', r'\1', content)
-# 模式 B：\end{tabular}\n    }\n → \end{tabular}\n（换行后单独 } 行）
+# Pattern B: \end{tabular}\n    }\n -> \end{tabular}\n
 content = re.sub(r'(\\end\{tabular\})\s*\n\s*\}', r'\1', content)
 
-# 7. 删除 \allowbreak
+# 7. Remove \allowbreak
 content = content.replace(r'\allowbreak', '')
 
-# 8. 删除 \ignorespaces
+# 8. Remove \ignorespaces
 content = content.replace(r'\ignorespaces', '')
 
-# 9. \path{...} → \texttt{...}（正文中和 \newcommand 定义中）
+# 9. Convert \path{...} to \texttt{...} in both body text and \newcommand definitions
 content = re.sub(r'\\path\{([^}]*)\}', r'\\texttt{\1}', content)
 
-# 10. 删除格式设置命令
+# 10. Remove formatting configuration commands
 content = re.sub(r'\\setlist\{[^}]*\}', '', content)
 content = re.sub(r'\\captionsetup\{[^}]*\}', '', content)
 content = re.sub(r'\\hypersetup\{[^}]*\}', '', content)
 
-# 11. 删除不再需要的 \usepackage
+# 11. Remove packages that are no longer needed
 for pkg in ['tabularx', 'enumitem']:
     content = content.replace(r'\usepackage{' + pkg + '}', '')
 
-# 12. 简化带可选参数的 enumerate
+# 12. Simplify enumerate environments that use optional parameters
 content = re.sub(
     r'\\begin\{enumerate\}\[[^\]]+\]',
     r'\\begin{enumerate}', content
 )
 
-# 13. 简化 \cmidrule 裁剪参数：\cmidrule(lr){2-3} → \cmidrule{2-3}
+# 13. Simplify \cmidrule trimming parameters: \cmidrule(lr){2-3} -> \cmidrule{2-3}
 content = re.sub(r'\\cmidrule\([^)]*\)', r'\\cmidrule', content)
 
-# 14. 删除独立行的 \small
+# 14. Remove standalone \small lines
 content = re.sub(r'\n\\small\n', '\n', content)
 
-# 15. 合并连续空行
+# 15. Collapse repeated blank lines
 content = re.sub(r'\n{3,}', '\n\n', content)
 
 with open(dst, 'w', encoding='utf-8') as f:
@@ -136,61 +136,61 @@ print(f"Done: {dst}")
 print(f"Size: {len(content)} chars")
 ```
 
-**按需添加（根据 Step 1 分析结果）：**
+**Add these only when the analysis requires them:**
 
-- 如果发现 `\href{...}{\path{...}}` 模式 → 将整个 `\newcommand` 定义替换为 pandoc 友好版本
-- 如果发现其他自定义列标识符（如 `L`, `R`, `P{}`）→ 在 `simplify_tabularx` 中添加对应替换
-- 如果发现 `\makecell` → 保留（pandoc 会忽略但不报错）
-- 如果发现 `\multirow` → 保留（pandoc 有基本支持但复杂合并单元格可能需手动调整）
-- 如果发现 `tabulary` / `supertabular` 等其他表格环境 → 类似 tabularx 处理
-- 如果文件使用 BibTeX 引用（`\cite`）→ 考虑是否需要传 `--bibliography` 给 pandoc
+- If you find the pattern `\href{...}{\path{...}}`, replace the entire `\newcommand` definition with a pandoc-friendly version.
+- If you find other custom column markers such as `L`, `R`, or `P{}`, add the corresponding replacements inside `simplify_tabularx`.
+- If you find `\makecell`, keep it. Pandoc usually ignores it without failing.
+- If you find `\multirow`, keep it. Pandoc has basic support, but complex merged cells may still need manual cleanup.
+- If you find other table environments such as `tabulary` or `supertabular`, treat them similarly to `tabularx`.
+- If the file uses BibTeX citations through `\cite`, decide whether `--bibliography` should also be passed to pandoc.
 
-### Step 3：运行预处理脚本
+### Step 3: Run the preprocessing script
 
 ```bash
-cd "<源文件目录>"
+cd "<source directory>"
 python _preprocess_for_pandoc.py
 ```
 
-验证 `_for_pandoc.tex` 已生成，并快速检查：
-- 无 `tabularx`、`resizebox`、`\allowbreak` 残留
-- `\begin{tabular}` 列规格中无自定义列标识符
+Confirm that `_for_pandoc.tex` was created, then quickly check:
+- there are no remaining `tabularx`, `resizebox`, or `\allowbreak` fragments
+- the `\begin{tabular}` column spec no longer contains custom column markers
 
-### Step 4：pandoc 转换
+### Step 4: Run the pandoc conversion
 
 ```bash
 pandoc _for_pandoc.tex \
-  -o "<输出文件名>.docx" \
+  -o "<output filename>.docx" \
   --from latex \
   --to docx \
-  --resource-path="<源文件目录>" \
+  --resource-path="<source directory>" \
   --standalone
 ```
 
-输出文件名规则：与源文件同名，扩展名改为 `.docx`。
-如果同名 `.docx` 已存在且被占用（Permission denied），则追加 `_new` 后缀。
+Output filename rule: use the same basename as the source file and change only the extension to `.docx`.
+If that `.docx` file already exists and is locked, causing `Permission denied`, append `_new` to the basename.
 
-### Step 5：清理临时文件
+### Step 5: Clean up temporary files
 
-删除：
+Delete:
 - `_for_pandoc.tex`
 - `_preprocess_for_pandoc.py`
 
-### Step 6：报告结果
+### Step 6: Report the result
 
-向用户报告：
-1. 输出文件路径和大小
-2. pandoc 是否有警告（如有，列出）
-3. 提示可能需要手动调整的内容：
-   - 表格格式（列宽、对齐）
-   - 含 `\multirow` 的合并单元格表格
-   - 中英文混排字体
-   - 标题层级样式
-   - 复杂多行数学公式
+Report back to the user with:
+1. the output file path and size
+2. any pandoc warnings, if present
+3. content that may still require manual cleanup:
+   - table formatting such as column widths or alignment
+   - tables that rely on `\multirow`
+   - mixed-language typography
+   - heading style hierarchy
+   - complex multi-line equations
 
-## 关键注意事项
+## Key Notes
 
-- **保留 `\newcommand` 定义**：pandoc 能正确展开大多数 `\newcommand`，不要盲目删除或手动展开
-- **图片路径**：`--resource-path` 设为源文件所在目录，pandoc 会自动查找引用的图片
-- **编码**：始终使用 UTF-8 读写
-- **不要修改源文件**：所有预处理操作在副本 `_for_pandoc.tex` 上进行
+- **Preserve `\newcommand` definitions**: pandoc expands most `\newcommand` definitions correctly, so do not delete or manually inline them without a clear reason.
+- **Image paths**: set `--resource-path` to the source file directory so pandoc can resolve referenced images automatically.
+- **Encoding**: always read and write as UTF-8.
+- **Do not modify the source file**: all preprocessing must happen on the `_for_pandoc.tex` copy.

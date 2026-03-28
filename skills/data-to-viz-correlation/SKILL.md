@@ -49,7 +49,7 @@ Use this skill when the message is about the relationship between numeric variab
 
 **Input**
 
-- "看两个指标之间的关系，点很多，普通散点图糊成一团。"
+- "Show the relationship between two metrics. There are so many points that a regular scatter plot becomes a blur."
 
 **Actions**
 

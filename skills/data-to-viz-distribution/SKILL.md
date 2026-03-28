@@ -47,7 +47,7 @@ Use this skill when the main question is about spread, skew, tails, outliers, or
 
 **Input**
 
-- "看一下不同模型 loss 的分布，最好能看尾部和离群点。"
+- "Show the loss distribution for different models, including tails and outliers."
 
 **Actions**
 

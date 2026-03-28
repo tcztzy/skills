@@ -9,53 +9,57 @@ It intentionally does not duplicate official skills that already exist in `opena
 - [`skills/`](./skills): all discoverable skills
 - [`skills/<skill-name>/`](./skills): user-installable skills
 
-## Showcase: 科研全流程
+## Language Policy
 
-下面这个例子展示了如何把仓库里的多个科研技能串成一个端到端工作流，而不是把它们当成彼此割裂的单点工具。
+Use precise, professional English throughout this repository unless a skill explicitly concerns another language, such as translation, language-specific writing guidance, or language-specific source code.
+
+## Showcase: End-to-End Research Workflow
+
+This example shows how multiple research-oriented skills in this repository can be composed into one end-to-end workflow instead of being used as isolated point tools.
 
 ```mermaid
 flowchart TD
-    A["研究问题 / 初始观察 / 灵感"] --> B{"方向是否已经成形？"}
-    B -->|否| C["research-ideation-novelty-check<br/>生成点子并做 novelty sanity-check"]
-    B -->|是| D["research-impact-strategy<br/>判断 GO / KILL / PIVOT / SCOPE-DOWN"]
+    A["Research question / initial observation / spark"] --> B{"Is the direction already shaped?"}
+    B -->|No| C["research-ideation-novelty-check<br/>Generate candidate ideas and run novelty sanity checks"]
+    B -->|Yes| D["research-impact-strategy<br/>Decide GO / KILL / PIVOT / SCOPE-DOWN"]
     C --> D
-    D -->|KILL| Z["停止当前方向 / 换题 / 重新收缩问题"]
-    D -->|GO / PIVOT / SCOPE-DOWN| E["zotero + citation-harvest<br/>收集文献、维护参考库、导出 BibTeX"]
-    E --> F["采集数据 / 跑实验 / 整理原始产物"]
-    F --> G["research-suite -> exploratory-data-analysis<br/>做格式识别、EDA、质量检查"]
-    G --> H["research-suite -> statistical-analysis<br/>选统计方法、查假设、报效应量"]
-    H --> I["research-suite -> scientific-visualization<br/>生成投稿级图表"]
-    I --> J["experiment-log-summarizer<br/>把 run 目录整理成 summary.md / summary.json"]
-    J --> K{"证据和故事线是否闭环？"}
-    K -->|否：定位或 claim 有问题| D
-    K -->|否：数据或实验还不够| F
-    K -->|是| L["scientific-paper-writeup + research-suite -> scientific-writing<br/>把 idea / logs / plots / citations 串成论文草稿"]
-    L --> M["paper-reviewer<br/>预审论证、结构、图表和版面"]
-    M --> N{"是否可以提交？"}
-    N -->|补实验| F
-    N -->|改故事或收缩 claim| D
-    N -->|改文稿、图表或引用| L
-    N -->|是| O["投稿 / rebuttal / 下一轮修订"]
+    D -->|KILL| Z["Stop this direction / change topics / tighten the scope again"]
+    D -->|GO / PIVOT / SCOPE-DOWN| E["zotero + citation-harvest<br/>Collect literature, maintain the reference library, export BibTeX"]
+    E --> F["Collect data / run experiments / organize raw artifacts"]
+    F --> G["research-suite -> exploratory-data-analysis<br/>Identify formats, run EDA, check data quality"]
+    G --> H["research-suite -> statistical-analysis<br/>Choose tests, check assumptions, report effect sizes"]
+    H --> I["research-suite -> scientific-visualization<br/>Produce submission-ready figures"]
+    I --> J["experiment-log-summarizer<br/>Condense the run directory into summary.md / summary.json"]
+    J --> K{"Do the evidence and story now close the loop?"}
+    K -->|No: positioning or claim is weak| D
+    K -->|No: data or experiments are still insufficient| F
+    K -->|Yes| L["scientific-paper-writeup + research-suite -> scientific-writing<br/>Turn ideas, logs, plots, and citations into a paper draft"]
+    L --> M["paper-reviewer<br/>Pre-review argument, structure, figures, and layout"]
+    M --> N{"Is it ready to submit?"}
+    N -->|Run more experiments| F
+    N -->|Revise the story or tighten the claim| D
+    N -->|Revise the draft, figures, or citations| L
+    N -->|Yes| O["Submit / rebuttal / next revision round"]
 ```
 
-推荐的最小闭环：
+Recommended minimum loop:
 
 1. [`research-ideation-novelty-check`](./skills/research-ideation-novelty-check/SKILL.md)
 2. [`research-impact-strategy`](./skills/research-impact-strategy/SKILL.md)
 3. [`zotero`](./skills/zotero/SKILL.md) / [`citation-harvest`](./skills/citation-harvest/SKILL.md)
-4. [`research-suite`](./skills/research-suite/SKILL.md) 内的 `exploratory-data-analysis`
-5. [`research-suite`](./skills/research-suite/SKILL.md) 内的 `statistical-analysis`
-6. [`research-suite`](./skills/research-suite/SKILL.md) 内的 `scientific-visualization`
+4. `exploratory-data-analysis` inside [`research-suite`](./skills/research-suite/SKILL.md)
+5. `statistical-analysis` inside [`research-suite`](./skills/research-suite/SKILL.md)
+6. `scientific-visualization` inside [`research-suite`](./skills/research-suite/SKILL.md)
 7. [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md)
-8. [`scientific-paper-writeup`](./skills/scientific-paper-writeup/SKILL.md) / [`research-suite`](./skills/research-suite/SKILL.md) 内的 `scientific-writing`
+8. [`scientific-paper-writeup`](./skills/scientific-paper-writeup/SKILL.md) / `scientific-writing` inside [`research-suite`](./skills/research-suite/SKILL.md)
 9. [`paper-reviewer`](./skills/paper-reviewer/SKILL.md)
 
-这个 showcase 的核心意思是：
+The core point of this showcase is:
 
-- 先用 `research-impact-strategy` 判断题值不值得继续，而不是一上来就写论文。
-- 把 `research-suite` 当作分析与可视化入口，把 EDA、统计、出图串起来。
-- 在写作前用 `experiment-log-summarizer` 把 run 目录沉淀成稳定输入。
-- 提交前再用 `paper-reviewer` 做一次预审，决定是补实验、改故事，还是直接投稿。
+- Use `research-impact-strategy` first to decide whether the topic is worth pursuing, instead of drafting the paper immediately.
+- Use `research-suite` as the analysis and visualization entrypoint so EDA, statistics, and figure production stay connected.
+- Use `experiment-log-summarizer` before writing so the run directory becomes a stable input.
+- Use `paper-reviewer` before submission to decide whether to add experiments, revise the story, or submit.
 
 ## Local Usage
 
@@ -84,10 +88,6 @@ If you want the easiest first-run path in the Codex app, install skills from thi
 
 ```text
 Use $skill-installer to install skills from https://github.com/tcztzy/skills.
-```
-
-```text
-请用 $skill-installer 从 https://github.com/tcztzy/skills 安装这个仓库里的技能。
 ```
 
 If you only want one skill, ask for it explicitly:

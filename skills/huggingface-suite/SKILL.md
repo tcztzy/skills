@@ -1,25 +1,25 @@
 ---
 name: huggingface-suite
-description: "Hugging Face Hub / datasets / training / evaluation / tracking / Gradio 的统一入口（vendored）。"
+description: "Unified entrypoint for Hugging Face Hub, datasets, training, evaluation, tracking, and Gradio workflows (vendored)."
 ---
 
 # Hugging Face Suite
 
-## 用途
-- 这是一个 **套件入口 skill**：把同域技能合并到一个入口，避免触发分裂。
-- vendored skills 存放在：`vendor/huggingface-skills/`（不会作为顶层 skill 被单独触发）。
+## Purpose
+- This is a **suite entrypoint skill** that consolidates related capabilities behind one top-level trigger.
+- Vendored skills live under `vendor/huggingface-skills/` and are not intended to trigger independently as top-level skills.
 
-## 路由规则（推荐）
-- Hub/CLI 认证、下载/上传、缓存、repo 管理 → `hugging-face-cli`
-- 数据集创建/维护/模板/SQL 查询/推送 → `hugging-face-datasets`
-- 模型评测结果写入 model card / model-index → `hugging-face-evaluation`
-- TRL + HF Jobs 训练/对齐、GGUF 转换 → `hugging-face-model-trainer`
-- 实验指标记录/告警/仪表盘（Trackio）→ `hugging-face-trackio`
-- Gradio demo / Blocks UI → `gradio`
+## Routing Rules (Recommended)
+- Hub and CLI authentication, downloads, uploads, cache management, or repository administration -> `hugging-face-cli`
+- Dataset creation, maintenance, templates, SQL querying, or publishing -> `hugging-face-datasets`
+- Writing evaluation results into model cards or `model-index` metadata -> `hugging-face-evaluation`
+- TRL plus Hugging Face Jobs training, alignment workflows, or GGUF conversion -> `hugging-face-model-trainer`
+- Experiment metric logging, alerts, or Trackio dashboards -> `hugging-face-trackio`
+- Gradio demos or Blocks-based UIs -> `gradio`
 
-## 包含的 vendored skills
+## Included Vendored Skills
 
-| 目录 | skill.name | 描述 |
+| Directory | skill.name | Description |
 |------|------------|------|
 | `hugging-face-cli` | `hugging-face-cli` | Execute Hugging Face Hub operations using the `hf` CLI. Use when the user needs to download models/datasets/spaces, upload files to Hub repositories, create repos, manage local cache, or run compute jobs on HF infrastructure. Covers authentication, file transfers, repository creation, cache operations, and cloud compute. |
 | `hugging-face-datasets` | `hugging-face-datasets` | Create and manage datasets on Hugging Face Hub. Supports initializing repos, defining configs/system prompts, streaming row updates, and SQL-based dataset querying/transformation. Designed to work alongside HF MCP server for comprehensive dataset workflows. |
@@ -28,11 +28,11 @@ description: "Hugging Face Hub / datasets / training / evaluation / tracking / G
 | `hugging-face-trackio` | `hugging-face-trackio` | Track and visualize ML training experiments with Trackio. Use when logging metrics during training (Python API), firing alerts for training diagnostics, or retrieving/analyzing logged metrics (CLI). Supports real-time dashboard visualization, alerts with webhooks, HF Space syncing, and JSON output for automation. |
 | `gradio` | `gradio` | Build Gradio web UIs and demos in Python. Use when creating or editing Gradio apps, components, event listeners, layouts, or chatbots. |
 
-## 许可与来源
-- 上游仓库：`https://github.com/huggingface/skills.git@main`
-- License/NOTICE：见 `vendor/huggingface-skills/` 下的相关文件（若存在）。
+## License and Source
+- Upstream repository: `https://github.com/huggingface/skills.git@main`
+- License and notice files: see the relevant files under `vendor/huggingface-skills/` when present.
 
-## 更新/重建
-- 同步来源缓存：运行 `skill-manager/scripts/sync-sources.py --all`
-- 重建套件：运行 `skill-manager/scripts/build-suites.py --all`
-- 构建后重启 Codex 以加载新/更新的 skills。
+## Update / Rebuild
+- Sync cached sources: run `skill-manager/scripts/sync-sources.py --all`
+- Rebuild the suite: run `skill-manager/scripts/build-suites.py --all`
+- Restart Codex after rebuilding so newly added or updated skills are loaded.

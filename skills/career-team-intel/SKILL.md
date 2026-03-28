@@ -1,6 +1,6 @@
 ---
 name: career-team-intel
-description: Proactively research target companies/teams and key hiring decision makers (EM/TL/HM/recruiters) for job seeking using public, explicitly professional sources; interpret hiring-intent signals (e.g., leader "we're hiring" posts), score confidence, and produce a team brief + contact map + outreach messages + resume alignment. Use when applying to large companies with many teams (e.g., Google/Microsoft/OpenAI) and you need to find which team is hiring, what they care about, and how to tailor outreach/interview prep. Do NOT deanonymize pseudonymous accounts or infer private life; only use publicly disclosed professional info. (求职/团队调研/招聘信号/外联)
+description: Proactively research target companies, teams, and hiring decision makers (EM/TL/HM/recruiters) for job seeking using public, explicitly professional sources; interpret hiring-intent signals such as leader "we're hiring" posts, score confidence, and produce a team brief, contact map, outreach messages, and resume alignment. Use when applying to large companies with many teams and you need to determine which team is hiring, what they care about, and how to tailor outreach and interview preparation. Do not deanonymize pseudonymous accounts or infer private life; only use publicly disclosed professional information.
 ---
 
 # Career Team Intel
@@ -25,6 +25,7 @@ Method mapping (adapted safely for career use):
 - Do **not** link pseudonymous accounts to real identities; do **not** infer private life; do **not** use data brokers/leaks.
 - Always record **URLs** and **dates** for every claim; prefer **corroboration** over clever inference.
 - If a source is ambiguous (stale post, vague “we’re growing”), treat it as a weak signal and ask for a req/link.
+- Write briefs, outreach, and interview-prep materials in professional English unless the user explicitly requests another language.
 
 ## Inputs To Ask For (Minimal)
 

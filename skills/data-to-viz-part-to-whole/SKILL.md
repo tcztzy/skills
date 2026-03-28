@@ -44,7 +44,7 @@ Use this skill when the question is about composition of a whole rather than pur
 
 **Input**
 
-- "我想看每个模型总错误里不同错误类型各占多少。"
+- "I want to see how each model's total errors break down by error type."
 
 **Actions**
 

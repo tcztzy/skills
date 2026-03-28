@@ -118,13 +118,9 @@ Scope keywords: <...>
         out_dir / "outreach_messages.md",
         """# Outreach Messages (Templates)
 
-English (leader / hiring manager):
+Leader / hiring manager:
 Hi <Name> — I saw your post about hiring for <role/team> (<date/link>). I’ve worked on <matching area>, e.g. <metric/result>.
 Is there a req ID/link you prefer I apply through?
-
-Chinese (leader / hiring manager):
-你好 <Name>，我看到你在 <date/link> 提到团队在招 <role/team>。我在 <匹配方向> 有相关经验（例如 <指标/结果>）。
-请问是否有对应的 req 链接/编号建议我走正式投递？
 """,
     )
 

@@ -16,11 +16,8 @@ By default, the output is a short strategy memo using `assets/strategy-memo-temp
 ## When to Use This Skill
 
 - Early stage: "Is this idea worth pursuing?" "Does this feel top-venue worthy?"
-- 早期判断："这个想法值得投顶会吗？"
 - Mid-project: "The experiments kind of work; should we keep going, pivot, or cut scope?"
-- 中期判断："实验有结果但不够强，要不要砍？"
 - Writing stage: "What is the one claim?" "Why does this draft not land?"
-- 写作判断："这篇 draft 为什么不够有冲击力？"
 - Pre-submission: "What obvious reviewer question have we not answered yet?"
 - Positioning stage: "Who is the reader?" "Does the paper explain why this matters now?"
 
@@ -85,7 +82,7 @@ Output:
 
 **Input**
 
-"我们有一个训练时防御的新方法，比 baseline 高 1.5%，但只在一个数据集上稳定。这个想法还值得投顶会吗？"
+"We have a new training-time defense method that beats the baseline by 1.5%, but it is stable on only one dataset. Is this still worth aiming at a top venue?"
 
 **Actions**
 
