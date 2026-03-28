@@ -19,22 +19,10 @@ SHELL_INIT_FILENAME = "shell-init.sh"
 DOCS_SKILLS = {"doc", "pdf", "latex-to-word"}
 SCIENCE_SKILLS = {
     "jupyter-notebook",
-    "research-suite",
-    "exploratory-data-analysis",
-    "scientific-visualization",
-    "scientific-writing",
-    "statistical-analysis",
+    "experiment-log-summarizer",
+    "paper-visualizer",
 }
-ML_SKILLS = {
-    "huggingface-suite",
-    "hugging-face-cli",
-    "hugging-face-datasets",
-    "hugging-face-evaluation",
-    "hugging-face-model-trainer",
-    "hugging-face-trackio",
-    "gradio",
-    "pytorch-lightning",
-}
+ML_SKILLS: set[str] = set()
 NOTION_SKILLS = {
     "notion-knowledge-capture",
     "notion-meeting-intelligence",
@@ -112,28 +100,8 @@ DOMAIN_SPECS: dict[str, dict[str, Any]] = {
     "ml-python": {
         "kind": "python",
         "skills": sorted(ML_SKILLS),
-        "install_groups": [
-            ["torch"],
-            [
-                "lightning",
-                "huggingface_hub",
-                "datasets",
-                "gradio",
-                "trl",
-                "trackio",
-                "lighteval",
-            ],
-        ],
-        "probe_modules": {
-            "torch": "torch",
-            "lightning": "lightning",
-            "huggingface_hub": "huggingface_hub",
-            "datasets": "datasets",
-            "gradio": "gradio",
-            "trl": "trl",
-            "trackio": "trackio",
-            "lighteval": "lighteval",
-        },
+        "packages": [],
+        "probe_modules": {},
     },
 }
 

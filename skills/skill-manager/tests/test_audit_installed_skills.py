@@ -60,7 +60,7 @@ class AuditInstalledSkillsTests(unittest.TestCase):
         self.assertEqual(verdict, "ready")
         self.assertTrue(probe)
         self.assertFalse(leak)
-        verdict, _reason, probe, leak = MODULE.skill_readiness("gradio", registry)
+        verdict, _reason, probe, leak = MODULE.skill_readiness("playwright", registry)
         self.assertEqual(verdict, "ready")
         self.assertTrue(probe)
         self.assertFalse(leak)
@@ -68,16 +68,24 @@ class AuditInstalledSkillsTests(unittest.TestCase):
     def test_audit_installed_skills_writes_summary(self) -> None:
         fake_skills = [
             {"skill_name": "latex-to-word", "skill_path": str(SKILLS_ROOT / "latex-to-word"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
-            {"skill_name": "gradio", "skill_path": str(SKILLS_ROOT / "huggingface-suite/vendor/huggingface-skills/gradio"), "skill_kind": "vendored", "entry_type": "leaf_skill"},
+            {
+                "skill_name": "paper-visualizer",
+                "skill_path": str(SKILLS_ROOT / "paper-visualizer"),
+                "skill_kind": "top_level",
+                "entry_type": "leaf_skill",
+            },
+            {"skill_name": "openai-docs", "skill_path": str(SKILLS_ROOT / "openai-docs"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
             {"skill_name": "skill-manager", "skill_path": str(SKILLS_ROOT / "skill-manager"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
-            {"skill_name": "pytorch-lightning", "skill_path": str(SKILLS_ROOT / "pytorch-lightning"), "skill_kind": "top_level", "entry_type": "leaf_skill"},
         ]
         with tempfile.TemporaryDirectory() as tmp:
             with patch.object(MODULE, "load_or_probe_registry", return_value=self.fake_registry()), patch.object(MODULE, "discover_skills", return_value=fake_skills):
                 payload = MODULE.audit_installed_skills(skills_root=SKILLS_ROOT, workspace_root=Path(tmp))
         self.assertEqual(payload["summary"]["total"], 4)
         self.assertEqual(payload["summary"]["ready"], 4)
-        self.assertEqual({item["runtime_domain"] for item in payload["skills"]}, {"docs-python", "ml-python", "core-tools"})
+        self.assertEqual(
+            {item["runtime_domain"] for item in payload["skills"]},
+            {"docs-python", "science-python", "core-tools"},
+        )
 
 
 if __name__ == "__main__":

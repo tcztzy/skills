@@ -1,8 +1,8 @@
 # Skills Repository
 
-This repository keeps installable Agent Skills under a single [`skills/`](./skills) entrypoint, following the layout used by [openai/skills](https://github.com/openai/skills) and [anthropics/skills](https://github.com/anthropics/skills).
+This repository keeps installable Agent Skills under a single [`skills/`](./skills) entrypoint, following the layout commonly used by skills repositories such as [openai/skills](https://github.com/openai/skills) and [anthropics/skills](https://github.com/anthropics/skills).
 
-It intentionally does not duplicate official skills that already exist in `openai/skills`. OpenAI-owned curated/system skills should come from the upstream repository or Codex's built-in system skill set; this repository focuses on project-owned skills plus non-OpenAI vendored suites.
+It focuses on project-owned skills that are maintained directly in this repository. Official or third-party skills should stay in their own upstream repositories rather than being vendored here.
 
 ## Layout
 
@@ -26,14 +26,13 @@ flowchart TD
     D -->|KILL| Z["Stop this direction / change topics / tighten the scope again"]
     D -->|GO / PIVOT / SCOPE-DOWN| E["zotero + citation-harvest<br/>Collect literature, maintain the reference library, export BibTeX"]
     E --> F["Collect data / run experiments / organize raw artifacts"]
-    F --> G["research-suite -> exploratory-data-analysis<br/>Identify formats, run EDA, check data quality"]
-    G --> H["research-suite -> statistical-analysis<br/>Choose tests, check assumptions, report effect sizes"]
-    H --> I["research-suite -> scientific-visualization<br/>Produce submission-ready figures"]
-    I --> J["experiment-log-summarizer<br/>Condense the run directory into summary.md / summary.json"]
+    F --> G["data-to-viz<br/>Choose chart family and plotting route"]
+    G --> H["paper-visualizer<br/>Generate or refine paper figures and plots"]
+    H --> J["experiment-log-summarizer<br/>Condense the run directory into summary.md / summary.json"]
     J --> K{"Do the evidence and story now close the loop?"}
     K -->|No: positioning or claim is weak| D
     K -->|No: data or experiments are still insufficient| F
-    K -->|Yes| L["scientific-paper-writeup + research-suite -> scientific-writing<br/>Turn ideas, logs, plots, and citations into a paper draft"]
+    K -->|Yes| L["scientific-paper-writeup<br/>Turn ideas, logs, plots, and citations into a paper draft"]
     L --> M["paper-reviewer<br/>Pre-review argument, structure, figures, and layout"]
     M --> N{"Is it ready to submit?"}
     N -->|Run more experiments| F
@@ -47,17 +46,17 @@ Recommended minimum loop:
 1. [`research-ideation-novelty-check`](./skills/research-ideation-novelty-check/SKILL.md)
 2. [`research-impact-strategy`](./skills/research-impact-strategy/SKILL.md)
 3. [`zotero`](./skills/zotero/SKILL.md) / [`citation-harvest`](./skills/citation-harvest/SKILL.md)
-4. `exploratory-data-analysis` inside [`research-suite`](./skills/research-suite/SKILL.md)
-5. `statistical-analysis` inside [`research-suite`](./skills/research-suite/SKILL.md)
-6. `scientific-visualization` inside [`research-suite`](./skills/research-suite/SKILL.md)
-7. [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md)
-8. [`scientific-paper-writeup`](./skills/scientific-paper-writeup/SKILL.md) / `scientific-writing` inside [`research-suite`](./skills/research-suite/SKILL.md)
-9. [`paper-reviewer`](./skills/paper-reviewer/SKILL.md)
+4. [`data-to-viz`](./skills/data-to-viz/SKILL.md)
+5. [`paper-visualizer`](./skills/paper-visualizer/SKILL.md)
+6. [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md)
+7. [`scientific-paper-writeup`](./skills/scientific-paper-writeup/SKILL.md)
+8. [`paper-reviewer`](./skills/paper-reviewer/SKILL.md)
 
 The core point of this showcase is:
 
 - Use `research-impact-strategy` first to decide whether the topic is worth pursuing, instead of drafting the paper immediately.
-- Use `research-suite` as the analysis and visualization entrypoint so EDA, statistics, and figure production stay connected.
+- Use `data-to-viz` before dropping into plotting backends so chart choice stays tied to the analytical question.
+- Use `paper-visualizer` when the deliverable is a manuscript-ready figure or plot rather than a quick exploratory chart.
 - Use `experiment-log-summarizer` before writing so the run directory becomes a stable input.
 - Use `paper-reviewer` before submission to decide whether to add experiments, revise the story, or submit.
 
@@ -127,7 +126,7 @@ python3 scripts/sync_codex_skills_from_claude.py --replace-symlink
 
 ## Claude Marketplace
 
-This repository now also exposes a Claude plugin marketplace manifest at [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
+This repository also exposes a Claude plugin marketplace manifest at [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
 
 - Each visible skill under [`skills/`](./skills) is exported as its own Claude plugin entry.
 - Hidden and system-only directories are excluded from the marketplace manifest.

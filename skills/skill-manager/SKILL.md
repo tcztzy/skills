@@ -1,14 +1,14 @@
 ---
 name: skill-manager
-description: Manage and evolve Codex skills: create, update, and audit SKILL.md files together with their scripts, references, and assets; inventory installed skills; validate and convert Claude Code skills; sync upstream sources and build vendored suites; and check shared runtime readiness. Prefer source-driven maintenance for skills that already have a known upstream and do not require repo-local modifications. Use when prompts mention create skill, audit skill, update SKILL.md, convert skill, install skill, build suite, or bootstrap skill runtimes.
+description: Manage and evolve Codex skills: create, update, and audit SKILL.md files together with their scripts, references, and assets; inventory installed skills; validate and convert Claude Code skills; and check shared runtime readiness. Use when prompts mention create skill, audit skill, update SKILL.md, validate skill, convert skill, inventory skills, install skill, or bootstrap skill runtimes.
 metadata:
   short_name: skillmgr
-  aliases: skill audit,skill authoring,skill install,skill suite
+  aliases: skill audit,skill authoring,skill install,runtime audit
 ---
 
 # Skill Manager
 
-This is the unified entry point for skill lifecycle management in this repository. Use it first for creating, updating, auditing, installing, converting, bundling, or bootstrapping shared runtimes for skills. For any skill with a known source that does not need repo-local changes, do not keep a parallel top-level copy in this repository; instead, sync, build, or use the upstream version registered in `references/sources.json`.
+This is the unified entry point for skill lifecycle management in this repository. Use it first for creating, updating, auditing, inventorying, converting, or bootstrapping shared runtimes for skills.
 
 ## Mode A: Create / Update / Audit Skills
 
@@ -30,7 +30,6 @@ This is the unified entry point for skill lifecycle management in this repositor
 - Keep only the procedural `how` in the skill; move large `what` blocks into `references/` or `assets/`.
 - Put fragile or repetitive mechanical steps into `scripts/`, not into prose.
 - For fast-moving platform knowledge, record the official lookup path instead of embedding large blocks of facts that will go stale.
-- For any skill with a known source and no repo-local modification requirement, prefer the upstream source and do not keep a duplicate top-level copy in this repository.
 - A tool-first top-level split is justified only when the tool changes the artifact type, runtime, permission boundary, or validation strategy.
 - If a skill must trigger as mandatory at the repo level, update `AGENTS.md` as part of the change.
 
@@ -121,15 +120,12 @@ codex_home="${CODEX_HOME:-$HOME/.codex}"
 ls -1 "$codex_home/skills" | sort
 ```
 
-### Get or install open-source skills
+Use the local audit helper when you want an inventory plus shared runtime readiness:
 
-Prefer the built-in source sync and suite build scripts in `skill-manager`:
-
-- For any skill registered in `references/sources.json` that does not need repo-local modification, use source-driven sync or build instead of maintaining a duplicate top-level copy.
-- `openai-skills` currently uses `skills/.curated` and `skills/.system`.
-- Sync source cache: `python3 "$HOME/.codex/skills/skill-manager/scripts/sync-sources.py" --all`
-- Build vendored suites or standalone skills: `python3 "$HOME/.codex/skills/skill-manager/scripts/build-suites.py" --all`
-- Source registry: `references/sources.json`
+```bash
+python3 "$HOME/.codex/skills/skill-manager/scripts/audit-installed-skills.py" \
+  --workspace /tmp/skill-audit
+```
 
 ### Convert a Claude Code skill into a Codex skill
 
@@ -152,35 +148,7 @@ Restart Codex after conversion so the new skill is loaded.
 - Use `variable_rewrites` to handle placeholders such as `$ARGUMENTS`.
 - If `agents/openai.yaml` is missing, generate a minimal usable version automatically.
 
-## Mode C: Source Sync / Suite Build / Runtime Preparation
-
-### Source registration
-
-- Source registry: `references/sources.json`
-- Mark a source as `restricted: true` when installation or vendoring must be blocked
-
-### Suite build
-
-- Suite definitions: `references/suites.json`
-- Maintained by default:
-  - `huggingface-suite`
-  - `research-suite`
-- Standalone:
-  - `pytorch-lightning`
-
-Sync source cache:
-
-```bash
-python3 "$HOME/.codex/skills/skill-manager/scripts/sync-sources.py" --all
-```
-
-Build suites or standalone skills:
-
-```bash
-python3 "$HOME/.codex/skills/skill-manager/scripts/build-suites.py" --all
-```
-
-Restart Codex after a build so new or updated skills are loaded.
+## Mode C: Runtime Preparation
 
 ### Shared runtime
 
@@ -191,9 +159,8 @@ Shared runtime root:
 Capability domains:
 
 - `docs-python`: `doc`, `pdf`, `latex-to-word`
-- `science-python`: `jupyter-notebook`, `research-suite`
-- `ml-python`: `huggingface-suite`, `pytorch-lightning`
-- `core-tools`: `codex`, `gh`, `playwright`, `pandoc`, screenshot tools, and MCP configuration
+- `science-python`: `jupyter-notebook`, `experiment-log-summarizer`, `paper-visualizer`
+- `core-tools`: `skill-manager`, `openai-docs`, `playwright`, `screenshot`, `gh-fix-ci`, `yeet`, and related tooling integrations
 
 Bootstrap:
 
@@ -228,7 +195,7 @@ Default rules:
 
 ### `scripts/audit-installed-skills.py`
 
-- Inventory top-level and vendored skills
+- Inventory installed skills
 - Combine inventory with the runtime registry to produce a readiness summary
 - Limited to inventory and runtime checks that are self-contained within the repository
 
@@ -239,13 +206,13 @@ Default rules:
 - Generate readiness and retirement-style reports
 - Skip-style audits only for skills that perform external writes
 
-### `scripts/sync-sources.py`
+### `scripts/bootstrap-global-skill-runtime.py`
 
-- Sync upstream sources into the local cache
+- Bootstrap the shared runtime registry for installed skills
 
-### `scripts/build-suites.py`
+### `scripts/runtime_registry.py`
 
-- Rebuild vendored suites and standalone skills from `sources.json` and `suites.json`
+- Define domain-to-skill mappings and probe logic for the shared runtime
 
 ## Expected outputs
 
@@ -254,6 +221,6 @@ Default rules:
   - any needed `references/`, `assets/`, or `scripts/`
   - validator passes
   - if this is a security audit, either findings or an explicit `No findings`
-- For install, convert, or suite tasks:
-  - the target skill or suite is installed or built correctly
+- For install, convert, inventory, or runtime tasks:
+  - installed skills are inventoried correctly
   - related probe and readiness results are traceable

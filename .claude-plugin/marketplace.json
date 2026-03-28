@@ -58,7 +58,7 @@
     },
     {
       "name": "career-team-intel",
-      "description": "Proactively research target companies/teams and key hiring decision makers (EM/TL/HM/recruiters) for job seeking using public, explicitly professional sources; interpret hiring-intent signals (e.g., leader \"we're hiring\" posts), score confidence, and produce a team brief + contact map + outreach messages + resume alignment.",
+      "description": "Proactively research target companies, teams, and hiring decision makers (EM/TL/HM/recruiters) for job seeking using public, explicitly professional sources; interpret hiring-intent signals such as leader \"we're hiring\" posts, score confidence, and produce a team brief, contact map, outreach messages, and resume alignment.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -201,15 +201,6 @@
       ]
     },
     {
-      "name": "huggingface-suite",
-      "description": "Hugging Face Hub / datasets / training / evaluation / tracking / Gradio 的统一入口（vendored）。",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/huggingface-suite"
-      ]
-    },
-    {
       "name": "idea-to-markdown",
       "description": "Convert idea JSON into a structured idea.md (optionally embedding a code snippet).",
       "source": "./",
@@ -220,7 +211,7 @@
     },
     {
       "name": "latex-to-word",
-      "description": "将 LaTeX (.tex) 文件转换为 Word (.docx) 格式。通过自动预处理解决 pandoc 对自定义命令、tabularx、resizebox 等的兼容性问题，最大限度减少后续手动调整。",
+      "description": "Convert LaTeX (.tex) files to Word (.docx) using an automated preprocessing pipeline that resolves common pandoc incompatibilities such as custom commands, tabularx, and resizebox, minimizing manual cleanup afterward.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -273,15 +264,6 @@
       ]
     },
     {
-      "name": "pytorch-lightning",
-      "description": "Deep learning framework (PyTorch Lightning). Organize PyTorch code into LightningModules, configure Trainers for multi-GPU/TPU, implement data pipelines, callbacks, logging (W&B, TensorBoard), distributed training (DDP, FSDP, DeepSpeed), for scalable neural network training.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/pytorch-lightning"
-      ]
-    },
-    {
       "name": "research-ideation-novelty-check",
       "description": "Generate and refine research ideas and run a lightweight novelty sanity-check using Semantic Scholar.",
       "source": "./",
@@ -297,15 +279,6 @@
       "strict": false,
       "skills": [
         "./skills/research-impact-strategy"
-      ]
-    },
-    {
-      "name": "research-suite",
-      "description": "科研写作、EDA、统计分析、可视化统一入口（vendored）。",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/research-suite"
       ]
     },
     {
@@ -328,7 +301,7 @@
     },
     {
       "name": "skill-manager",
-      "description": "Manage and evolve Codex skills: create, update, and audit SKILL.md files together with their scripts, references, and assets; inventory installed skills; validate and convert Claude Code skills; sync upstream sources and build vendored suites; and check shared runtime readiness. Prefer source-driven maintenance for skills that already have a known upstream and do not require repo-local modifications.",
+      "description": "Manage and evolve Codex skills: create, update, and audit SKILL.md files together with their scripts, references, and assets; inventory installed skills; and check shared runtime readiness.",
       "source": "./",
       "strict": false,
       "skills": [

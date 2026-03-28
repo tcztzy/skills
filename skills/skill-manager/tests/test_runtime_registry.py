@@ -20,9 +20,11 @@ class RuntimeRegistryTests(unittest.TestCase):
             self.assertEqual(MODULE.resolve_runtime_root(), Path(tmp).resolve())
 
     def test_runtime_domain_mapping(self) -> None:
+        self.assertEqual(MODULE.runtime_domain_for_skill("doc"), "docs-python")
         self.assertEqual(MODULE.runtime_domain_for_skill("latex-to-word"), "docs-python")
-        self.assertEqual(MODULE.runtime_domain_for_skill("research-suite"), "science-python")
-        self.assertEqual(MODULE.runtime_domain_for_skill("gradio"), "ml-python")
+        self.assertEqual(MODULE.runtime_domain_for_skill("jupyter-notebook"), "science-python")
+        self.assertEqual(MODULE.runtime_domain_for_skill("paper-visualizer"), "science-python")
+        self.assertEqual(MODULE.runtime_domain_for_skill("openai-docs"), "core-tools")
         self.assertEqual(MODULE.runtime_domain_for_skill("skill-manager"), "core-tools")
 
     def test_ambient_python_state_exposes_leak_flag(self) -> None:

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Hugging Face Suite"
-  short_description: "Unified entrypoint for Hugging Face Hub, datasets, training, evaluation, tracking, and Gradio workflows (vendored)."
-  default_prompt: "Use this suite entrypoint to complete the task. First confirm the goal, such as Hub operations, datasets, training, evaluation, tracking, or Gradio UI work, then choose the matching vendored skill using the suite routing rules."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Research Suite"
-  short_description: "Unified entrypoint for scientific writing, EDA, statistical analysis, and visualization workflows (vendored)."
-  default_prompt: "Use this suite entrypoint to complete the task. First confirm the goal, such as scientific writing, EDA, statistical analysis, or figure production, then choose the matching vendored skill using the suite routing rules."
