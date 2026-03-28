@@ -328,7 +328,7 @@
     },
     {
       "name": "skill-manager",
-      "description": "管理和演进 Codex skills：创建/更新/审计 SKILL.md 与配套 scripts/references/assets，盘点已安装 skills，校验和转换 Claude Code skills，同步来源并构建 vendored suites，检查共享 runtime 的准备情况，并避免在本仓库重复维护 openai/skills 已提供的官方技能.",
+      "description": "Manage and evolve Codex skills: create, update, and audit SKILL.md files together with their scripts, references, and assets; inventory installed skills; validate and convert Claude Code skills; sync upstream sources and build vendored suites; and check shared runtime readiness. Prefer source-driven maintenance for skills that already have a known upstream and do not require repo-local modifications.",
       "source": "./",
       "strict": false,
       "skills": [
