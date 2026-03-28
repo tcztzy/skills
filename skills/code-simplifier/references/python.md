@@ -21,6 +21,7 @@ Notes:
 - Prefer data-driven mappings (`dict.get`) over repetitive `if/elif` chains when it stays clear.
 - Avoid nested ternary expressions; prefer `if/elif/else` or `match` for multiple branches.
 - For Pydantic models, prefer class keyword config such as `class Model(BaseModel, extra="forbid"):` over `model_config = ConfigDict(extra="forbid")` when both forms are equivalent.
+- Do not add `from __future__ import annotations` by default in modern Python code. Prefer normal annotations unless the repo already standardizes on postponed evaluation; stringized annotations complicate runtime annotation access and are no longer the clear forward path in the Python docs.
 - Keep type information on boundaries; avoid widening to `Any` just to shorten code.
 - Be careful with falsy-coalescing (`x or default`): it is only behavior-preserving if `x` being falsy should also trigger the default.
 

@@ -246,6 +246,15 @@
       ]
     },
     {
+      "name": "paper-visualizer",
+      "description": "Orchestrate standalone paper-visualization workflows with skill-packaged agents, scripts, style guides, and inspectable run artifacts.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/paper-visualizer"
+      ]
+    },
+    {
       "name": "project-simplify",
       "description": "Reduce repository complexity by de-vendoring large third-party sources and replacing them with pinned release artifacts, checksum verification, and minimal subset extraction.",
       "source": "./",

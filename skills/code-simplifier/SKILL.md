@@ -27,6 +27,8 @@ When a language pack exists, load only the relevant pack. For Rust work, use the
 - Remove redundancy (duplicate branches, repeated literals, repeated parsing/validation).
 - Prefer explicit, readable code over dense one-liners.
 - IMPORTANT: Avoid nested ternary operators (and similar "clever" constructs). Prefer `if/else` chains, `switch/match`, or small helpers when multiple conditions exist.
+- Prefer the simplest implementation that satisfies the requirement.
+- Do not add defensive branches, fallback layers, or configuration plumbing unless there is a concrete repository-specific need. Assume sane inputs and normal library defaults unless the codebase clearly requires stronger handling.
 
 4. Maintain balance.
 - Do not prioritize "fewer lines" over readability/debuggability.
