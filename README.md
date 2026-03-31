@@ -1,5 +1,13 @@
 # Skills Repository
 
+[![Codex plugin](https://img.shields.io/badge/Codex-native_plugin-0F766E?style=for-the-badge)](./.codex-plugin/plugin.json)
+[![Claude Code marketplace](https://img.shields.io/badge/Claude_Code-marketplace-CC785C?style=for-the-badge)](./.claude-plugin/marketplace.json)
+[![OpenClaw compatible](https://img.shields.io/badge/OpenClaw-compatible-4C6EF5?style=for-the-badge)](./skills)
+[![23 installable skills](https://img.shields.io/badge/23-installable_skills-334155?style=for-the-badge)](./skills)
+[![Research and developer workflows](https://img.shields.io/badge/Focus-research_%2B_dev_workflows-B45309?style=for-the-badge)](./README.md#showcase-end-to-end-research-workflow)
+
+Use this repository from **Codex**, **Claude Code**, and **OpenClaw** workflows.
+
 This repository keeps installable Agent Skills under a single [`skills/`](./skills) entrypoint, following the layout commonly used by skills repositories such as [openai/skills](https://github.com/openai/skills) and [anthropics/skills](https://github.com/anthropics/skills).
 
 It focuses on project-owned skills that are maintained directly in this repository. Official or third-party skills should stay in their own upstream repositories rather than being vendored here.
@@ -105,27 +113,6 @@ Use $skill-installer to install the `skill-manager` skill from https://github.co
 ```
 
 If a newly installed skill does not appear immediately, restart Codex.
-
-## Claude -> Codex Projection
-
-If you want Codex to mirror Claude's enabled skill plugins instead of exposing the whole repository, use [`scripts/sync_codex_skills_from_claude.py`](./scripts/sync_codex_skills_from_claude.py).
-
-The script:
-
-- reads `~/.claude/settings.json`
-- resolves enabled plugin ids like `document-skills@anthropic-agent-skills`
-- loads the corresponding marketplace metadata from `~/.claude/plugins/marketplaces/*/.claude-plugin/marketplace.json`
-- ignores non-skill plugins
-- creates symlinks for enabled skills under `~/.codex/skills`
-
-Example:
-
-```bash
-python3 scripts/sync_codex_skills_from_claude.py --dry-run
-python3 scripts/sync_codex_skills_from_claude.py --replace-symlink
-```
-
-`--replace-symlink` is needed if `~/.codex/skills` is currently a direct symlink to this repository, because the enabled-only projection needs a managed directory instead of a pass-through root symlink.
 
 ## Claude Marketplace
 
