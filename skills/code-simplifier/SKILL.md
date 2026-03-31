@@ -2,7 +2,8 @@
 name: code-simplifier
 description: Safely simplify code with multi-metric quality gates. Use when prompts mention
   to refactor/compress/reduce size or complexity without functional change; validate with
-  formatter-aligned metrics (lines/bytes + tokens/complexity when available) plus lint/tests/build.
+  formatter-aligned metrics (lines/bytes + tokens/complexity when available) plus
+  lint/tests/build and performance regression checks when relevant.
 ---
 
 # Code Simplifier
@@ -17,6 +18,7 @@ When a language pack exists, load only the relevant pack. For Rust work, use the
 
 1. Preserve functionality.
 - Never change behavior, outputs, side effects, error semantics, performance characteristics that tests/usage rely on, or public API shape unless explicitly requested.
+- Treat repeatable runtime or memory regressions on touched hot paths as failed simplifications, not acceptable trade-offs for shorter code.
 
 2. Apply project standards.
 - Read and follow the repo's conventions/instructions (for example: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, style guides, lint configs).
@@ -48,6 +50,10 @@ When a language pack exists, load only the relevant pack. For Rust work, use the
   - Formatted line count (`wc -l`).
   - Source bytes (`wc -c`).
   - Token count and structural complexity when feasible (AST nodes/branches/max depth, cyclomatic complexity).
+- If the touched code is plausibly performance-sensitive, or the repo already has benchmark/perf commands, record a performance baseline before changing code.
+  - Prefer existing project benchmarks first.
+  - Otherwise benchmark only the changed hot path with a stable command, representative input, and multiple repeats.
+  - Capture the command, input shape, environment, and the statistic you will compare.
 - Run relevant checks for the language/repo (lint + type check + build + targeted tests).
 - Rust default baseline: `cargo fmt --all`, then `cargo check`, `cargo clippy`, and targeted `cargo test`.
 
@@ -70,17 +76,20 @@ When a language pack exists, load only the relevant pack. For Rust work, use the
 4. Validate every pass.
 - Re-run formatter.
 - Re-check metrics against baseline.
-- Re-run lint/typecheck/build/tests. If the project has a fast subset, run that on each pass and run the full suite before finalizing.
+- Re-run lint/typecheck/build/tests.
+- Re-run the same benchmark/perf command whenever you took a performance baseline.
+- If the project has a fast subset, run that on each pass and run the full suite before finalizing.
 
 5. Treat non-improvement as failure.
 - If only one metric improves (for example lines) while others regress or stay flat, treat it as a failed simplification unless it clearly improves clarity.
 - If readability/maintainability drops, treat as failed even if size metrics improve.
+- If the simplified version shows a repeatable performance regression outside normal measurement noise, treat it as failed even when size/complexity metrics improve.
 - Explain why (formatter expansion, indirection overhead, compressed-but-harder control flow, hidden side effects, harder debugging).
 - Switch strategy (different refactor shape) and try again.
 
 ## Language Packs (References + Scripts)
 
-- Python: `references/python.md` and `scripts/python_metrics.py`. For Pydantic models, prefer class keyword config such as `class Model(BaseModel, extra="forbid"):` over `model_config = ConfigDict(extra="forbid")` when the keyword form expresses the same constraint.
+- Python: `references/python.md` and `scripts/python_metrics.py`. For performance-sensitive Python simplifications, also follow the benchmark discipline used by the `python-performance-tuning` skill: baseline first, keep setup stable, use multiple repeats, and reject repeatable regressions. For Pydantic models, prefer class keyword config such as `class Model(BaseModel, extra="forbid"):` over `model_config = ConfigDict(extra="forbid")` when the keyword form expresses the same constraint.
 - Rust: `references/rust.md` (use `cargo fmt`/`check`/`clippy`/`test`; if AST metrics matter, create the tiny `proc-macro2` + `syn` probe from the reference)
 - Add other languages by adding markdown files under `references/` (and `scripts/` helpers when useful).
 
@@ -94,6 +103,7 @@ When a language pack exists, load only the relevant pack. For Rust work, use the
 ## Decision Rules
 
 - Optimize for **multi-metric simplicity**: formatted lines + bytes + (tokens/complexity when available) + build/test confidence.
+- When relevant, include runtime and memory regression checks in that gate; smaller code does not count as a win if the changed path gets slower.
 - Keep behavior equivalent by default; do not change API shape or edge-case semantics unless requested.
 - Do not trade away readability just to game metrics.
 - Do not trade away borrow-safety, explicit invariants, or error quality just to game metrics.
@@ -108,8 +118,9 @@ Simplify one or more files without functional change.
 **Actions**
 1. Identify scope (diff, file list, or user-specified functions).
 2. Run the project's formatter, then record baseline metrics (lines/bytes; tokens/complexity when available).
-3. Apply behavior-preserving simplifications while keeping readability and contracts intact.
-4. Re-run formatter, re-measure, and run the relevant checks (lint/typecheck/build/tests).
+3. If the touched path is performance-sensitive, record a fair benchmark baseline.
+4. Apply behavior-preserving simplifications while keeping readability, contracts, and performance intact.
+5. Re-run formatter, re-measure, and run the relevant checks (lint/typecheck/build/tests and the same benchmark when applicable).
 
 **Output**
 A short report with baseline vs final metrics, what checks were run, and confirmation that behavior is preserved.
@@ -117,6 +128,7 @@ A short report with baseline vs final metrics, what checks were run, and confirm
 ## Output Checklist
 
 - State baseline and final metrics (as available): line count, byte size, token count, complexity measures.
+- State baseline and final performance metrics when benchmarks were run, including the command and compared statistic.
 - State net deltas and whether readability/maintainability stayed acceptable.
-- Confirm formatter + lint/typecheck/build/tests run and outcomes.
+- Confirm formatter + lint/typecheck/build/tests and any benchmark/perf checks run and outcomes.
 - If no true simplification, provide failure analysis and next strategy.
