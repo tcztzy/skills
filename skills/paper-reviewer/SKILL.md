@@ -24,7 +24,7 @@ If the user is doing pre-submission self-positioning and mainly wants to decide 
    - Prefer the session's `pdf` skill for PDF rendering or page-level inspection when available.
    - Fallback to this local renderer when no suitable PDF helper is available:
    ~~~bash
-   UV_CACHE_DIR=/tmp/uv-cache XDG_CACHE_HOME=/tmp uv run scripts/render_pdf_pages.py --pdf paper.pdf --out-dir paper_pages
+   uv run scripts/render_pdf_pages.py --pdf paper.pdf --out-dir paper_pages
    ~~~
 2. Run a visual pass over the rendered pages before scoring.
    - Layout, whitespace balance, and page rhythm.
@@ -34,7 +34,7 @@ If the user is doing pre-submission self-positioning and mainly wants to decide 
    - Cropping, overflow, awkward breaks, and other production issues.
 3. Extract text only if needed for searchability, dense methods, equations, or precise wording checks.
    ~~~bash
-   UV_CACHE_DIR=/tmp/uv-cache XDG_CACHE_HOME=/tmp uv run --with pypdf -s scripts/extract_pdf_text.py --pdf paper.pdf --out paper.txt
+   uv run --with pypdf -s scripts/extract_pdf_text.py --pdf paper.pdf --out paper.txt
    ~~~
 4. Set evaluation scope and context.
    - Scope: `comprehensive`, `targeted`, or `comparative`.

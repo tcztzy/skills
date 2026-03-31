@@ -28,16 +28,16 @@ If the main question is whether an idea is worth pursuing at all, or whether it 
 ### Semantic Scholar search
 - Offline (default-safe; no network):
   ~~~bash
-  UV_CACHE_DIR=/tmp/uv-cache XDG_CACHE_HOME=/tmp uv run -s scripts/s2_search.py --query "your query"
+  uv run -s scripts/s2_search.py --query "your query"
   ~~~
 - Online (explicit opt-in; optional S2_API_KEY in env):
   ~~~bash
-  UV_CACHE_DIR=/tmp/uv-cache XDG_CACHE_HOME=/tmp uv run -s scripts/s2_search.py --online --query "attention is all you need" --limit 10
+  uv run -s scripts/s2_search.py --online --query "attention is all you need" --limit 10
   ~~~
 
 ### Idea schema validation
 - ~~~bash
-  UV_CACHE_DIR=/tmp/uv-cache XDG_CACHE_HOME=/tmp uv run -s scripts/idea_schema_validate.py --in ideas.json
+  uv run -s scripts/idea_schema_validate.py --in ideas.json
   ~~~
 
 ## References

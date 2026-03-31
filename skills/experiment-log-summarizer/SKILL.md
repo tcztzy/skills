@@ -15,7 +15,7 @@ This skill does not run experiments and does not call external services. It inve
    - Examples are described in references/run-layout.md.
 2. Run the summarizer
    ~~~bash
-   UV_CACHE_DIR=/tmp/uv-cache XDG_CACHE_HOME=/tmp uv run -s scripts/summarize_dir.py --dir /path/to/run --out summary.md --json-out summary.json
+   uv run -s scripts/summarize_dir.py --dir /path/to/run --out summary.md --json-out summary.json
    ~~~
 3. Use the summary
    - Paste summary.md into your writeup workflow.
