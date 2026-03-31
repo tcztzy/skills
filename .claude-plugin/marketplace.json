@@ -49,7 +49,7 @@
     },
     {
       "name": "bfts-config-prep",
-      "description": "Prepare a BFTS run directory from idea JSON by generating idea.md and a configured bfts_config.yaml. Use when starting a BFTS experiment from structured idea inputs and you want a runnable timestamped run folder under runs/.",
+      "description": "Prepare a BFTS run directory from idea JSON by generating idea.md and a configured bfts_config.yaml.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -138,6 +138,15 @@
       ]
     },
     {
+      "name": "paper-writer",
+      "description": "Single entry point for drafting or revising scientific papers, generating profile-based LaTeX scaffolds, harvesting draft-local citations into BibTeX, and auditing figure-caption-figref alignment from paper PDFs.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/paper-writer"
+      ]
+    },
+    {
       "name": "project-simplify",
       "description": "Reduce repository complexity by de-vendoring large third-party sources and replacing them with pinned release artifacts, checksum verification, and minimal subset extraction.",
       "source": "./",
@@ -171,15 +180,6 @@
       "strict": false,
       "skills": [
         "./skills/research-impact-strategy"
-      ]
-    },
-    {
-      "name": "paper-writer",
-      "description": "Single entry point for drafting or revising scientific papers, generating profile-based LaTeX scaffolds, harvesting citations into BibTeX, and auditing figure-caption-figref alignment from paper PDFs.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/paper-writer"
       ]
     },
     {
