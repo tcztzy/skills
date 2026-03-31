@@ -72,16 +72,27 @@ That keeps runtime lookup paths stable for repository-local skills, for example:
 
 If you also need official OpenAI skills such as `playwright`, `pdf`, or `openai-docs`, install them from [openai/skills](https://github.com/openai/skills) or use the built-in system skills that ship with Codex.
 
-## Codex App Quickstart (macOS / Windows)
+## Codex Plugin
 
-If you want the easiest first-run path in the Codex app, install skills from this repository URL first instead of wiring local symlinks.
+This repository now exposes a native Codex plugin via [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json).
+
+If you open this repository in the Codex app, you can install it from the repo marketplace without copying skills into `.agents/skills`:
 
 1. Download the Codex app
    - macOS (Apple Silicon): [Download Codex.dmg](https://persistent.oaistatic.com/codex-app-prod/Codex.dmg)
    - Windows: [Install from Microsoft Store](https://apps.microsoft.com/detail/9plm9xgg6vks?hl=en-US&gl=US) or run `winget install Codex -s msstore`
 2. Open Codex and sign in with your ChatGPT account.
-3. Open any local folder or git repository in the Codex app.
-4. Paste one of the following prompts into Codex to install skills from this repository:
+3. Clone this repository locally and open it in the Codex app.
+4. Restart Codex if the repository was already open before the marketplace files were added.
+5. Open the plugin directory, choose the `Blackscience Tech Skills` marketplace, and install the `Blackscience Tech Skills` plugin.
+
+The plugin packages the repository's [`skills/`](./skills) directory directly, so adding or updating skills in this repo updates the local plugin source as well.
+
+## Codex App Quickstart (Remote Install Alternative)
+
+If you do not want to clone this repository locally first, install skills from the repository URL with `skill-installer`.
+
+Paste one of the following prompts into Codex:
 
 ```text
 Use $skill-installer to install skills from https://github.com/tcztzy/skills.
@@ -94,12 +105,6 @@ Use $skill-installer to install the `skill-manager` skill from https://github.co
 ```
 
 If a newly installed skill does not appear immediately, restart Codex.
-
-Why this path:
-
-- Codex repo-local auto-discovery expects skills under `.agents/skills`.
-- This repository keeps installable skills under [`skills/`](./skills) as a shared skill source.
-- For Codex app beginners, installing from the repository URL is the simplest setup.
 
 ## Claude -> Codex Projection
 
