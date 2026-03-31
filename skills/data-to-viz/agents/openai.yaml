@@ -1,4 +1,0 @@
-interface:
-  display_name: "Data-to-Viz"
-  short_description: "Route visualization tasks to Data-to-Viz chart families"
-  default_prompt: "Act as the visualization router. First decide whether the task is chart-choice-only, then map it to a Data-to-Viz family, run caveat checks, and route to the matching data-to-viz family skill. Do not choose a backend first; backend choice happens inside the family skill."

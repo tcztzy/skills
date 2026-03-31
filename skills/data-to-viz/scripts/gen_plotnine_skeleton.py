@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate a runnable plotnine data-to-viz skeleton from a tabular inventory.
+Generate a runnable plotnine publication-visualization skeleton from a tabular inventory.
 """
 
 import argparse
@@ -10,7 +10,7 @@ from pathlib import Path
 
 TEMPLATE = """#!/usr/bin/env python3
 \"\"\"
-Auto-generated plotnine data-to-viz skeleton.
+Auto-generated plotnine publication-visualization skeleton.
 
 To run:
   uv run --with pandas --with plotnine -s auto_data_to_viz.py --figures-dir "__FIGURES_DIR__" --manifest viz_manifest.json
@@ -188,7 +188,7 @@ def _save_bundle(plot, stem: str, figures_dir: Path) -> dict[str, str]:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Run the auto plotnine data-to-viz script.")
+    ap = argparse.ArgumentParser(description="Run the auto plotnine publication-visualization script.")
     ap.add_argument("--figures-dir", default="__FIGURES_DIR__", help="Output figures directory.")
     ap.add_argument("--clean", action="store_true", help="Clean figures-dir before plotting.")
     ap.add_argument("--max-plots", type=int, default=DEFAULT_MAX_PLOTS, help="Max quicklook plots to attempt.")

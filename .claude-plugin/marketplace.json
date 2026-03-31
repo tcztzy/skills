@@ -49,7 +49,7 @@
     },
     {
       "name": "bfts-config-prep",
-      "description": "Prepare a run directory and BFTS config for experiments from an idea JSON + idea.md. Use before running experiment-bfts-runner.",
+      "description": "Prepare a BFTS run directory from idea JSON by generating idea.md and a configured bfts_config.yaml. Use when starting a BFTS experiment from structured idea inputs and you want a runnable timestamped run folder under runs/.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -66,15 +66,6 @@
       ]
     },
     {
-      "name": "citation-harvest",
-      "description": "Query Semantic Scholar to collect citations and generate a deduplicated BibTeX file. Offline by default.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/citation-harvest"
-      ]
-    },
-    {
       "name": "code-simplifier",
       "description": "Safely simplify code with multi-metric quality gates.",
       "source": "./",
@@ -84,89 +75,8 @@
       ]
     },
     {
-      "name": "data-to-viz",
-      "description": "Route visualization tasks by Data-to-Viz chart family instead of choosing a library first.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/data-to-viz"
-      ]
-    },
-    {
-      "name": "data-to-viz-comparison-ranking",
-      "description": "Design comparison and ranking visuals such as bars, lollipops, Cleveland dots, grouped intervals, and leaderboard-style summaries. Use after `data-to-viz` routes a task to comparison/ranking or when prompts ask who is bigger, what is the order, grouped bar chart, lollipop chart, or benchmark comparison; output a comparison-chart shortlist or a backend recommendation plus the shared generator path.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/data-to-viz-comparison-ranking"
-      ]
-    },
-    {
-      "name": "data-to-viz-correlation",
-      "description": "Design correlation visuals such as scatter plots, hexbins, 2D density views, and dense-point compatibility paths. Use after `data-to-viz` routes a task to correlation or when prompts ask about relationships between numeric variables, scatter plots, dense point clouds, or regression-style comparison; output a correlation-chart shortlist or a backend recommendation plus the shared generator path.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/data-to-viz-correlation"
-      ]
-    },
-    {
-      "name": "data-to-viz-distribution",
-      "description": "Design distribution visuals such as histograms, density curves, box plots, violin plots, beeswarms, and ridgelines. Use after `data-to-viz` routes a task to distribution or when prompts ask about spread, skew, tails, outliers, or grouped distributions; output a distribution-chart shortlist or a backend recommendation plus the shared generator path.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/data-to-viz-distribution"
-      ]
-    },
-    {
-      "name": "data-to-viz-evolution",
-      "description": "Design evolution visuals such as line charts, connected trajectories, and ordered-step summaries. Use after `data-to-viz` routes a task to evolution or when prompts ask how something changes over time, epoch, step, iteration, or sequence order; output an evolution-chart shortlist or a backend recommendation plus the shared generator path.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/data-to-viz-evolution"
-      ]
-    },
-    {
-      "name": "data-to-viz-flow",
-      "description": "Design flow visuals such as Sankey, alluvial, chord, and transition-oriented network views. Use after `data-to-viz` routes a task to flow or when prompts ask about movement, transfer, transition, or connection volume; output a flow-chart shortlist and a backend recommendation. This family is doc-first in v1.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/data-to-viz-flow"
-      ]
-    },
-    {
-      "name": "data-to-viz-map",
-      "description": "Design map visuals such as point maps, choropleths, and dense geographic views. Use after `data-to-viz` routes a task to map or when prompts ask for locations, stations, spatial density, choropleths, or geospatial overlays; output a map-chart shortlist or a backend recommendation plus the shared map generator path.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/data-to-viz-map"
-      ]
-    },
-    {
-      "name": "data-to-viz-multivariate",
-      "description": "Design multivariate visuals such as heatmaps, small multiples, pair plots, correlograms, and other many-variable layouts. Use after `data-to-viz` routes a task to multivariate or when prompts ask to show several variables together and no simpler chart family is enough; output a multivariate-chart shortlist or a backend recommendation plus the shared minimal generator path.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/data-to-viz-multivariate"
-      ]
-    },
-    {
-      "name": "data-to-viz-part-to-whole",
-      "description": "Design part-to-whole visuals such as stacked bars, normalized bars, treemaps, and sunburst-like composition views. Use after `data-to-viz` routes a task to part-to-whole or when prompts ask how a total is composed; output a composition-chart shortlist and a backend recommendation. This family is doc-first in v1.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/data-to-viz-part-to-whole"
-      ]
-    },
-    {
       "name": "experiment-bfts-runner",
-      "description": "Run the standalone BFTS experiment pipeline to execute multi-agent tree-search experiments from a prepared bfts_config.yaml. Use after idea-to-markdown and bfts-config-prep to produce logs, workspaces, and experiment artifacts.",
+      "description": "Run the standalone BFTS experiment pipeline to execute multi-agent tree-search experiments from a prepared bfts_config.yaml. Use after bfts-config-prep to produce logs, workspaces, and experiment artifacts.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -183,30 +93,12 @@
       ]
     },
     {
-      "name": "figure-caption-ref-audit",
-      "description": "Extract figure screenshots, captions, and in-text figure references (figrefs) from a PDF into an audit bundle (images + figures.json).",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/figure-caption-ref-audit"
-      ]
-    },
-    {
       "name": "hpc-batch",
       "description": "Troubleshoot Slurm/LSF batch jobs, arrays, and stuck-job issues.",
       "source": "./",
       "strict": false,
       "skills": [
         "./skills/hpc-batch"
-      ]
-    },
-    {
-      "name": "idea-to-markdown",
-      "description": "Convert idea JSON into a structured idea.md (optionally embedding a code snippet).",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/idea-to-markdown"
       ]
     },
     {
@@ -238,7 +130,7 @@
     },
     {
       "name": "paper-visualizer",
-      "description": "Orchestrate standalone paper-visualization workflows with skill-packaged agents, scripts, style guides, and inspectable run artifacts.",
+      "description": "Route publication-grade visualization tasks by chart family and execute manuscript-facing plot or diagram workflows with packaged agents, shared generators, style guides, and inspectable run artifacts.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -282,26 +174,17 @@
       ]
     },
     {
-      "name": "rust-quality-simplify",
-      "description": "Rust-focused alias of `code-simplifier`.",
+      "name": "paper-writer",
+      "description": "Single entry point for drafting or revising scientific papers, generating profile-based LaTeX scaffolds, harvesting citations into BibTeX, and auditing figure-caption-figref alignment from paper PDFs.",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/rust-quality-simplify"
-      ]
-    },
-    {
-      "name": "scientific-paper-writeup",
-      "description": "Drafting or revising scientific papers (LaTeX or Markdown) from experiment logs, ideas, plots, and citations with section-by-section guidance, citation hygiene, page-limit constraints, and LaTeX QA.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/scientific-paper-writeup"
+        "./skills/paper-writer"
       ]
     },
     {
       "name": "skill-manager",
-      "description": "Manage and evolve Codex skills: create, update, and audit SKILL.md files together with their scripts, references, and assets; inventory installed skills; and check shared runtime readiness.",
+      "description": "Manage and evolve Codex skills: create, update, and audit SKILL.md files together with their scripts, references, and assets; inventory installed skills; validate and convert Claude Code skills; and check shared runtime readiness.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -318,33 +201,6 @@
       ]
     },
     {
-      "name": "wenyan-quality-simplify",
-      "description": "Simplify Wenyan language source code (`.wy`, especially `wenyan.wy`) with strict quality gates while preserving semantics.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/wenyan-quality-simplify"
-      ]
-    },
-    {
-      "name": "writeup-icbinb",
-      "description": "Draft a 4-page ICBINB-style LaTeX paper from idea JSON, summary artifacts, and plot manifest. Offline by default.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/writeup-icbinb"
-      ]
-    },
-    {
-      "name": "writeup-normal",
-      "description": "Draft a normal-length LaTeX paper from idea JSON, summary artifacts, and plot manifest. Offline by default.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/writeup-normal"
-      ]
-    },
-    {
       "name": "wsl-fs",
       "description": "Use when the task needs to work with projects stored in the WSL Linux filesystem, including path translation, entering a distro, finding repos under /home, and running build or git commands in WSL instead of on Windows.",
       "source": "./",
@@ -355,7 +211,7 @@
     },
     {
       "name": "zotero",
-      "description": "Capture (Zotero Connector), manage, search, and export Zotero libraries and citations using Zotero desktop + Better BibTeX, the Zotero Web API, a local Zotero data directory, or user-provided export files.",
+      "description": "Capture (Zotero Connector), manage, search, and export Zotero libraries and collection-scoped citations using Zotero desktop + Better BibTeX, the Zotero Web API, a local Zotero data directory, or user-provided export files.",
       "source": "./",
       "strict": false,
       "skills": [

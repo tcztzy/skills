@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate a runnable ggplot2 data-to-viz skeleton from a tabular inventory.
+Generate a runnable ggplot2 publication-visualization skeleton from a tabular inventory.
 
 The generated R script expects ggplot2, readr, and jsonlite.
 """

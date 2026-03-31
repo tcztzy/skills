@@ -1,4 +1,0 @@
-interface:
-  display_name: "Data-to-Viz: Distribution"
-  short_description: "Histograms, density, box, violin, beeswarm, ridgeline"
-  default_prompt: "Handle distribution visualization tasks. Choose among histograms, density curves, box plots, violin plots, beeswarms, and ridgelines, warn when smoothing or violins would mislead, and pick a publication-first backend or shared generator path."

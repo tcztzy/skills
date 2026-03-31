@@ -1,9 +1,11 @@
 ---
 name: zotero
-description: Capture (Zotero Connector), manage, search, and export Zotero libraries and citations using Zotero desktop + Better BibTeX, the Zotero Web API, a local Zotero data directory, or user-provided export files. Use when tasks mention Zotero, Zotero Connector, Better BibTeX, collections, BibTeX/BibLaTeX auto-export (keep updated), citations, bibliographies, or reference management.
+description: Capture (Zotero Connector), manage, search, and export Zotero libraries and collection-scoped citations using Zotero desktop + Better BibTeX, the Zotero Web API, a local Zotero data directory, or user-provided export files. Use when tasks mention Zotero, Zotero Connector, Better BibTeX, collections, keep-updated BibTeX/BibLaTeX exports, citations, bibliographies, or reference management across a library or collection. Do not use this skill for draft-local citation-gap search inside a single manuscript; route that to `paper-writer`.
 ---
 
 # Zotero
+
+Use this skill for library-level or collection-level reference management. If the task is fixing citation gaps inside one paper draft, use `paper-writer` instead.
 
 ## Principles
 

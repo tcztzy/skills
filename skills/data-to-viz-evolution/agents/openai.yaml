@@ -1,4 +1,0 @@
-interface:
-  display_name: "Data-to-Viz: Evolution"
-  short_description: "Line charts, trajectories, ordered-step views"
-  default_prompt: "Handle evolution visualization tasks. Choose among line charts, connected trajectories, or other ordered-step views, reject misleading static-category forms, and route to the correct publication-first backend."

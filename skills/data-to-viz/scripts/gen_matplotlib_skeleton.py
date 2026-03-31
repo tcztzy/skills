@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate a runnable matplotlib data-to-viz skeleton from an inventory.json file.
+Generate a runnable matplotlib publication-visualization skeleton from an inventory.json file.
 
 This generator is intentionally dependency-light. The generated script requires
 numpy + matplotlib to render figures.
@@ -13,7 +13,7 @@ from pathlib import Path
 
 TEMPLATE = """#!/usr/bin/env python3
 \"\"\"
-Auto-generated matplotlib data-to-viz skeleton.
+Auto-generated matplotlib publication-visualization skeleton.
 
 This script is intended as a starting point. It will:
 - load existing .npy data only
@@ -197,7 +197,7 @@ def _quicklook_plot(entry: dict, figures_dir: Path, idx: int) -> dict[str, objec
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Run the auto matplotlib data-to-viz script.")
+    ap = argparse.ArgumentParser(description="Run the auto matplotlib publication-visualization script.")
     ap.add_argument("--figures-dir", default="__FIGURES_DIR__", help="Output figures directory.")
     ap.add_argument("--clean", dest="clean", action="store_true", default=DEFAULT_CLEAN, help="Clean figures-dir before plotting.")
     ap.add_argument("--no-clean", dest="clean", action="store_false", help="Do not clean figures-dir before plotting.")

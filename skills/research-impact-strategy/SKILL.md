@@ -32,7 +32,7 @@ By default, the output is a short strategy memo using `assets/strategy-memo-temp
 - Cross-cutting constraints or standards:
   Do not overclaim novelty or importance. Separate evidence from inference. Optimize for one central idea, not maximal surface area.
 - Implementation options or tools:
-  Mostly prose analysis. Route to `research-ideation-novelty-check`, `scientific-paper-writeup`, or `paper-reviewer` when the user actually needs ideation, manuscript drafting, or formal review.
+  Mostly prose analysis. Route to `research-ideation-novelty-check`, `paper-writer`, or `paper-reviewer` when the user actually needs ideation, manuscript drafting, or formal review.
 
 ## Workflow
 
@@ -104,7 +104,7 @@ A short memo with:
 ## Edge Cases / Validation
 
 - If the user mainly wants new ideas or novelty queries, route to `research-ideation-novelty-check`.
-- If the user already committed to writing and needs a full manuscript, route to `scientific-paper-writeup` after the strategy memo.
+- If the user already committed to writing and needs a full manuscript, route to `paper-writer` after the strategy memo.
 - If the user wants a venue-style evaluation of a finished paper, route to `paper-reviewer`.
 - If the best conclusion still sounds trivial when everything succeeds, prefer `KILL` or `PIVOT`.
 - If the draft feels like multiple papers glued together, prefer `SCOPE-DOWN` before recommending more experiments.

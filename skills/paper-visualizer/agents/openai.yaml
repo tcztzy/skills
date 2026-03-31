@@ -1,4 +1,4 @@
 interface:
   display_name: "Paper Visualizer"
-  short_description: "Generate paper figures from manuscript files or standalone visualization workflows"
-  default_prompt: "Use $paper-visualizer to turn a manuscript file such as main.tex into a generated Figure image, save it locally, and update the manuscript."
+  short_description: "Route chart families and generate paper-ready plots or manuscript figures"
+  default_prompt: "Use $paper-visualizer as the single entrypoint for publication-grade visualization: choose the correct chart family before backend choice, return a shortlist when routing is enough, or run the manuscript / plot workflow to generate a paper-ready artifact."

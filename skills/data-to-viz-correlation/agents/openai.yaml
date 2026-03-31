@@ -1,4 +1,0 @@
-interface:
-  display_name: "Data-to-Viz: Correlation"
-  short_description: "Scatter, hexbin, 2D density, dense-point fallbacks"
-  default_prompt: "Handle correlation visualization tasks. Choose among scatter, hexbin, 2D density, or Datashader-compatible dense rendering, and route to the correct publication-first or compatibility backend."

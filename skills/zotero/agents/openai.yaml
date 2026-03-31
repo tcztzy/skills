@@ -1,4 +1,4 @@
 interface:
   display_name: "Zotero"
-  short_description: "Capture (Connector), manage, and export Zotero libraries (Better BibTeX)"
-  default_prompt: "Use $zotero to capture papers into Zotero (via Zotero Connector), organize collections, and export a keep-updated BibTeX file using Better BibTeX."
+  short_description: "Capture, manage, and export Zotero libraries and collection BibTeX"
+  default_prompt: "Use $zotero for library-level or collection-level reference management: capture papers into Zotero, organize collections, and export a keep-updated BibTeX file using Better BibTeX. Do not use it for manuscript-local citation-gap search."

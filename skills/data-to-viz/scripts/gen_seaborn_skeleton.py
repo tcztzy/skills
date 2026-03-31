@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate a runnable seaborn data-to-viz skeleton from a tabular inventory.
+Generate a runnable seaborn publication-visualization skeleton from a tabular inventory.
 """
 
 import argparse
@@ -10,7 +10,7 @@ from pathlib import Path
 
 TEMPLATE = """#!/usr/bin/env python3
 \"\"\"
-Auto-generated seaborn data-to-viz skeleton.
+Auto-generated seaborn publication-visualization skeleton.
 
 This script is intended as a starting point for tidy tabular data.
 
@@ -210,7 +210,7 @@ def _save_bundle(grid, stem: str, figures_dir: Path) -> dict[str, str]:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Run the auto seaborn data-to-viz script.")
+    ap = argparse.ArgumentParser(description="Run the auto seaborn publication-visualization script.")
     ap.add_argument("--figures-dir", default="__FIGURES_DIR__", help="Output figures directory.")
     ap.add_argument("--clean", action="store_true", help="Clean figures-dir before plotting.")
     ap.add_argument("--max-plots", type=int, default=DEFAULT_MAX_PLOTS, help="Max quicklook plots to attempt.")

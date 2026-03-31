@@ -24,15 +24,14 @@ flowchart TD
     B -->|Yes| D["research-impact-strategy<br/>Decide GO / KILL / PIVOT / SCOPE-DOWN"]
     C --> D
     D -->|KILL| Z["Stop this direction / change topics / tighten the scope again"]
-    D -->|GO / PIVOT / SCOPE-DOWN| E["zotero + citation-harvest<br/>Collect literature, maintain the reference library, export BibTeX"]
+    D -->|GO / PIVOT / SCOPE-DOWN| E["zotero + paper-writer<br/>Collect literature, harvest citations, export BibTeX"]
     E --> F["Collect data / run experiments / organize raw artifacts"]
-    F --> G["data-to-viz<br/>Choose chart family and plotting route"]
-    G --> H["paper-visualizer<br/>Generate or refine paper figures and plots"]
-    H --> J["experiment-log-summarizer<br/>Condense the run directory into summary.md / summary.json"]
+    F --> G["paper-visualizer<br/>Route chart family and generate manuscript-ready figures and plots"]
+    G --> J["experiment-log-summarizer<br/>Condense the run directory into summary.md / summary.json"]
     J --> K{"Do the evidence and story now close the loop?"}
     K -->|No: positioning or claim is weak| D
     K -->|No: data or experiments are still insufficient| F
-    K -->|Yes| L["scientific-paper-writeup<br/>Turn ideas, logs, plots, and citations into a paper draft"]
+    K -->|Yes| L["paper-writer<br/>Turn ideas, logs, plots, and citations into a paper draft"]
     L --> M["paper-reviewer<br/>Pre-review argument, structure, figures, and layout"]
     M --> N{"Is it ready to submit?"}
     N -->|Run more experiments| F
@@ -45,19 +44,18 @@ Recommended minimum loop:
 
 1. [`research-ideation-novelty-check`](./skills/research-ideation-novelty-check/SKILL.md)
 2. [`research-impact-strategy`](./skills/research-impact-strategy/SKILL.md)
-3. [`zotero`](./skills/zotero/SKILL.md) / [`citation-harvest`](./skills/citation-harvest/SKILL.md)
-4. [`data-to-viz`](./skills/data-to-viz/SKILL.md)
-5. [`paper-visualizer`](./skills/paper-visualizer/SKILL.md)
-6. [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md)
-7. [`scientific-paper-writeup`](./skills/scientific-paper-writeup/SKILL.md)
-8. [`paper-reviewer`](./skills/paper-reviewer/SKILL.md)
+3. [`zotero`](./skills/zotero/SKILL.md) / [`paper-writer`](./skills/paper-writer/SKILL.md) for bibliography helpers
+4. [`paper-visualizer`](./skills/paper-visualizer/SKILL.md)
+5. [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md)
+6. [`paper-writer`](./skills/paper-writer/SKILL.md)
+7. [`paper-reviewer`](./skills/paper-reviewer/SKILL.md)
 
 The core point of this showcase is:
 
 - Use `research-impact-strategy` first to decide whether the topic is worth pursuing, instead of drafting the paper immediately.
-- Use `data-to-viz` before dropping into plotting backends so chart choice stays tied to the analytical question.
-- Use `paper-visualizer` when the deliverable is a manuscript-ready figure or plot rather than a quick exploratory chart.
+- Use `paper-visualizer` as the single visualization entry point; it now subsumes chart-family routing and manuscript-ready figure generation.
 - Use `experiment-log-summarizer` before writing so the run directory becomes a stable input.
+- Use `paper-writer` as the single manuscript-writing entry point; it now covers guided drafting, profile-based LaTeX scaffolds, bibliography harvesting, and figure/caption audit helpers.
 - Use `paper-reviewer` before submission to decide whether to add experiments, revise the story, or submit.
 
 ## Local Usage
@@ -70,7 +68,7 @@ Point your local skill roots at this directory:
 That keeps runtime lookup paths stable for repository-local skills, for example:
 
 - `$CODEX_HOME/skills/skill-manager/scripts/validate-skill.py`
-- `$CODEX_HOME/skills/data-to-viz/scripts/gen_matplotlib_skeleton.py`
+- `$CODEX_HOME/skills/paper-visualizer/scripts/manuscript_figure.py`
 
 If you also need official OpenAI skills such as `playwright`, `pdf`, or `openai-docs`, install them from [openai/skills](https://github.com/openai/skills) or use the built-in system skills that ship with Codex.
 

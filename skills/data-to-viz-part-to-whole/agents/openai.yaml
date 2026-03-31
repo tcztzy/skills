@@ -1,4 +1,0 @@
-interface:
-  display_name: "Data-to-Viz: Part-to-Whole"
-  short_description: "Composition, stacked bars, treemaps, sunbursts"
-  default_prompt: "Handle part-to-whole visualization tasks. Choose among stacked bars, normalized bars, treemaps, or sunburst-like views, reject misleading pies when exact comparison matters, and return a doc-first backend recommendation."

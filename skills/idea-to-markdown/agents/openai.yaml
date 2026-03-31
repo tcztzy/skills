@@ -1,4 +1,0 @@
-interface:
-  display_name: "Idea to Markdown"
-  short_description: "Convert idea JSON to idea.md"
-  default_prompt: "Convert idea JSON into a structured idea.md with section headers, optionally embedding a code snippet." 

@@ -1,6 +1,6 @@
 ---
 name: experiment-bfts-runner
-description: Run the standalone BFTS experiment pipeline to execute multi-agent tree-search experiments from a prepared bfts_config.yaml. Use after idea-to-markdown and bfts-config-prep to produce logs, workspaces, and experiment artifacts.
+description: Run the standalone BFTS experiment pipeline to execute multi-agent tree-search experiments from a prepared bfts_config.yaml. Use after bfts-config-prep to produce logs, workspaces, and experiment artifacts.
 ---
 
 # Experiment BFTS Runner
@@ -10,11 +10,11 @@ Execute the full BFTS tree-search experiment workflow from a prepared bfts_confi
 
 ## Workflow
 1. Prepare a run directory
-   - Use bfts-config-prep to create runs/<timestamp>_<idea_name>/ with bfts_config.yaml and idea.md.
+   - Use bfts-config-prep to create runs/<timestamp>_<idea_name>/ with `idea.json`, `idea.md`, and `bfts_config.yaml`.
 2. Run the experiment
    - Offline default:
      ~~~bash
-     UV_CACHE_DIR=/tmp/uv-cache XDG_CACHE_HOME=/tmp uv run --with pyyaml,omegaconf,openai,anthropic,backoff,rich,humanize -s scripts/run_bfts.py --config runs/<run>/bfts_config.yaml
+     uv run --with pyyaml,omegaconf,openai,anthropic,backoff,rich,humanize -s scripts/run_bfts.py --config runs/<run>/bfts_config.yaml
      ~~~
    - Online (required for LLM calls):
      ~~~bash

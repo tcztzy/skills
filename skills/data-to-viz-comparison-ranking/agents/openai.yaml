@@ -1,4 +1,0 @@
-interface:
-  display_name: "Data-to-Viz: Comparison / Ranking"
-  short_description: "Bars, lollipops, Cleveland dots, grouped intervals"
-  default_prompt: "Handle comparison and ranking visualization tasks. Choose chart forms such as bars, lollipops, Cleveland dots, or grouped intervals, reject misleading alternatives, and pick a publication-first backend or shared generator path."

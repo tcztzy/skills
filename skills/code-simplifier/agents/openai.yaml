@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Simplifier"
   short_description: "Safely simplify code with language-aware quality gates"
-  default_prompt: "Use $code-simplifier to reduce code size and complexity across formatter-aligned lines, bytes, and language-appropriate token/complexity metrics, while preserving behavior, readability, and lint/test quality gates. Load only the relevant language pack (for example Python or Rust)."
+  default_prompt: "Use $code-simplifier to reduce code size and complexity across formatter-aligned lines, bytes, and language-appropriate token/complexity metrics, while preserving behavior, readability, and lint/test quality gates. Load only the relevant language pack (for example Python, Rust, or Wenyan)."
