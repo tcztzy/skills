@@ -1,0 +1,38 @@
+{
+  "name": "skills",
+  "version": "1.0.0",
+  "description": "Project-owned research, evaluation, developer tooling, and document workflow skills.",
+  "author": {
+    "name": "Tang Ziya",
+    "email": "tcztzy@gmail.com",
+    "url": "https://github.com/tcztzy"
+  },
+  "homepage": "https://github.com/tcztzy/skills",
+  "repository": "https://github.com/tcztzy/skills",
+  "keywords": [
+    "skills",
+    "research",
+    "evaluation",
+    "developer-tooling",
+    "documents"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Blackscience Tech Skills",
+    "shortDescription": "Research and developer workflow skills",
+    "longDescription": "Install the Blackscience Tech Skills repository as a Codex plugin to access project-owned skills for research workflows, evaluation, developer tooling, and document tasks.",
+    "developerName": "Tang Ziya",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/tcztzy/skills",
+    "defaultPrompt": [
+      "Use Blackscience Tech Skills to review a paper draft before submission.",
+      "Use Blackscience Tech Skills to simplify a codebase without regressions.",
+      "Use Blackscience Tech Skills to summarize an experiment run directory."
+    ],
+    "brandColor": "#0F766E"
+  }
+}
