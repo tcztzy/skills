@@ -16,18 +16,12 @@ from typing import Any, Optional
 if __package__ is None or __package__ == "":
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from runtime_registry import load_or_probe_registry, registry_path, resolve_runtime_root  # type: ignore  # noqa: E402
+from runtime_registry import NOTION_SKILLS, load_or_probe_registry, registry_path, resolve_runtime_root  # type: ignore  # noqa: E402
 from skill_inventory import discover_skills  # type: ignore  # noqa: E402
 from utils import dump_json, dump_text, ensure_lab_workspace, load_json, utc_now_iso  # type: ignore  # noqa: E402
 from validate_skill import validate_skill  # type: ignore  # noqa: E402
 
 DEFAULT_SKILLS_ROOT = Path.home() / ".codex" / "skills"
-NOTION_SKILLS = {
-    "notion-knowledge-capture",
-    "notion-meeting-intelligence",
-    "notion-research-documentation",
-    "notion-spec-to-implementation",
-}
 SAFE_BENCHMARK_SKILLS = {
     "doc",
     "pdf",

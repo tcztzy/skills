@@ -9,6 +9,7 @@ import os
 import shutil
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -407,16 +408,25 @@ def ambient_python_state() -> dict[str, Any]:
     }
 
 
-def build_registry(*, runtime_root: str | Path | None = None, install_missing: bool = True, domains: set[str] | None = None) -> dict[str, Any]:
+def build_registry(
+    *,
+    runtime_root: str | Path | None = None,
+    install_missing: bool = True,
+    domains: set[str] | None = None,
+    persist: bool = True,
+) -> dict[str, Any]:
     root = resolve_runtime_root(runtime_root)
-    root.mkdir(parents=True, exist_ok=True)
+    if persist or install_missing:
+        root.mkdir(parents=True, exist_ok=True)
     selected = domains or set(DOMAIN_SPECS)
     registry: dict[str, Any] = {
-        "generated_at": __import__("datetime").datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "runtime_root": str(root),
         "registry_path": str(registry_path(root)),
         "base_python": str(base_python_executable()),
         "ambient_python": ambient_python_state(),
+        "shell_init_path": str(shell_init_path(root)),
+        "refresh_helper_path": str(refresh_helper_path()),
         "domains": {},
     }
 
@@ -451,10 +461,13 @@ def build_registry(*, runtime_root: str | Path | None = None, install_missing: b
             "status": "ready" if probe.get("available") else "conditional_ready",
         }
 
-    registry_path(root).write_text(json.dumps(registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    registry["shell_init_path"] = str(write_shell_init(root))
-    registry["refresh_helper_path"] = str(write_refresh_helper())
-    registry_path(root).write_text(json.dumps(registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    if persist:
+        write_shell_init(root)
+        write_refresh_helper()
+        registry_path(root).write_text(
+            json.dumps(registry, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
     return registry
 
 
@@ -468,8 +481,15 @@ def load_registry(runtime_root: str | Path | None = None) -> dict[str, Any] | No
 def load_or_probe_registry(*, runtime_root: str | Path | None = None, install_missing: bool = False, domains: set[str] | None = None) -> dict[str, Any]:
     existing = load_registry(runtime_root)
     if existing and not install_missing:
-        return build_registry(runtime_root=runtime_root, install_missing=False, domains=domains)
-    return build_registry(runtime_root=runtime_root, install_missing=install_missing, domains=domains)
+        existing_domains = set(existing.get("domains", {}))
+        if domains is None or domains.issubset(existing_domains):
+            return existing
+    return build_registry(
+        runtime_root=runtime_root,
+        install_missing=install_missing,
+        domains=domains,
+        persist=install_missing,
+    )
 
 
 def runtime_probe_passed(registry: dict[str, Any], domain: str) -> bool:

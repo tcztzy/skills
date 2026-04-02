@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 import tempfile
 import unittest
@@ -48,6 +49,35 @@ class RuntimeRegistryTests(unittest.TestCase):
             self.assertTrue(target.exists())
             content = target.read_text(encoding='utf-8')
             self.assertIn('CODEX_SKILL_RUNTIME_ROOT', content)
+
+    def test_load_or_probe_registry_uses_existing_cache_without_writes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = MODULE.registry_path(root)
+            payload = {"cached": True}
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(json.dumps(payload) + "\n", encoding="utf-8")
+
+            before = target.read_text(encoding="utf-8")
+            before_mtime = target.stat().st_mtime_ns
+            loaded = MODULE.load_or_probe_registry(runtime_root=root, install_missing=False)
+
+            self.assertEqual(loaded, payload)
+            self.assertEqual(target.read_text(encoding="utf-8"), before)
+            self.assertEqual(target.stat().st_mtime_ns, before_mtime)
+            self.assertFalse(MODULE.shell_init_path(root).exists())
+
+    def test_load_or_probe_registry_without_cache_stays_in_memory(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = MODULE.registry_path(root)
+
+            loaded = MODULE.load_or_probe_registry(runtime_root=root, install_missing=False)
+
+            self.assertIn("domains", loaded)
+            self.assertEqual(loaded["runtime_root"], str(root.resolve()))
+            self.assertFalse(target.exists())
+            self.assertFalse(MODULE.shell_init_path(root).exists())
 
 
 if __name__ == "__main__":
