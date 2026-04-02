@@ -1,0 +1,11 @@
+interface:
+  display_name: "Typst"
+  short_description: "Draft and validate Typst with MCP-first workflow"
+  default_prompt: "Use $typst to draft, convert, debug, and validate a Typst document with typst-mcp for lookup and local compile for final verification."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "typst"
+      description: "Typst MCP server for docs lookup, LaTeX conversion, syntax checks, and snippet image previews."
+policy:
+  allow_implicit_invocation: true

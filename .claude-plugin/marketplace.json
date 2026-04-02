@@ -201,6 +201,15 @@
       ]
     },
     {
+      "name": "typst",
+      "description": "Draft, convert, debug, and validate Typst documents.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/typst"
+      ]
+    },
+    {
       "name": "wsl-fs",
       "description": "Use when the task needs to work with projects stored in the WSL Linux filesystem, including path translation, entering a distro, finding repos under /home, and running build or git commands in WSL instead of on Windows.",
       "source": "./",
