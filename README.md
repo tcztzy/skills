@@ -1,30 +1,146 @@
-# Skills Repository
+# Blackscience Tech Skills
 
-[![Codex plugin](https://img.shields.io/badge/Codex-native_plugin-0F766E?style=for-the-badge)](./.codex-plugin/plugin.json)
+[![Codex repo plugin](https://img.shields.io/badge/Codex-repo_plugin-0F766E?style=for-the-badge)](./.codex-plugin/plugin.json)
 [![Claude Code marketplace](https://img.shields.io/badge/Claude_Code-marketplace-CC785C?style=for-the-badge)](./.claude-plugin/marketplace.json)
-[![OpenClaw compatible](https://img.shields.io/badge/OpenClaw-compatible-4C6EF5?style=for-the-badge)](./skills)
+[![OpenClaw layout](https://img.shields.io/badge/OpenClaw-compatible_layout-4C6EF5?style=for-the-badge)](./skills)
 [![24 installable skills](https://img.shields.io/badge/24-installable_skills-334155?style=for-the-badge)](./skills)
-[![Research and developer workflows](https://img.shields.io/badge/Focus-research_%2B_dev_workflows-B45309?style=for-the-badge)](./README.md#showcase-end-to-end-research-workflow)
+[![Research and developer workflows](https://img.shields.io/badge/Focus-research_%2B_dev_workflows-B45309?style=for-the-badge)](./README.md#research-workflow)
 
-Use this repository from **Codex**, **Claude Code**, and **OpenClaw** workflows.
+Task-first agent skills for research, evaluation, developer tooling, and document workflows.
 
-This repository keeps installable Agent Skills under a single [`skills/`](./skills) entrypoint, following the layout commonly used by skills repositories such as [openai/skills](https://github.com/openai/skills) and [anthropics/skills](https://github.com/anthropics/skills).
+This repository distributes the same [`skills/`](./skills) tree in three practical ways:
 
-It focuses on project-owned skills that are maintained directly in this repository. Official or third-party skills should stay in their own upstream repositories rather than being vendored here.
+- as a native Codex repo plugin
+- as a generated Claude Code marketplace
+- as a plain local skills directory for tools that read skill roots directly
 
-## Layout
+The repository is intentionally project-owned. First-party skills live here; official or third-party skills should stay in their own upstream repositories instead of being vendored into this tree.
 
-- [`skills/`](./skills): all discoverable skills
-- [`skills/<skill-name>/`](./skills): user-installable skills when the directory includes `SKILL.md`
-- helper-only directories under [`skills/`](./skills) may exist without `SKILL.md`; they are not exported as installable skills or marketplace entries
+## At a Glance
 
-## Language Policy
+| Item | Value |
+| --- | --- |
+| Main skill root | [`skills/`](./skills) |
+| Codex distribution | [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) + [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) |
+| Claude Code distribution | [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) |
+| Current catalog size | 24 installable skills |
+| Main focus areas | research, evaluation, developer tooling, documents |
 
-Use precise, professional English throughout this repository unless a skill explicitly concerns another language, such as translation, language-specific writing guidance, or language-specific source code.
+## Install
 
-## Showcase: End-to-End Research Workflow
+Choose the shortest path for your environment.
 
-This example shows how multiple research-oriented skills in this repository can be composed into one end-to-end workflow instead of being used as isolated point tools.
+### Codex App
+
+Install this repository as a repo-local plugin when you already have the checkout on disk.
+
+1. Clone the repository locally.
+2. Open the repository in the Codex app.
+3. Restart Codex if the repo was already open before the marketplace files existed.
+4. Open the plugin directory, choose the `Blackscience Tech Skills` marketplace, and install the `Blackscience Tech Skills` plugin.
+
+The Codex marketplace entry points at the repository root, so Codex loads [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and the existing [`skills/`](./skills) tree without an extra wrapper directory.
+
+### Codex Remote Install
+
+If you do not want to clone the repository first, install from the GitHub URL with `skill-installer`.
+
+```text
+Use $skill-installer to install skills from https://github.com/tcztzy/skills.
+```
+
+To install only one skill:
+
+```text
+Use $skill-installer to install the `skill-manager` skill from https://github.com/tcztzy/skills.
+```
+
+If a newly installed skill does not appear immediately, restart Codex.
+
+### Claude Code Marketplace
+
+This repository also exposes a Claude marketplace manifest at [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
+
+After the repository is pushed to GitHub:
+
+1. Add the repository as a marketplace in Claude Code.
+2. Enable the individual plugins you want from that marketplace.
+
+The Claude manifest is generated from the installable skill directories under [`skills/`](./skills), so the plugin list stays aligned with the repository contents.
+
+### Manual Local Roots
+
+If you prefer direct filesystem-based loading, point your local skill roots at this repository's [`skills/`](./skills) directory.
+
+```bash
+REPO_ROOT=/path/to/tcztzy-skills
+ln -sfn "$REPO_ROOT/skills" "$HOME/.codex/skills"
+ln -sfn "$REPO_ROOT/skills" "$HOME/.claude/skills"
+```
+
+That keeps skill lookup stable for repository-local helpers such as:
+
+- `$CODEX_HOME/skills/skill-manager/scripts/validate-skill.py`
+- `$CODEX_HOME/skills/paper-visualizer/scripts/manuscript_figure.py`
+
+The same layout is also suitable for OpenClaw-compatible workflows that read a `skills/` directory directly.
+
+## Skill Map
+
+The catalog is organized around user tasks instead of tool brands.
+
+| Track | What it covers | Representative skills |
+| --- | --- | --- |
+| Research strategy | idea generation, novelty checks, go/kill/pivot decisions | [`research-ideation-novelty-check`](./skills/research-ideation-novelty-check/SKILL.md), [`research-impact-strategy`](./skills/research-impact-strategy/SKILL.md) |
+| Paper production | literature, figures, drafting, review, translation | [`zotero`](./skills/zotero/SKILL.md), [`paper-writer`](./skills/paper-writer/SKILL.md), [`paper-visualizer`](./skills/paper-visualizer/SKILL.md), [`paper-reviewer`](./skills/paper-reviewer/SKILL.md), [`academic-zh-en-translation`](./skills/academic-zh-en-translation/SKILL.md) |
+| Experiment and evaluation | run preparation, execution, scoring, post-run summaries | [`bfts-config-prep`](./skills/bfts-config-prep/SKILL.md), [`experiment-bfts-runner`](./skills/experiment-bfts-runner/SKILL.md), [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md), [`benchmark-builder`](./skills/benchmark-builder/SKILL.md), [`answer-judging`](./skills/answer-judging/SKILL.md), [`token-cost-tracker`](./skills/token-cost-tracker/SKILL.md) |
+| Engineering and systems | code simplification, performance, infra, batch systems, ACP, environment handling | [`code-simplifier`](./skills/code-simplifier/SKILL.md), [`project-simplify`](./skills/project-simplify/SKILL.md), [`python-performance-tuning`](./skills/python-performance-tuning/SKILL.md), [`hpc-batch`](./skills/hpc-batch/SKILL.md), [`nix`](./skills/nix/SKILL.md), [`wsl-fs`](./skills/wsl-fs/SKILL.md), [`agent-client-protocol`](./skills/agent-client-protocol/SKILL.md) |
+| Authoring and workflow maintenance | skill authoring, format conversion, document authoring, hiring research | [`skill-manager`](./skills/skill-manager/SKILL.md), [`latex-to-word`](./skills/latex-to-word/SKILL.md), [`typst`](./skills/typst/SKILL.md), [`career-team-intel`](./skills/career-team-intel/SKILL.md) |
+
+<details>
+<summary>Full installable catalog</summary>
+
+### Research and paper workflows
+
+- [`academic-zh-en-translation`](./skills/academic-zh-en-translation/SKILL.md): academic Chinese-English translation with fidelity and discipline-aware wording
+- [`paper-reviewer`](./skills/paper-reviewer/SKILL.md): bounded academic paper review with structured outputs
+- [`paper-visualizer`](./skills/paper-visualizer/SKILL.md): publication-grade figures, plots, and diagrams
+- [`paper-writer`](./skills/paper-writer/SKILL.md): drafting, revising, scaffolding, citation harvesting, and figure QA
+- [`research-ideation-novelty-check`](./skills/research-ideation-novelty-check/SKILL.md): idea generation and lightweight novelty sanity checks
+- [`research-impact-strategy`](./skills/research-impact-strategy/SKILL.md): go/kill/pivot/scope-down decisions for research directions
+- [`zotero`](./skills/zotero/SKILL.md): literature capture, collection management, and bibliography export
+
+### Experiment and evaluation workflows
+
+- [`answer-judging`](./skills/answer-judging/SKILL.md): response quality judging from thread-only evidence
+- [`benchmark-builder`](./skills/benchmark-builder/SKILL.md): benchmark items, rubrics, evaluators, and release protocols
+- [`bfts-config-prep`](./skills/bfts-config-prep/SKILL.md): prepare runnable BFTS experiment directories
+- [`experiment-bfts-runner`](./skills/experiment-bfts-runner/SKILL.md): execute the standalone BFTS experiment pipeline
+- [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md): grounded summaries of run directories and artifacts
+- [`token-cost-tracker`](./skills/token-cost-tracker/SKILL.md): summarize token usage and cost logs
+
+### Engineering, infra, and environment workflows
+
+- [`agent-client-protocol`](./skills/agent-client-protocol/SKILL.md): implement or debug ACP integrations
+- [`code-simplifier`](./skills/code-simplifier/SKILL.md): simplify code while keeping quality gates
+- [`hpc-batch`](./skills/hpc-batch/SKILL.md): troubleshoot Slurm or LSF jobs, arrays, and stuck queues
+- [`nix`](./skills/nix/SKILL.md): write and debug Nix language and flake workflows
+- [`project-simplify`](./skills/project-simplify/SKILL.md): de-vendor large dependencies and replace them with pinned artifacts
+- [`python-performance-tuning`](./skills/python-performance-tuning/SKILL.md): profile-first Python runtime and memory optimization
+- [`wsl-fs`](./skills/wsl-fs/SKILL.md): operate on repositories living inside WSL filesystems
+
+### Documents, authoring, and workflow maintenance
+
+- [`career-team-intel`](./skills/career-team-intel/SKILL.md): public-signal team and hiring research for job seeking
+- [`latex-to-word`](./skills/latex-to-word/SKILL.md): automated LaTeX-to-Word conversion with preprocessing
+- [`skill-manager`](./skills/skill-manager/SKILL.md): create, audit, validate, convert, and inventory skills
+- [`typst`](./skills/typst/SKILL.md): draft, convert, debug, and validate Typst documents
+
+</details>
+
+## Research Workflow
+
+The repository is strongest when multiple research-oriented skills are composed into one loop instead of used as isolated one-off tools.
 
 ```mermaid
 flowchart TD
@@ -53,77 +169,35 @@ Recommended minimum loop:
 
 1. [`research-ideation-novelty-check`](./skills/research-ideation-novelty-check/SKILL.md)
 2. [`research-impact-strategy`](./skills/research-impact-strategy/SKILL.md)
-3. [`zotero`](./skills/zotero/SKILL.md) / [`paper-writer`](./skills/paper-writer/SKILL.md) for bibliography helpers
+3. [`zotero`](./skills/zotero/SKILL.md) or [`paper-writer`](./skills/paper-writer/SKILL.md) for bibliography work
 4. [`paper-visualizer`](./skills/paper-visualizer/SKILL.md)
 5. [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md)
 6. [`paper-writer`](./skills/paper-writer/SKILL.md)
 7. [`paper-reviewer`](./skills/paper-reviewer/SKILL.md)
 
-The core point of this showcase is:
+The intended operating model is:
 
-- Use `research-impact-strategy` first to decide whether the topic is worth pursuing, instead of drafting the paper immediately.
-- Use `paper-visualizer` as the single visualization entry point; it now subsumes chart-family routing and manuscript-ready figure generation.
-- Use `experiment-log-summarizer` before writing so the run directory becomes a stable input.
-- Use `paper-writer` as the single manuscript-writing entry point; it now covers guided drafting, profile-based LaTeX scaffolds, bibliography harvesting, figure/caption audit helpers, and submission-readiness materials.
-- Use `paper-reviewer` before submission to decide whether to add experiments, revise the story, or submit.
+- decide whether the story is worth pursuing before drafting
+- summarize experiment artifacts before turning them into prose
+- use one visualization entry point instead of splitting by plotting backend
+- use one manuscript-writing entry point instead of fragmenting adjacent paper tasks
+- run a bounded review pass before submission
 
-## Local Usage
+## Repository Layout
 
-Point your local skill roots at this directory:
+- [`skills/`](./skills): all discoverable skills
+- [`skills/<skill-name>/`](./skills): installable skills when the directory contains `SKILL.md`
+- helper-only directories may exist under [`skills/`](./skills) without being exported as installable entries
 
-- `~/.codex/skills -> /Users/tcztzy/skills/skills`
-- `~/.claude/skills -> /Users/tcztzy/skills/skills`
+## Metadata and Maintenance
 
-That keeps runtime lookup paths stable for repository-local skills, for example:
+Repository metadata is split by consumer:
 
-- `$CODEX_HOME/skills/skill-manager/scripts/validate-skill.py`
-- `$CODEX_HOME/skills/paper-visualizer/scripts/manuscript_figure.py`
+- [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json): native Codex plugin manifest
+- [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json): Codex marketplace entry for this repository
+- [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json): Claude marketplace manifest generated from skill metadata
 
-If you also need official OpenAI skills such as `playwright`, `pdf`, or `openai-docs`, install them from [openai/skills](https://github.com/openai/skills) or use the built-in system skills that ship with Codex.
-
-## Codex Plugin
-
-This repository now exposes a native Codex plugin via [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) and the installable plugin manifest at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
-
-If you open this repository in the Codex app, you can install it from the repo marketplace without copying skills into `.agents/skills`:
-
-1. Download the Codex app
-   - macOS (Apple Silicon): [Download Codex.dmg](https://persistent.oaistatic.com/codex-app-prod/Codex.dmg)
-   - Windows: [Install from Microsoft Store](https://apps.microsoft.com/detail/9plm9xgg6vks?hl=en-US&gl=US) or run `winget install Codex -s msstore`
-2. Open Codex and sign in with your ChatGPT account.
-3. Clone this repository locally and open it in the Codex app.
-4. Restart Codex if the repository was already open before the marketplace files were added.
-5. Open the plugin directory, choose the `Blackscience Tech Skills` marketplace, and install the `Blackscience Tech Skills` plugin.
-
-The marketplace entry points directly at the repository root (`source.path: "."`), so Codex loads [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and the existing [`skills/`](./skills) tree without an extra wrapper directory.
-
-## Codex App Quickstart (Remote Install Alternative)
-
-If you do not want to clone this repository locally first, install skills from the repository URL with `skill-installer`.
-
-Paste one of the following prompts into Codex:
-
-```text
-Use $skill-installer to install skills from https://github.com/tcztzy/skills.
-```
-
-If you only want one skill, ask for it explicitly:
-
-```text
-Use $skill-installer to install the `skill-manager` skill from https://github.com/tcztzy/skills.
-```
-
-If a newly installed skill does not appear immediately, restart Codex.
-
-## Claude Marketplace
-
-This repository also exposes a Claude plugin marketplace manifest at [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
-
-- Each visible directory under [`skills/`](./skills) that contains `SKILL.md` is exported as its own Claude plugin entry.
-- Hidden and system-only directories are excluded from the marketplace manifest.
-- The manifest is generated by [`scripts/generate_claude_marketplace.py`](./scripts/generate_claude_marketplace.py).
-
-Regenerate it after adding, removing, renaming, or changing the frontmatter of installable skills:
+Regenerate the Claude marketplace after adding, removing, renaming, or updating installable skills:
 
 ```bash
 python3 scripts/generate_claude_marketplace.py
@@ -135,4 +209,8 @@ Validate both Codex and Claude plugin metadata before pushing:
 python3 scripts/validate_plugin_metadata.py
 ```
 
-After the repository is pushed, Claude Code can add it as a marketplace from GitHub and enable individual skill plugins through `enabledPlugins`.
+## Repository Conventions
+
+- Use precise, professional English unless a skill is explicitly language-specific.
+- Keep top-level skills task-first rather than tool-first whenever possible.
+- Keep upstream official skills such as `playwright`, `pdf`, or `openai-docs` in their original source repositories or use the built-in system skills that ship with Codex.
