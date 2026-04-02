@@ -1,9 +1,9 @@
 # Skills Repository
 
-[![Codex plugin](https://img.shields.io/badge/Codex-native_plugin-0F766E?style=for-the-badge)](./.codex-plugin/plugin.json)
+[![Codex plugin](https://img.shields.io/badge/Codex-native_plugin-0F766E?style=for-the-badge)](./plugins/skills/.codex-plugin/plugin.json)
 [![Claude Code marketplace](https://img.shields.io/badge/Claude_Code-marketplace-CC785C?style=for-the-badge)](./.claude-plugin/marketplace.json)
 [![OpenClaw compatible](https://img.shields.io/badge/OpenClaw-compatible-4C6EF5?style=for-the-badge)](./skills)
-[![23 installable skills](https://img.shields.io/badge/23-installable_skills-334155?style=for-the-badge)](./skills)
+[![24 installable skills](https://img.shields.io/badge/24-installable_skills-334155?style=for-the-badge)](./skills)
 [![Research and developer workflows](https://img.shields.io/badge/Focus-research_%2B_dev_workflows-B45309?style=for-the-badge)](./README.md#showcase-end-to-end-research-workflow)
 
 Use this repository from **Codex**, **Claude Code**, and **OpenClaw** workflows.
@@ -64,7 +64,7 @@ The core point of this showcase is:
 - Use `research-impact-strategy` first to decide whether the topic is worth pursuing, instead of drafting the paper immediately.
 - Use `paper-visualizer` as the single visualization entry point; it now subsumes chart-family routing and manuscript-ready figure generation.
 - Use `experiment-log-summarizer` before writing so the run directory becomes a stable input.
-- Use `paper-writer` as the single manuscript-writing entry point; it now covers guided drafting, profile-based LaTeX scaffolds, bibliography harvesting, and figure/caption audit helpers.
+- Use `paper-writer` as the single manuscript-writing entry point; it now covers guided drafting, profile-based LaTeX scaffolds, bibliography harvesting, figure/caption audit helpers, and submission-readiness materials.
 - Use `paper-reviewer` before submission to decide whether to add experiments, revise the story, or submit.
 
 ## Local Usage
@@ -83,7 +83,7 @@ If you also need official OpenAI skills such as `playwright`, `pdf`, or `openai-
 
 ## Codex Plugin
 
-This repository now exposes a native Codex plugin via [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json).
+This repository now exposes a native Codex plugin via [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) and the installable plugin source at [`plugins/skills/.codex-plugin/plugin.json`](./plugins/skills/.codex-plugin/plugin.json).
 
 If you open this repository in the Codex app, you can install it from the repo marketplace without copying skills into `.agents/skills`:
 
@@ -95,7 +95,7 @@ If you open this repository in the Codex app, you can install it from the repo m
 4. Restart Codex if the repository was already open before the marketplace files were added.
 5. Open the plugin directory, choose the `Blackscience Tech Skills` marketplace, and install the `Blackscience Tech Skills` plugin.
 
-The plugin packages the repository's [`skills/`](./skills) directory directly, so adding or updating skills in this repo updates the local plugin source as well.
+The installable plugin source keeps a `skills/` view under [`plugins/skills/`](./plugins/skills), so adding or updating skills in this repo updates the local plugin source as well.
 
 ## Codex App Quickstart (Remote Install Alternative)
 
