@@ -3,10 +3,10 @@
 Use this reference to outline and draft each section. Default to the standard conference style unless the user specifies a workshop or negative-results format.
 
 ## Standard conference paper (default)
-- **Title**: Short, informative, preferably under two lines.
-- **Abstract**: One paragraph TL;DR; motivation, method, key results; no citations unless required by venue.
+- **Title**: Short, informative, and restrained; avoid hype adjectives and claims broader than the evidence.
+- **Abstract**: One paragraph TL;DR; motivation, method, key results, and why the result matters to the intended readers; no citations unless required by venue.
 - **Introduction**: Context, problem statement, why it matters, contributions, and a brief summary of findings.
-- **Related Work**: Compare/contrast with closest prior work; include multiple citations.
+- **Related Work**: Compare/contrast with the closest prior work fairly and prominently; include multiple citations rather than prestige padding.
 - **Background** (optional): Definitions, problem setup, or theory needed to understand the method.
 - **Method**: Clear description of the proposed approach and how it tests the hypothesis.
 - **Experimental Setup**: Data, baselines, evaluation metrics, and key implementation details (avoid hardware unless requested).
@@ -33,3 +33,5 @@ Section notes for negative-results papers:
 - Every claim must be supported by experimental evidence or citations.
 - Clearly label negative or inconclusive results.
 - Avoid overstating contributions when evidence is limited.
+- Keep the main message easy to see: major figures should appear near their first substantive discussion when the format allows it, and captions should state the takeaway.
+- Distinguish simulations, calculations, and experiments accurately in both text and captions.

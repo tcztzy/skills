@@ -18,6 +18,7 @@ Default behavior is dual output:
 - A concise, human-readable review in the conversation.
 
 If the user is doing pre-submission self-positioning and mainly wants to decide whether to go, kill, pivot, or reshape the story before formal review, route to `research-impact-strategy` instead.
+If the user wants a pre-submission readiness pass, keep the same bounded format but pay extra attention to title/abstract discipline, closest-prior-work comparison, figure-first readability, and any cover-letter or resubmission materials the user provides.
 
 ## Workflow
 1. If the input is a PDF, render page images first.
@@ -40,9 +41,12 @@ If the user is doing pre-submission self-positioning and mainly wants to decide 
    - Scope: `comprehensive`, `targeted`, or `comparative`.
    - Stage: early draft vs. near-submission.
    - Venue or discipline constraints if provided.
+   - Whether this is a submission-readiness check and whether cover letters, prior reviews, or reviewer suggestions are included.
 5. Run a dimension pass before scoring.
    - Problem formulation and research questions.
+   - Title/abstract reasonableness and audience fit.
    - Literature positioning and gap identification.
+   - Fairness and prominence of comparison to the closest prior work.
    - Methodology and design rigor.
    - Data/sources quality and transparency.
    - Analysis quality and claim-evidence alignment.
@@ -66,6 +70,7 @@ Use short sections:
 - Overall verdict
 - Main strengths
 - Main weaknesses or risks
+- Submission-readiness risks (required when the task is near-submission)
 - Visual presentation and figure/table audit (required for PDF inputs)
 - Questions for authors
 - Priority suggestions (ranked by impact)
@@ -110,6 +115,7 @@ Output:
 - Keep output bounded and evidence-linked; do not expand into unstructured long-form critique unless requested.
 - For LaTeX or Markdown papers, prefer reviewing the compiled PDF when available so layout and figures are visible.
 - Use the dedicated `pdf` skill for generic PDF manipulation when it is available; keep this skill focused on review criteria and evidence synthesis.
+- If submission materials are provided, review them for journal specificity, resubmission hygiene, and obvious conflict-of-interest risk, but keep the output concise.
 
 ## References
 - Review JSON schema: `references/review.schema.json`

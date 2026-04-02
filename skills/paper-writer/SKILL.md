@@ -11,11 +11,12 @@ metadata:
 ## Overview
 Use this as the one research-manuscript skill in the repository.
 
-It covers four bundled workflows:
+It covers five bundled workflows:
 - Draft or revise a manuscript directly in LaTeX or Markdown.
 - Generate an offline-first LaTeX scaffold from structured artifacts using `scripts/writeup_scaffold.py`.
 - Harvest candidate citations into JSON + BibTeX using `scripts/citation_harvest.py`.
 - Extract figure-region images, captions, and figrefs into an audit bundle using `scripts/extract_figures_and_refs.py`.
+- Prepare journal-submission support materials such as cover letters, reviewer suggestions, and resubmission notes.
 
 Keep only genuinely adjacent tasks outside this skill:
 - Use `research-impact-strategy` first if the story or central claim is still blurry.
@@ -46,14 +47,40 @@ Keep only genuinely adjacent tasks outside this skill:
    - Do not invent results or citations.
    - Do not write local repository or filesystem paths in the manuscript body (for example `/Users/...` or checkout-specific paths). Refer to artifacts, scripts, or resources in paper-appropriate prose instead.
 
-5. **LaTeX QA and formatting**
+5. **Run a submission-readiness pass when journal fit matters**
+   - Use `references/submission-readiness.md` when the paper is headed to a journal, a high-selectivity venue, or a resubmission round.
+   - Tighten the title and abstract so they are concise, accurate, and not inflated.
+   - Make the comparison to the closest prior work fair and prominent instead of relying on vague novelty language.
+   - Ensure the main message is visible from the figures, captions, and figrefs without hunting through the text.
+   - If the user needs them, draft a journal-specific cover letter, unbiased reviewer suggestions, and a clear resubmission note describing material changes.
+
+6. **LaTeX QA and formatting**
    - Follow `references/latex-quality.md` for common issues.
    - Verify figures exist and references are consistent.
    - If figure/text alignment is the main QA problem, use `references/figure-audit.md` and `scripts/extract_figures_and_refs.py` before editing captions or figrefs by hand.
    - Respect page limits and venue layout constraints.
 
-6. **Safeguards and integrity checks**
+7. **Safeguards and integrity checks**
    - Use `references/safeguards.md` to validate factuality, attribution, and responsible disclosure.
+
+## Submission Support Workflow
+Use this when the user wants help beyond the manuscript itself, such as a cover letter, reviewer suggestions, associate-editor suggestions, or a resubmission note.
+
+1. **Collect submission context**
+   - Target journal or venue, audience, and whether this is a fresh submission, resubmission, or transfer.
+   - Optional but useful: prior reviews, editor comments, rejected cover letter, and requested journal-transfer target.
+2. **Run the readiness checklist**
+   - Use `references/submission-readiness.md`.
+3. **Draft supporting materials**
+   - Cover letter: explain why the work matters to the journal's readers, not just the immediate subfield.
+   - Reviewer suggestions: propose technically competent, conflict-screened reviewers only when the user asks.
+   - Associate-editor suggestions: provide them only when the venue uses them and the user asks.
+   - Resubmission note: state what changed and why the new version is materially different.
+4. **Check journal specificity**
+   - Remove stale journal names or generic boilerplate.
+   - Avoid suggesting transfers to journals that are obviously outside scope.
+5. **Hand back a submission packet**
+   - Return the manuscript deltas plus the supporting text as separate deliverables so the user can review them independently.
 
 ## Bibliography Helper Workflow
 Use this when the draft has citation gaps or a weak `references.bib`, not when the main job is Zotero library management, collection export, or keep-updated BibTeX sync.
@@ -67,6 +94,7 @@ Use this when the draft has citation gaps or a weak `references.bib`, not when t
 4. **Review and merge**
    - Inspect `citations.json`, prune false positives, and merge vetted entries into `references.bib`.
    - Clean BibTeX keys if they collide with existing entries.
+   - Make sure the closest prior work is included explicitly; do not keep only flattering or high-prestige comparisons.
 5. **Apply safeguards**
    - Follow `references/bibliography-harvest-safeguards.md`.
 
@@ -106,14 +134,17 @@ Use this when the user already has structured artifacts and wants a fast paper s
 
 ## Request checklist for users
 - Target venue or page limit (if any)
+- Target journal audience and whether this is a new submission, resubmission, or transfer
 - Desired format (standard vs. negative-results / workshop)
 - Inputs available: idea text, summaries/logs, plots, citations
 - Output format: LaTeX (preferred) or Markdown
+- Whether the user also needs a cover letter, reviewer suggestions, or a resubmission note
 - If structured artifacts exist, whether the user wants a scaffold profile (`conference` or `icbinb`)
 
 ## Output expectations
 - A complete manuscript (LaTeX or Markdown), with all sections filled.
 - Or a scaffolded `paper.tex` generated from structured artifacts and ready for manual completion.
+- Optional submission-support materials such as a cover letter, reviewer suggestions, or a resubmission note.
 - Citations only from provided references.bib or vetted sources.
 - Honest reporting of negative or inconclusive results.
 - The main text must not include local repository or filesystem paths; rewrite them as reader-facing descriptions if the source material contains such paths.
@@ -121,6 +152,7 @@ Use this when the user already has structured artifacts and wants a fast paper s
 ## References
 - Section guidance: `references/section-guidelines.md`
 - Citation workflow: `references/citation-workflow.md`
+- Submission-readiness checklist: `references/submission-readiness.md`
 - Bibliography helper workflow: `references/bibliography-harvest.md`
 - Bibliography helper safeguards: `references/bibliography-harvest-safeguards.md`
 - LaTeX quality checks: `references/latex-quality.md`

@@ -1,4 +1,4 @@
 interface:
   display_name: "Research Impact Strategy"
   short_description: "Decide go/kill/pivot and sharpen the core research story"
-  default_prompt: "Evaluate whether a research idea, experiment thread, or paper draft is worth pursuing. Extract the one-sentence core claim and the stronger 'so what' claim, assess impact/timing/positioning risk, choose GO/KILL/PIVOT/SCOPE-DOWN, and return a concise strategy memo with required evidence and story fixes."
+  default_prompt: "Evaluate whether a research idea, experiment thread, or paper draft is worth pursuing. Extract the one-sentence core claim and the stronger 'so what' claim, assess impact, timing, audience fit, title/abstract overclaiming risk, and closest-prior-work positioning, choose GO/KILL/PIVOT/SCOPE-DOWN, and return a concise strategy memo with required evidence and story fixes."

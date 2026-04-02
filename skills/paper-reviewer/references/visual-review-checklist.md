@@ -3,6 +3,7 @@
 Use this checklist during the PDF page-image pass.
 
 ## Layout and typography
+- Is the title precise and proportionate to what the paper actually supports?
 - Is the visual hierarchy clear from title through captions and references?
 - Are body text, headings, captions, footnotes, and equations consistently sized and spaced?
 - Are there crowded pages, large dead zones, awkward page breaks, widows/orphans, overflow, or clipped content?
@@ -16,6 +17,7 @@ Use this checklist during the PDF page-image pass.
 
 ## Captions and callouts
 - Does each caption describe what is visible and state the intended takeaway?
+- Can a skim through title, abstract, figures, and captions recover the main claim without unnecessary hunting?
 - Do figure/table references in the text point to the correct visual element?
 - Are there mismatches between captions, panel labels, legends, or plotted content?
 

@@ -19,7 +19,7 @@ By default, the output is a short strategy memo using `assets/strategy-memo-temp
 - Mid-project: "The experiments kind of work; should we keep going, pivot, or cut scope?"
 - Writing stage: "What is the one claim?" "Why does this draft not land?"
 - Pre-submission: "What obvious reviewer question have we not answered yet?"
-- Positioning stage: "Who is the reader?" "Does the paper explain why this matters now?"
+- Positioning stage: "Who is the reader?" "Does the paper explain why this matters now?" "Is the title/abstract overselling the result?"
 
 ## Decision Ladder / Routing Axis
 
@@ -49,9 +49,10 @@ By default, the output is a short strategy memo using `assets/strategy-memo-temp
    - Choose exactly one of `GO`, `KILL`, `PIVOT`, or `SCOPE-DOWN`.
    - List the must-answer experiments, arguments, or reader-positioning fixes required before more work is justified.
 5. Audit the draft story when a draft exists
-   - Check the title for accuracy and single-idea alignment.
-   - Check the introduction for reader framing and story logic.
-   - Check figures for self-contained takeaways.
+   - Check the title and abstract for accuracy, restraint, and single-idea alignment.
+   - Check the introduction for reader framing, story logic, and a real broader context rather than a prestige-paper laundry list.
+   - Check whether the closest prior work is compared fairly and prominently.
+   - Check figures and captions for self-contained takeaways that make the main message easy to skim.
    - Check the conclusion for an explicit answer to "so what?"
 
 ## Constraints / Standards
@@ -59,6 +60,7 @@ By default, the output is a short strategy memo using `assets/strategy-memo-temp
 - Treat importance, novelty, and timing as judgments under uncertainty, not facts.
 - Prefer one strong paper over a bag of loosely related claims.
 - Kill or redirect projects that are technically functioning but strategically weak.
+- Prefer explicit comparison to the hardest relevant prior work over vague novelty claims.
 - Do not recommend more experiments by default; recommend only the evidence needed to answer the next skeptical question.
 - Keep the output decision-complete enough that a researcher knows what to do next.
 

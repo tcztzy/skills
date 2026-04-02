@@ -11,7 +11,7 @@ Use this workflow to add or validate citations. The goal is coverage without hal
 - Suggest future work grounded in prior studies.
 
 ## Steps
-1. **Identify gaps**: For each section, list claims that need citations.
+1. **Identify gaps**: For each section, list claims that need citations, especially novelty framing and closest-comparison claims.
 2. **Search**: Use a trusted source (Semantic Scholar or user-provided papers) to find candidates.
    - For batch Semantic Scholar sweeps, use `references/bibliography-harvest.md` and `scripts/citation_harvest.py`.
 3. **Select**: Choose the most relevant and non-duplicative papers.
@@ -22,5 +22,7 @@ Use this workflow to add or validate citations. The goal is coverage without hal
 - Do not add citations you did not actually find.
 - Do not duplicate existing citations under alternate keys.
 - Prefer a diverse set of papers rather than only the most popular.
+- Prefer the closest relevant comparisons over a long list of broad or prestigious but weakly connected citations.
+- Do not omit or downplay key prior work just because it weakens the novelty story.
 - Avoid copying text from sources verbatim.
 - Record query strings and the query date in your notes when using the harvester.

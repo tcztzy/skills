@@ -1,4 +1,4 @@
 interface:
   display_name: "Paper Writer"
   short_description: "Draft papers, repair draft-local bibliographies, and audit figure-text alignment"
-  default_prompt: "Draft, revise, or scaffold a scientific paper from ideas, summaries, plots, and citations. Use the bundled bibliography helper only for manuscript-local citation gaps, route Zotero library or collection management elsewhere, keep claims grounded in evidence, choose the right profile or venue format, and ensure citation and LaTeX quality."
+  default_prompt: "Draft, revise, or scaffold a scientific paper from ideas, summaries, plots, and citations. Use the bundled bibliography helper only for manuscript-local citation gaps, route Zotero library or collection management elsewhere, keep claims grounded in evidence, compare the closest prior work fairly, keep the title and abstract concise and proportionate, and ensure figure/caption readability, submission-readiness, and LaTeX quality."

@@ -25,6 +25,13 @@ Use this note when the research is real but the paper still does not land.
 - Treat the introduction as a story with a destination.
 - State the world the reader currently believes in, then explain why your framing is the right one, then present the contribution.
 - When the claim is controversial or non-obvious, order the evidence so the reader arrives at the conclusion rather than rejects it immediately.
+- Broader context does not mean dumping a list of loosely related high-profile papers; it means locating the work in the real argument of the field.
+
+## Prior-work positioning
+
+- The closest prior work is not optional.
+- Compare against the papers that make the hardest case for novelty, not just the easiest case for citation support.
+- If the real advance is incremental, explain why that increment still changes what readers should believe or do.
 
 ## Figures
 
