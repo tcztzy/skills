@@ -72,41 +72,11 @@ def validate_plugin_manifest(path: Path) -> tuple[dict[str, Any], list[str]]:
 
 def validate_codex_metadata(repo_root: Path) -> list[str]:
     plugin_manifest_path = repo_root / ".codex-plugin" / "plugin.json"
-    runtime_plugin_manifest_path = (
-        repo_root / "plugins" / "skills" / ".codex-plugin" / "plugin.json"
-    )
     marketplace_path = repo_root / ".agents" / "plugins" / "marketplace.json"
     plugin_manifest, errors = validate_plugin_manifest(plugin_manifest_path)
-    runtime_plugin_manifest, runtime_errors = validate_plugin_manifest(
-        runtime_plugin_manifest_path
-    )
     marketplace = load_json(marketplace_path)
-
-    errors.extend(runtime_errors)
-
-    if plugin_manifest != runtime_plugin_manifest:
-        diff = "\n".join(
-            difflib.unified_diff(
-                canonical_json(plugin_manifest).splitlines(),
-                canonical_json(runtime_plugin_manifest).splitlines(),
-                fromfile=repo_label(plugin_manifest_path),
-                tofile=repo_label(runtime_plugin_manifest_path),
-                lineterm="",
-            )
-        )
-        errors.append(
-            f"{repo_label(runtime_plugin_manifest_path)} is out of sync with "
-            f"{repo_label(plugin_manifest_path)}.\n{diff}"
-        )
-
     plugin_name = plugin_manifest.get("name")
-    runtime_plugin_name = runtime_plugin_manifest.get("name")
-    if (
-        not isinstance(plugin_name, str)
-        or not plugin_name
-        or not isinstance(runtime_plugin_name, str)
-        or not runtime_plugin_name
-    ):
+    if not isinstance(plugin_name, str) or not plugin_name:
         return errors
 
     plugins = marketplace.get("plugins")
@@ -125,26 +95,20 @@ def validate_codex_metadata(repo_root: Path) -> list[str]:
         if plugin_root_candidate is None:
             continue
 
-        if plugin_root_candidate == repo_root.resolve():
-            errors.append(
-                f"{repo_label(marketplace_path)} plugin entry {index} resolves to the "
-                "repository root. Codex rejects empty local source paths such as './'."
-            )
-            continue
-
         candidate_manifest = plugin_root_candidate / ".codex-plugin" / "plugin.json"
-        if candidate_manifest.resolve() == runtime_plugin_manifest_path.resolve():
+        if candidate_manifest.resolve() == plugin_manifest_path.resolve():
             matching_entries.append((index, entry, plugin_root_candidate))
         elif isinstance(rel_path, str) and rel_path.strip() in {".", "./"}:
             errors.append(
-                f"{repo_label(marketplace_path)} plugin entry {index} uses an empty "
-                f"local source path: {rel_path!r}."
+                f"{repo_label(marketplace_path)} plugin entry {index} resolves to "
+                f"{repo_label(plugin_root_candidate)}, but its manifest does not match "
+                f"{repo_label(plugin_manifest_path)}."
             )
 
     if not matching_entries:
         errors.append(
             f"{repo_label(marketplace_path)} does not contain a plugin entry that resolves "
-            f"to {repo_label(runtime_plugin_manifest_path)}."
+            f"to {repo_label(plugin_manifest_path)}."
         )
         return errors
 
@@ -157,10 +121,10 @@ def validate_codex_metadata(repo_root: Path) -> list[str]:
 
     index, entry, _ = matching_entries[0]
     entry_name = entry.get("name")
-    if entry_name != runtime_plugin_name:
+    if entry_name != plugin_name:
         errors.append(
             f"{repo_label(marketplace_path)} plugin entry {index} is named "
-            f"{entry_name!r}, expected {runtime_plugin_name!r}."
+            f"{entry_name!r}, expected {plugin_name!r}."
         )
 
     source = entry.get("source")
@@ -169,10 +133,17 @@ def validate_codex_metadata(repo_root: Path) -> list[str]:
             f"{repo_label(marketplace_path)} plugin entry {index} must use "
             f"'source.source': 'local'."
         )
-    elif resolve_plugin_root(repo_root, entry) == repo_root.resolve():
+    elif resolve_plugin_root(repo_root, entry) != repo_root.resolve():
         errors.append(
-            f"{repo_label(marketplace_path)} plugin entry {index} must use a non-root "
-            "local source path."
+            f"{repo_label(marketplace_path)} plugin entry {index} must resolve to the "
+            f"repository root so Codex loads {repo_label(plugin_manifest_path)}."
+        )
+
+    rel_path = source.get("path")
+    if not isinstance(rel_path, str) or rel_path.strip() not in {".", "./"}:
+        errors.append(
+            f"{repo_label(marketplace_path)} plugin entry {index} must use "
+            "'source.path' as '.' or './'."
         )
 
     policy = entry.get("policy")

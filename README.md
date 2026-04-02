@@ -1,6 +1,6 @@
 # Skills Repository
 
-[![Codex plugin](https://img.shields.io/badge/Codex-native_plugin-0F766E?style=for-the-badge)](./plugins/skills/.codex-plugin/plugin.json)
+[![Codex plugin](https://img.shields.io/badge/Codex-native_plugin-0F766E?style=for-the-badge)](./.codex-plugin/plugin.json)
 [![Claude Code marketplace](https://img.shields.io/badge/Claude_Code-marketplace-CC785C?style=for-the-badge)](./.claude-plugin/marketplace.json)
 [![OpenClaw compatible](https://img.shields.io/badge/OpenClaw-compatible-4C6EF5?style=for-the-badge)](./skills)
 [![24 installable skills](https://img.shields.io/badge/24-installable_skills-334155?style=for-the-badge)](./skills)
@@ -83,7 +83,7 @@ If you also need official OpenAI skills such as `playwright`, `pdf`, or `openai-
 
 ## Codex Plugin
 
-This repository now exposes a native Codex plugin via [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) and the installable plugin source at [`plugins/skills/.codex-plugin/plugin.json`](./plugins/skills/.codex-plugin/plugin.json).
+This repository now exposes a native Codex plugin via [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) and the installable plugin manifest at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 
 If you open this repository in the Codex app, you can install it from the repo marketplace without copying skills into `.agents/skills`:
 
@@ -95,7 +95,7 @@ If you open this repository in the Codex app, you can install it from the repo m
 4. Restart Codex if the repository was already open before the marketplace files were added.
 5. Open the plugin directory, choose the `Blackscience Tech Skills` marketplace, and install the `Blackscience Tech Skills` plugin.
 
-The installable plugin source keeps a `skills/` view under [`plugins/skills/`](./plugins/skills), so adding or updating skills in this repo updates the local plugin source as well.
+The marketplace entry points directly at the repository root (`source.path: "."`), so Codex loads [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and the existing [`skills/`](./skills) tree without an extra wrapper directory.
 
 ## Codex App Quickstart (Remote Install Alternative)
 
