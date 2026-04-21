@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Codex skill metrics event",
+  "type": "object",
+  "required": ["event", "ts"],
+  "properties": {
+    "event": {
+      "type": "string",
+      "enum": ["user_prompt_submit", "stop"]
+    },
+    "ts": {
+      "type": "string"
+    },
+    "cwd": {
+      "type": ["string", "null"]
+    },
+    "session_id": {
+      "type": ["string", "null"]
+    },
+    "transcript_path": {
+      "type": ["string", "null"]
+    },
+    "prompt_sha256": {
+      "type": ["string", "null"]
+    },
+    "prompt": {
+      "type": ["string", "null"]
+    },
+    "assistant_sha256": {
+      "type": ["string", "null"]
+    },
+    "assistant": {
+      "type": ["string", "null"]
+    },
+    "explicit_skill_mentions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "candidate_expected_skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "observed_skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "gold_expected_skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "confusion": {
+      "type": ["object", "null"],
+      "properties": {
+        "tp": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fn": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fp": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "available_skill_count": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": true
+}
