@@ -111,6 +111,15 @@
       ]
     },
     {
+      "name": "modern-python-style",
+      "description": "Enforce modern Python 3.10+ syntax and typing with deterministic checks.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/modern-python-style"
+      ]
+    },
+    {
       "name": "nix",
       "description": "Explain, write, and debug Nix expression language + common Nix workflows (flakes, nix CLI, nixpkgs).",
       "source": "./",

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Career Team Intel"
-  short_description: "Public hiring-signal & team research"
-  default_prompt: "Use $career-team-intel to research a target company/team/leader via public professional sources, interpret hiring intent signals, and draft outreach + resume alignment."
