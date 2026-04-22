@@ -1,6 +1,6 @@
 ---
 name: paper-writer
-description: Single entry point for drafting or revising scientific papers, generating profile-based LaTeX scaffolds, harvesting draft-local citations into BibTeX, and auditing figure-caption-figref alignment from paper PDFs. Use when writing or editing research papers, workshop submissions, technical reports, negative-results papers, venue-specific drafts such as standard conference papers and 4-page ICBINB manuscripts, manuscript-local bibliography repair, or figure QA while keeping claims grounded in experiment artifacts. Route Zotero library management, collection export, and keep-updated bibliography sync to `zotero`.
+description: Single entry point for drafting or revising scientific papers, generating profile-based LaTeX scaffolds, harvesting draft-local citations into BibTeX, and auditing figure-caption-figref alignment from paper PDFs. Use when writing or editing research papers, workshop submissions, technical reports, negative-results papers, venue-specific drafts such as standard conference papers and 4-page ICBINB manuscripts, manuscript-local bibliography repair, or figure QA while keeping claims grounded in experiment artifacts. When the manuscript is blocked by an evidence gap, actively recommend the smallest decisive supplementary experiment, and run simple statistics or lightweight analyses directly when the artifacts are already available. Route Zotero library management, collection export, and keep-updated bibliography sync to `zotero`.
 metadata:
   short_name: paper-writer
   aliases: scientific-paper-writeup, paper-writeup, manuscript drafting, research writing, paper draft, writeup-normal, writeup-icbinb, ICBINB writeup, manuscript bibliography repair, manuscript citation harvest, figref audit
@@ -17,6 +17,8 @@ It covers five bundled workflows:
 - Harvest candidate citations into JSON + BibTeX using `scripts/citation_harvest.py`.
 - Extract figure-region images, captions, and figrefs into an audit bundle using `scripts/extract_figures_and_refs.py`.
 - Prepare journal-submission support materials such as cover letters, reviewer suggestions, and resubmission notes.
+
+When a draft is blocked by missing evidence, do not stay passive. Surface the gap explicitly, recommend the smallest experiment that would unblock the claim, and run the easy version yourself when it is already feasible from local code, logs, tables, or predictions.
 
 Keep only genuinely adjacent tasks outside this skill:
 - Use `research-impact-strategy` first if the story or central claim is still blurry.
@@ -41,27 +43,56 @@ Keep only genuinely adjacent tasks outside this skill:
    - Use the section guidance in `references/section-guidelines.md`.
    - Ensure every claim is supported by experiment logs or citations.
 
-4. **Draft the manuscript**
+4. **Check for evidence gaps before polishing prose**
+   - Look for claims that still need support, such as missing variability estimates, missing baseline comparisons, absent ablations, weak error analysis, or unclear robustness checks.
+   - If a gap is real, treat it as a writing blocker rather than trying to write around it.
+   - Prefer the smallest decisive addition that would make the paper more convincing.
+
+5. **Draft the manuscript**
    - Write section by section.
    - Cite related work using existing references only. If new citations are needed, follow `references/citation-workflow.md` and the bundled bibliography helper in `references/bibliography-harvest.md`.
    - Do not invent results or citations.
+   - Do not hide evidence gaps with vague wording. Either support the claim, soften the claim, or mark the need for a supplementary experiment.
    - Do not write local repository or filesystem paths in the manuscript body (for example `/Users/...` or checkout-specific paths). Refer to artifacts, scripts, or resources in paper-appropriate prose instead.
 
-5. **Run a submission-readiness pass when journal fit matters**
+6. **Run a submission-readiness pass when journal fit matters**
    - Use `references/submission-readiness.md` when the paper is headed to a journal, a high-selectivity venue, or a resubmission round.
    - Tighten the title and abstract so they are concise, accurate, and not inflated.
    - Make the comparison to the closest prior work fair and prominent instead of relying on vague novelty language.
    - Ensure the main message is visible from the figures, captions, and figrefs without hunting through the text.
    - If the user needs them, draft a journal-specific cover letter, unbiased reviewer suggestions, and a clear resubmission note describing material changes.
 
-6. **LaTeX QA and formatting**
+7. **LaTeX QA and formatting**
    - Follow `references/latex-quality.md` for common issues.
    - Verify figures exist and references are consistent.
    - If figure/text alignment is the main QA problem, use `references/figure-audit.md` and `scripts/extract_figures_and_refs.py` before editing captions or figrefs by hand.
    - Respect page limits and venue layout constraints.
 
-7. **Safeguards and integrity checks**
+8. **Safeguards and integrity checks**
    - Use `references/safeguards.md` to validate factuality, attribution, and responsible disclosure.
+
+## Evidence-Gap and Supplementary Experiment Workflow
+Use this when the manuscript is bottlenecked by missing support for an otherwise important claim.
+
+1. **Classify the gap**
+   - Simple: statistics or slicing that can be computed from existing artifacts, such as means and standard deviations across seeds, confidence intervals, significance tests, win rates, proportions, sample counts, error buckets, or a missing summary table.
+   - Lightweight: a short rerun, a small ablation, a missing baseline on existing outputs, or a simple robustness check that should finish quickly with current code and data access.
+   - Heavy: long retraining, new dataset collection, major annotation work, or anything that materially changes scope, compute, or timeline.
+
+2. **Default to action, not only advice**
+   - For simple gaps, run the analysis directly if the needed artifacts are already present locally. This includes simple statistics, aggregation, plotting, and error breakdowns.
+   - For lightweight gaps, actively recommend the experiment and execute it when it is low-risk, cheap, and clearly within the current workspace setup.
+   - For heavy gaps, do not launch it silently. Tell the user why it is important, propose the smallest decisive version, and explain what claim it would validate.
+
+3. **Prefer the smallest decisive experiment**
+   - Ask which uncertainty matters most for acceptance: effect size stability, baseline fairness, ablation necessity, robustness, or failure mode characterization.
+   - Reduce broad ideas like "more experiments" into one narrow intervention with a clear expected manuscript payoff.
+   - If a claim is not central enough to justify new work, weaken or remove the claim instead of expanding the project.
+
+4. **Integrate results honestly**
+   - Record the method, sample definition, and any assumptions made in the supplementary analysis.
+   - Update the manuscript text, tables, figures, and limitations together so the new evidence is reflected consistently.
+   - If the new result is negative or mixed, keep it and adjust the claim accordingly.
 
 ## Submission Support Workflow
 Use this when the user wants help beyond the manuscript itself, such as a cover letter, reviewer suggestions, associate-editor suggestions, or a resubmission note.
@@ -137,6 +168,7 @@ Use this when the user already has structured artifacts and wants a fast paper s
 - Target journal audience and whether this is a new submission, resubmission, or transfer
 - Desired format (standard vs. negative-results / workshop)
 - Inputs available: idea text, summaries/logs, plots, citations
+- Whether local code, predictions, result tables, or logs are available for quick supplementary analyses or statistics
 - Output format: LaTeX (preferred) or Markdown
 - Whether the user also needs a cover letter, reviewer suggestions, or a resubmission note
 - If structured artifacts exist, whether the user wants a scaffold profile (`conference` or `icbinb`)
@@ -145,6 +177,7 @@ Use this when the user already has structured artifacts and wants a fast paper s
 - A complete manuscript (LaTeX or Markdown), with all sections filled.
 - Or a scaffolded `paper.tex` generated from structured artifacts and ready for manual completion.
 - Optional submission-support materials such as a cover letter, reviewer suggestions, or a resubmission note.
+- When needed, a narrowly scoped supplementary analysis or experiment plan, and the computed result directly if it was simple enough to run from existing artifacts.
 - Citations only from provided references.bib or vetted sources.
 - Honest reporting of negative or inconclusive results.
 - The main text must not include local repository or filesystem paths; rewrite them as reader-facing descriptions if the source material contains such paths.
