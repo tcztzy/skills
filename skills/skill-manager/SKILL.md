@@ -1,9 +1,13 @@
 ---
 name: skill-manager
-description: Manage and evolve Codex skills: create, update, and audit SKILL.md files together with their scripts, references, and assets; inventory installed skills; validate and convert Claude Code skills; and check shared runtime readiness. Use when prompts mention create skill, audit skill, update SKILL.md, validate skill, convert skill, inventory skills, install skill, or bootstrap skill runtimes.
+description: "Manage and evolve Codex skills: create, update, and audit SKILL.md files together with their scripts, references, and assets; inventory installed skills; validate and convert Claude Code skills; and check shared runtime readiness. Use when prompts mention create skill, audit skill, update SKILL.md, validate skill, convert skill, inventory skills, install skill, or bootstrap skill runtimes."
 metadata:
   short_name: skillmgr
-  aliases: skill audit,skill authoring,skill install,runtime audit
+  aliases:
+    - skill audit
+    - skill authoring
+    - skill install
+    - runtime audit
 ---
 
 # Skill Manager
