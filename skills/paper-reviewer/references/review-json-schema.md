@@ -27,3 +27,4 @@ Produce valid JSON with the following fields **in this order**:
 - Keep the review specific to the provided paper text.
 - Do not invent results, claims, or citations not present in the paper.
 - Avoid long verbatim quotes.
+- For list fields such as `Strengths`, `Weaknesses`, `Questions`, and `Limitations`, append concrete locators whenever the item refers to a specific passage or visual element.
