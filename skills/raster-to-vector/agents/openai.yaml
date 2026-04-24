@@ -1,0 +1,4 @@
+interface:
+  display_name: "Raster To Vector"
+  short_description: "Redraw raster diagrams as editable SVG"
+  default_prompt: "Use $raster-to-vector to convert this raster diagram into presentation-ready editable SVG with selectable text, editable connectors and containers, and replaceable icons."
