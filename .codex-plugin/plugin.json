@@ -30,8 +30,7 @@
     "websiteURL": "https://github.com/tcztzy/skills",
     "defaultPrompt": [
       "Use Blackscience Tech Skills to review a paper draft before submission.",
-      "Use Blackscience Tech Skills to simplify a codebase without regressions.",
-      "Use Blackscience Tech Skills to summarize an experiment run directory."
+      "Use Blackscience Tech Skills to simplify a codebase without regressions."
     ],
     "brandColor": "#0F766E"
   }
