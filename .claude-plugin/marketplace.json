@@ -57,15 +57,6 @@
       ]
     },
     {
-      "name": "career-team-intel",
-      "description": "Proactively research target companies, teams, and hiring decision makers (EM/TL/HM/recruiters) for job seeking using public, explicitly professional sources; interpret hiring-intent signals such as leader \"we're hiring\" posts, score confidence, and produce a team brief, contact map, outreach messages, and resume alignment.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/career-team-intel"
-      ]
-    },
-    {
       "name": "code-simplifier",
       "description": "Safely simplify code with multi-metric quality gates.",
       "source": "./",
@@ -112,7 +103,7 @@
     },
     {
       "name": "modern-python-style",
-      "description": "Enforce modern Python 3.10+ syntax and typing with deterministic checks.",
+      "description": "Enforce modern Python 3.10+ syntax, static typing discipline, and anti-ceremony code style with deterministic checks.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -171,6 +162,15 @@
       "strict": false,
       "skills": [
         "./skills/python-performance-tuning"
+      ]
+    },
+    {
+      "name": "raster-to-vector",
+      "description": "Convert raster architecture diagrams, screenshots, flowcharts, UI diagrams, scanned figures, charts, and rendered PDF pages into presentation-ready editable SVG. Use PP-OCR text geometry, local segmentation, CV primitives, optional image understanding, agent-provided icon replacements, and per-element fallback tracing; never ship a final full-canvas embedded PNG as vectorization.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/raster-to-vector"
       ]
     },
     {
