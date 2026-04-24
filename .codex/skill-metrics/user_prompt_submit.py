@@ -15,8 +15,8 @@ from common import (
     maybe_store_text,
     now_iso,
     payload_get,
+    rough_candidate_skill_matches,
     read_stdin_json,
-    rough_candidate_skills,
     sha256_text,
 )
 
@@ -27,6 +27,8 @@ def main() -> int:
     if not isinstance(prompt, str):
         prompt = str(prompt)
     skills = inventory_skills()
+    candidate_matches = rough_candidate_skill_matches(prompt, skills)
+    candidate_hints = [row["skill"] for row in candidate_matches]
     event = {
         "event": "user_prompt_submit",
         "ts": now_iso(),
@@ -36,7 +38,9 @@ def main() -> int:
         "prompt_sha256": sha256_text(prompt),
         "prompt": maybe_store_text(compact_text(prompt)),
         "explicit_skill_mentions": explicit_skill_mentions(prompt),
-        "candidate_expected_skills": rough_candidate_skills(prompt, skills),
+        "candidate_skill_hints": candidate_hints,
+        "candidate_skill_matches": candidate_matches,
+        "candidate_expected_skills": candidate_hints,
         "gold_expected_skills": expected_for_prompt(prompt),
         "available_skill_count": len(skills),
     }

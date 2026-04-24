@@ -44,6 +44,34 @@
         "type": "string"
       }
     },
+    "candidate_skill_hints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "candidate_skill_matches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["skill", "score", "reasons"],
+        "properties": {
+          "skill": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number"
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
     "observed_skills": {
       "type": "array",
       "items": {

@@ -58,13 +58,17 @@ STOPWORDS = {
     "make",
     "model",
     "output",
+    "paper",
     "prompt",
     "prompts",
+    "python",
     "repo",
     "request",
     "review",
     "run",
     "script",
+    "that",
+    "this",
     "skill",
     "skills",
     "task",
@@ -76,6 +80,8 @@ STOPWORDS = {
     "user",
     "using",
     "when",
+    "with",
+    "without",
     "work",
     "workflow",
 }
@@ -212,29 +218,52 @@ def explicit_skill_mentions(text: str) -> list[str]:
     return sorted(set(SKILL_MENTION_RE.findall(text)))
 
 
-def rough_candidate_skills(prompt: str, skills: list[dict[str, str]], limit: int = 12) -> list[str]:
+def skill_match_terms(text: str) -> list[str]:
+    return [
+        token.lower()
+        for token in re.findall(r"[A-Za-z0-9_+-]{4,}", text)
+        if token.lower() not in STOPWORDS
+    ]
+
+
+def rough_candidate_skill_matches(
+    prompt: str,
+    skills: list[dict[str, str]],
+    limit: int = 12,
+    min_score: int = 3,
+) -> list[dict[str, Any]]:
     prompt_l = prompt.lower()
-    scored: list[tuple[int, str]] = []
+    matches: list[dict[str, Any]] = []
     explicit = set(explicit_skill_mentions(prompt))
     for skill in skills:
         name = skill["name"]
         desc = skill.get("description", "")
         score = 0
+        reasons: list[str] = []
         if name in explicit:
             score += 100
+            reasons.append("explicit_mention")
         if name.lower() in prompt_l:
-            score += 10
-        for token in re.findall(r"[A-Za-z0-9_+-]{4,}", name):
-            token_l = token.lower()
-            if token_l not in STOPWORDS and token_l in prompt_l:
-                score += 3
-        for token in re.findall(r"[A-Za-z0-9_+-]{4,}", desc):
-            token_l = token.lower()
-            if token_l not in STOPWORDS and token_l in prompt_l:
-                score += 1
-        if score >= 2 or name in explicit:
-            scored.append((score, name))
-    return [name for _, name in sorted(scored, reverse=True)[:limit]]
+            score += 20
+            reasons.append("skill_name")
+
+        name_hits = sorted({token for token in skill_match_terms(name) if token in prompt_l})
+        if name_hits:
+            score += min(12, len(name_hits) * 4)
+            reasons.extend(f"name:{token}" for token in name_hits[:4])
+
+        desc_hits = sorted({token for token in skill_match_terms(desc) if token in prompt_l})
+        if desc_hits:
+            score += min(6, len(desc_hits))
+            reasons.extend(f"description:{token}" for token in desc_hits[:6])
+
+        if name in explicit or score >= min_score:
+            matches.append({"skill": name, "score": score, "reasons": reasons})
+    return sorted(matches, key=lambda row: (-int(row["score"]), str(row["skill"])))[:limit]
+
+
+def rough_candidate_skills(prompt: str, skills: list[dict[str, str]], limit: int = 12) -> list[str]:
+    return [row["skill"] for row in rough_candidate_skill_matches(prompt, skills, limit=limit)]
 
 
 def latest_transcript() -> Path | None:

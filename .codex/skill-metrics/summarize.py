@@ -42,13 +42,23 @@ def main() -> int:
     events = read_jsonl(args.events)
     explicit_uses = read_jsonl(args.skill_use)
     candidate_counts: Counter[str] = Counter()
+    candidate_score_totals: Counter[str] = Counter()
+    candidate_score_counts: Counter[str] = Counter()
     observed_counts: Counter[str] = Counter()
     explicit_counts: Counter[str] = Counter()
     stats: dict[str, Counter[str]] = defaultdict(Counter)
 
     for event in events:
-        for skill in event.get("candidate_expected_skills") or []:
+        for skill in event.get("candidate_skill_hints") or event.get("candidate_expected_skills") or []:
             candidate_counts[skill] += 1
+        for match in event.get("candidate_skill_matches") or []:
+            if not isinstance(match, dict):
+                continue
+            skill = match.get("skill")
+            score = match.get("score")
+            if isinstance(skill, str) and isinstance(score, (int, float)):
+                candidate_score_totals[skill] += score
+                candidate_score_counts[skill] += 1
         for skill in event.get("observed_skills") or []:
             observed_counts[skill] += 1
         conf = event.get("confusion")
@@ -79,6 +89,7 @@ def main() -> int:
             {
                 "skill": skill,
                 "candidate_count": candidate_counts[skill],
+                "avg_candidate_score": ratio(candidate_score_totals[skill], candidate_score_counts[skill]),
                 "observed_count": observed_counts[skill],
                 "explicit_marker_count": explicit_counts[skill],
                 "tp": tp,
@@ -95,7 +106,7 @@ def main() -> int:
         return 0
 
     print(f"events: {summary['event_count']}  explicit markers: {summary['skill_use_marker_count']}")
-    print("skill\tcandidate\tobserved\tmarker\ttp\tfn\tfp\tprecision\trecall\tf1")
+    print("skill\tcandidate\tavg_score\tobserved\tmarker\ttp\tfn\tfp\tprecision\trecall\tf1")
     for row in summary["skills"]:
         def fmt(value: object) -> str:
             return "" if value is None else (f"{value:.3f}" if isinstance(value, float) else str(value))
@@ -105,6 +116,7 @@ def main() -> int:
                 [
                     fmt(row["skill"]),
                     fmt(row["candidate_count"]),
+                    fmt(row["avg_candidate_score"]),
                     fmt(row["observed_count"]),
                     fmt(row["explicit_marker_count"]),
                     fmt(row["tp"]),
