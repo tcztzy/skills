@@ -2,25 +2,51 @@
 
 Use this file when the task needs concrete implementation entrypoints instead of protocol-only guidance.
 
-## Current Compatibility Snapshot
+## Current Compatibility Snapshot (2026-05)
 
-Use this snapshot for routing and trigger interpretation, not as a substitute for re-checking live docs when the user asks for the latest status.
+- Codex CLI: `@agentclientprotocol/codex-acp` via bun. Repo: `https://github.com/zed-industries/codex-acp`
+- Claude Agent / Claude Code: `@agentclientprotocol/claude-agent-acp` via bun. Repo: `https://github.com/zed-industries/claude-agent-acp`
+- OpenClaw: `openclaw acp` bridge. Docs: `https://docs.openclaw.ai/cli/acp`
+- OpenCode: `opencode acp` subcommand
+- Hermes: `hermes acp` subcommand
+- Gemini CLI: first ACP reference, built into Zed
+- GitHub Copilot CLI, Cline, Goose, Qwen Code, Kimi CLI, Mistral Vibe: all ACP-compatible
+- ZeroClaw: no verified ACP support
 
-- Codex CLI:
-  - ACP agents page lists `Codex CLI` as usable with an ACP client via Zed's adapter.
-  - official adapter repo: `https://github.com/zed-industries/codex-acp`
-- Claude Agent / Claude Code:
-  - ACP agents page lists `Claude Agent` via Zed's SDK adapter.
-  - official adapter repo now resolves to `https://github.com/zed-industries/claude-agent-acp`
-  - older notes may still say `claude-code-acp`, but the live official adapter repo/package is `claude-agent-acp`
-  - OpenClaw docs still use the older product wording `Claude Code` in examples
-- OpenClaw:
-  - ACP clients/connectors page lists OpenClaw through the `openclaw acp` bridge.
-  - official docs: `https://docs.openclaw.ai/cli/acp`
-- ZeroClaw:
-  - no ACP support page was found in ACP official docs
-  - no ACP support page was found in ZeroClaw official docs/repo searches used for this skill
-  - treat ACP support as unverified
+## Rust SDK (SACP)
+
+Official page:
+
+- `https://agentclientprotocol.com/libraries/rust`
+
+Package and repository:
+
+- crate: `agent-client-protocol` (SACP types)
+- crate: `agent-client-protocol-tokio` (async runtime integration)
+- install: `cargo add agent-client-protocol agent-client-protocol-tokio`
+- repository: `https://github.com/agentclientprotocol/rust-sdk`
+
+SACP = Statically-typed ACP. Generated Rust types from the ACP JSON schema. Provides:
+
+- Typed request/response structs for all ACP methods
+- JSON-RPC 2.0 message types
+- Async connection primitives (tokio-based)
+- Serde serialization for all protocol types
+
+Use this SDK when:
+
+- the project is Rust (including SwarmX)
+- you want compile-time guarantees on ACP message shapes
+- you are building an agent or client in Rust
+- you are wrapping an existing Rust CLI with ACP
+
+## ACP Registry
+
+- `https://agentclientprotocol.com/registry`
+- `https://github.com/agentclientprotocol/registry`
+- Registry format: agents describe themselves via `agent.json`
+- CI auto-validates format, icons, download URLs, and auth support
+- Clients pull `registry.json` for discovery
 
 ## Official Documentation
 
@@ -34,6 +60,11 @@ Use this snapshot for routing and trigger interpretation, not as a substitute fo
 - Terminals: `https://agentclientprotocol.com/protocol/terminals`
 - Slash commands: `https://agentclientprotocol.com/protocol/slash-commands`
 - Schema: `https://agentclientprotocol.com/protocol/schema`
+- Session resume: `https://agentclientprotocol.com/protocol/session-resume`
+- Session close: `https://agentclientprotocol.com/protocol/session-close`
+- Session list: `https://agentclientprotocol.com/protocol/session-list`
+- ACP Registry: `https://agentclientprotocol.com/registry`
+- Transport negotiation: `https://agentclientprotocol.com/protocol/transports`
 - Main spec repository: `https://github.com/agentclientprotocol/agent-client-protocol`
 
 ## TypeScript SDK

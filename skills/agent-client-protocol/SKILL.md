@@ -1,15 +1,16 @@
 ---
 name: agent-client-protocol
 description: Implement or debug Agent Client Protocol (ACP) integrations between coding
-  agents and clients/editors. Use when prompts mention ACP, Agent Client Protocol, or ask
-  whether tools like Codex CLI (via `zed-industries/codex-acp`), Claude Agent / Claude Code
-  (via `zed-industries/claude-agent-acp`, with older docs sometimes still saying `claude-code-acp`),
-  OpenClaw (via `openclaw acp`), Zed, Visual Studio
-  Code with the ACP Client extension, JetBrains, neovim, Emacs, marimo notebook, or Obsidian
-  support ACP; also use for ACP compatibility checks such as whether ZeroClaw has ACP support.
-  Trigger on JSON-RPC ACP methods like initialize, session/new, session/load, session/prompt,
-  session/update, session/request_permission, terminal/create, fs/read_text_file, slash commands,
-  or the official ACP TypeScript/Python SDKs.
+  agents and clients/editors. Covers spec v0.11.4 (2026-04-23): full session lifecycle
+  (new/load/resume/close/list), prompt turns, tool calls, permissions, file system,
+  terminals, slash commands, MCP integration, ACP Registry, and transport negotiation
+  (stdio/HTTP/WebSocket). Use when prompts mention ACP, Agent Client Protocol, agent-client-protocol
+  crate, ACP agent/client/bridge implementation; when asking whether Codex CLI, Claude Agent,
+  OpenClaw, ZeroClaw, or other agents support ACP; when working with ACP in Rust (SACP SDK),
+  Python, TypeScript, or Kotlin. Trigger on JSON-RPC ACP methods: initialize, session/new,
+  session/load, session/resume, session/prompt, session/update, session/close, session/list,
+  session/request_permission, session_info_update, terminal/create, fs/read_text_file,
+  available_commands_update, or the official ACP SDKs.
 ---
 
 # Agent Client Protocol
@@ -17,14 +18,32 @@ description: Implement or debug Agent Client Protocol (ACP) integrations between
 Use this skill when building or troubleshooting ACP-compatible agents, clients, or bridges.
 Prefer official ACP docs and SDKs. Do not invent method names, capability flags, or payload fields.
 
-## Compatibility Snapshot
+## Protocol Version
 
-As of March 16, 2026, the ACP docs and linked project docs support these practical routing assumptions:
+Current stable: **v0.11.4** (2026-04-23). The protocol is developed by Zed Industries with multi-vendor governance. JetBrains' Sergey Ignatov joined as Lead Maintainer (2026-02-18).
 
-- Codex CLI is available to ACP clients through the `zed-industries/codex-acp` adapter.
-- Claude Agent / Claude Code is available to ACP clients through the `zed-industries/claude-agent-acp` adapter.
-- OpenClaw is listed by ACP as both an ACP-capable agent entry and a connector via `openclaw acp`.
-- ZeroClaw does not have ACP support that this skill can currently verify from ACP official docs or ZeroClaw official docs; treat ACP support as unverified until a primary source appears.
+Key stable features as of 2026-04:
+- `session/resume` and `session/close` stabilized (2026-04-22)
+- `session/list` stabilized (2026-03-09)
+- `session_info_update` notification stabilized (2026-03-09)
+- Session Config Options stabilized (2026-02-04): model, mode, reasoning level
+- ACP Registry stabilized (2026-03-09)
+- Streamable HTTP & WebSocket Transport in Draft (2026-04-22)
+- Transports Working Group formed (JetBrains + Block/Goose, 2026-04-23)
+
+## Compatibility Snapshot (2026-05)
+
+- Codex CLI: ACP via `@agentclientprotocol/codex-acp` (bun x). Adapter repo: `zed-industries/codex-acp`
+- Claude Agent / Claude Code: ACP via `@agentclientprotocol/claude-agent-acp` (bun x). Adapter repo: `zed-industries/claude-agent-acp`
+- OpenClaw: ACP via `openclaw acp` bridge. Docs: `docs.openclaw.ai/cli/acp`
+- Gemini CLI: First ACP reference implementation (Zed)
+- OpenCode: ACP via `opencode acp` subcommand
+- Hermes: ACP via `hermes acp` subcommand
+- GitHub Copilot CLI, Cline, Goose, Qwen Code, Kimi CLI, Mistral Vibe: all ACP-compatible
+- ZeroClaw: no verified ACP support as of 2026-05
+- Rust SDK: `agentclientprotocol/rust-sdk` (based on SACP)
+- Python SDK: `agent-client-protocol` (pip package). Pydantic models, async base classes
+- TypeScript SDK: `@agentclientprotocol/sdk`. AgentSideConnection, ClientSideConnection
 
 ## Workflow
 
@@ -40,12 +59,18 @@ As of March 16, 2026, the ACP docs and linked project docs support these practic
 ## Lifecycle Invariants
 
 - Use JSON-RPC 2.0 request/response semantics for methods and one-way semantics for notifications.
-- Call `initialize` before `session/new` or `session/load`.
-- Create or load a session before `session/prompt`.
+- Call `initialize` before `session/new`, `session/load`, or `session/resume`.
+- Create, load, or resume a session before `session/prompt`.
+- Accept `session/list` (optional) to enumerate active sessions; advertise via `agentCapabilities.listSessions`.
+- Accept `session/resume` when `agentCapabilities.resumeSession` is true; agent replays history via `session/update` then answers the original `session/resume`.
+- Accept `session/close` to terminate a session; after close, the agent must reject further `session/prompt` for that session ID.
+- Accept `session_info_update` notifications from client (e.g., title changes).
 - Check capabilities before optional methods:
   - `clientCapabilities.fs.readTextFile` and `clientCapabilities.fs.writeTextFile`
   - `clientCapabilities.terminal`
   - `agentCapabilities.loadSession`
+  - `agentCapabilities.resumeSession`
+  - `agentCapabilities.listSessions`
   - `agentCapabilities.mcpCapabilities.http` and `agentCapabilities.mcpCapabilities.sse`
 - Keep file paths absolute and line numbers 1-based.
 - Finish each prompt turn by replying to the original `session/prompt` with a `stopReason`.
@@ -56,7 +81,10 @@ As of March 16, 2026, the ACP docs and linked project docs support these practic
 
 - Negotiate `protocolVersion`, `agentCapabilities`, and optional `authMethods` during `initialize`.
 - Support the baseline session surface: `session/new`, `session/prompt`, `session/cancel`, and `session/update`.
-- If supporting resume, advertise `loadSession` and implement `session/load`.
+- If supporting resume, advertise `resumeSession` and implement `session/resume` (replay history via `session/update`, then answer the original request).
+- If supporting listing, advertise `listSessions` and implement `session/list`.
+- Accept `session/close` to clean up session resources.
+- Accept `session_info_update` notifications for client-driven metadata changes.
 - During a prompt turn, stream plans, message chunks, and tool progress through `session/update`.
 - Catch cancellation-related runtime errors and return `stopReason: cancelled` instead of leaking a generic tool or transport exception.
 
@@ -71,10 +99,25 @@ As of March 16, 2026, the ACP docs and linked project docs support these practic
 
 ### ACP + MCP
 
-- Pass MCP server connection details in `session/new` or `session/load`.
+- Pass MCP server connection details in `session/new`, `session/load`, or `session/resume`.
 - Expect all ACP agents to support MCP stdio.
-- Prefer MCP HTTP transport when available.
-- Avoid new SSE-only designs; ACP docs note MCP has deprecated SSE.
+- Prefer MCP HTTP (SSE deprecated by MCP spec).
+- Streamable HTTP & WebSocket transports for ACP itself are in Draft (2026-04).
+- For HTTP/SSE MCP servers, check `agentCapabilities.mcpCapabilities.http` before use.
+
+### ACP Registry
+
+The ACP Registry (`registry.json`) is a community index of ACP-compatible agents and clients. Agents describe themselves via `agent.json` — CI validates format, icons, download URLs, and auth support automatically. Use the registry to discover available agents rather than maintaining a hardcoded list.
+
+### Rust SDK (SACP)
+
+```toml
+[dependencies]
+agent-client-protocol = "0.11"
+agent-client-protocol-tokio = "0.11"
+```
+
+Uses SACP (Statically-typed ACP) — generated Rust types from the ACP JSON schema. Provides typed connection primitives, JSON-RPC plumbing, and async support via tokio. Official repo: `https://github.com/agentclientprotocol/rust-sdk`.
 
 ## Output Rules
 

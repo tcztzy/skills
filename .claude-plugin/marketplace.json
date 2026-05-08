@@ -22,7 +22,7 @@
     },
     {
       "name": "agent-client-protocol",
-      "description": "Implement or debug Agent Client Protocol (ACP) integrations between coding agents and clients/editors.",
+      "description": "Implement or debug Agent Client Protocol (ACP) integrations between coding agents and clients/editors. Covers spec v0.11.4 (2026-04-23): full session lifecycle (new/load/resume/close/list), prompt turns, tool calls, permissions, file system, terminals, slash commands, MCP integration, ACP Registry, and transport negotiation (stdio/HTTP/WebSocket).",
       "source": "./",
       "strict": false,
       "skills": [

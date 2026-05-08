@@ -13,10 +13,11 @@ Use this file when the task needs exact lifecycle ordering, capability checks, o
 ## Required Order
 
 1. `initialize`
-2. `session/new` or `session/load`
+2. `session/new`, `session/load`, or `session/resume`
 3. `session/prompt`
 4. optional `session/update`, `session/request_permission`, `fs/*`, `terminal/*`
 5. `session/prompt` response with `stopReason`
+6. optional `session/close`
 
 Do not skip steps. Most ACP bugs are lifecycle bugs.
 
@@ -72,8 +73,27 @@ Useful capabilities to check:
 Rules:
 
 - `cwd` must be absolute.
-- Session IDs are the handle for `session/prompt`, `session/cancel`, and `session/load`.
+- Session IDs are the handle for `session/prompt`, `session/cancel`, `session/load`, `session/resume`, and `session/close`.
 - For reproducible benchmarks, create a fresh session per task and keep task-specific workspace, logs, and memory roots outside any shared resumed session state.
+
+### Resuming a session (stabilized 2026-04-22)
+
+- Use `session/resume` when `agentCapabilities.resumeSession` is true.
+- Pass the existing `sessionId`, absolute `cwd`, and optional MCP servers.
+- The agent must replay the full session history via `session/update` notifications before answering the original `session/resume`.
+- Differs from `session/load`: resume replays history first, then stays open for further `session/prompt` calls within the same session.
+
+### Closing a session (stabilized 2026-04-22)
+
+- Use `session/close` to terminate a session.
+- After close, the agent must reject further `session/prompt` for that session ID.
+- Clean up session resources (subprocesses, temp files, MCP connections).
+
+### Listing sessions (stabilized 2026-03-09)
+
+- Use `session/list` when `agentCapabilities.listSessions` is true.
+- Agent returns a list of active session IDs and metadata.
+- Optional: filter by `cwd` or status.
 
 ## Prompt Turn
 
@@ -200,3 +220,6 @@ Start here when debugging:
 4. Are all file paths absolute and all line numbers 1-based?
 5. Does each `session/prompt` eventually receive exactly one terminal response with a `stopReason`?
 6. On cancel, does the agent return `cancelled` instead of surfacing an exception?
+7. For `session/resume`: did the agent replay full history via `session/update` before answering?
+8. For `session/close`: are further `session/prompt` calls for that session ID rejected?
+9. For `session/list`: did the client check `agentCapabilities.listSessions` first?
