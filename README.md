@@ -95,7 +95,7 @@ The catalog is organized around user tasks instead of tool brands.
 | Paper production | literature, figures, drafting, review, translation | [`zotero`](./skills/zotero/SKILL.md), [`paper-writer`](./skills/paper-writer/SKILL.md), [`paper-visualizer`](./skills/paper-visualizer/SKILL.md), [`paper-reviewer`](./skills/paper-reviewer/SKILL.md), [`academic-zh-en-translation`](./skills/academic-zh-en-translation/SKILL.md) |
 | Experiment and evaluation | run preparation, execution, scoring, post-run summaries | [`bfts-config-prep`](./skills/bfts-config-prep/SKILL.md), [`experiment-bfts-runner`](./skills/experiment-bfts-runner/SKILL.md), [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md), [`benchmark-builder`](./skills/benchmark-builder/SKILL.md), [`answer-judging`](./skills/answer-judging/SKILL.md), [`token-cost-tracker`](./skills/token-cost-tracker/SKILL.md) |
 | Engineering and systems | code simplification, performance, infra, batch systems, ACP, environment handling | [`code-simplifier`](./skills/code-simplifier/SKILL.md), [`project-simplify`](./skills/project-simplify/SKILL.md), [`python-performance-tuning`](./skills/python-performance-tuning/SKILL.md), [`hpc-batch`](./skills/hpc-batch/SKILL.md), [`nix`](./skills/nix/SKILL.md), [`wsl-fs`](./skills/wsl-fs/SKILL.md), [`agent-client-protocol`](./skills/agent-client-protocol/SKILL.md) |
-| Authoring and workflow maintenance | skill authoring, format conversion, document authoring, hiring research | [`skill-manager`](./skills/skill-manager/SKILL.md), [`latex-to-word`](./skills/latex-to-word/SKILL.md), [`typst`](./skills/typst/SKILL.md), [`career-team-intel`](./skills/career-team-intel/SKILL.md) |
+| Authoring and workflow maintenance | skill authoring, format conversion, document authoring, hiring research | [`skill-manager`](./skills/skill-manager/SKILL.md), [`latex-to-word`](./skills/latex-to-word/SKILL.md), [`typst`](./skills/typst/SKILL.md) |
 
 <details>
 <summary>Full installable catalog</summary>
@@ -131,7 +131,6 @@ The catalog is organized around user tasks instead of tool brands.
 
 ### Documents, authoring, and workflow maintenance
 
-- [`career-team-intel`](./skills/career-team-intel/SKILL.md): public-signal team and hiring research for job seeking
 - [`latex-to-word`](./skills/latex-to-word/SKILL.md): automated LaTeX-to-Word conversion with preprocessing
 - [`skill-manager`](./skills/skill-manager/SKILL.md): create, audit, validate, convert, and inventory skills
 - [`typst`](./skills/typst/SKILL.md): draft, convert, debug, and validate Typst documents
