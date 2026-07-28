@@ -1,0 +1,93 @@
+{
+  "skill_name": "nix",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "A NixOS module currently configures `virtualisation.oci-containers.containers.lab.image`, but the requirement is a native NixOS container with `privateNetwork`, a writable `/dev/bus/usb` bind mount, and OpenSSH enabled inside the guest. Explain the correction and provide the module fragment.",
+      "expected_output": "Uses `containers.lab`, native bindMounts, and nested container config; removes OCI image and backend-specific device options.",
+      "files": [],
+      "expectations": [
+        "Chooses the native NixOS container namespace rather than OCI",
+        "Represents the USB bind mount with hostPath and isReadOnly false",
+        "Enables OpenSSH inside the container config"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Fix a NixOS service module whose evaluator provides only `lib.mkEnableOption`, `lib.mkOption`, `lib.mkIf`, `lib.types.package`, `lib.types.port`, `lib.types.str`, and `lib.types.listOf`. It needs configurable package, port, and extra arguments, a systemd service, and a firewall port. Describe how you will avoid relying on unavailable helpers and how you will test non-default values.",
+      "expected_output": "Treats the supplied fake lib as the API, uses only available helpers or builtins, flows all service values through cfg, and proposes enabled/disabled alternate-value evaluation.",
+      "files": [],
+      "expectations": [
+        "Does not assume general nixpkgs.lib helpers are present",
+        "Uses cfg values in ExecStart and the firewall definition",
+        "Tests at least one non-default configuration and the disabled case"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Review this Home Manager-style fragment: `xdg.portal.extraPortals = config.xdg.portal.extraPortals ++ [ pkgs.xdg-desktop-portal-hyprland ];`. The module must preserve portal contributions from other desktops and add Hyprland plus a non-Hyprland fallback only when Hyprland is enabled. Give a corrected pattern and explain the recursion risk.",
+      "expected_output": "Uses module merging such as mkAfter instead of reading an option while defining it, gates the contribution with mkIf, and preserves non-Hyprland defaults.",
+      "files": [],
+      "expectations": [
+        "Identifies self-reference while defining the same option",
+        "Uses module merge priority/order combinators",
+        "Preserves existing portal packages and fallback defaults"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Package a small C CLI with `stdenv.mkDerivation`. Its source is pinned on GitHub; the build uses `make PREFIX=$out`; shell completions use `installShellFiles`; tests must run; the binary must land in `$out/bin`; and callers depend on `meta.mainProgram`. State the important derivation fields and the checks you would run.",
+      "expected_output": "Places installShellFiles in nativeBuildInputs, pins source/hash, preserves make/check/install contracts and meta, and distinguishes evaluation from an actual build.",
+      "files": [],
+      "expectations": [
+        "Classifies installShellFiles as a native build tool",
+        "Includes fixed source identity, checks, install destination, and mainProgram",
+        "Runs both an evaluation-level check and a build-level check"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "A `buildRustPackage` enables `download-binaries`; its `build.rs` downloads ONNX Runtime and a model with curl. Rewrite the packaging strategy so sandboxed builds remain offline. The model should remain inspectable through passthru.",
+      "expected_output": "Disables the download feature, uses an ONNX Runtime package in buildInputs, fetches the model as a fixed Nix input, passes store paths to the build, exposes passthru.assets.model, and does not weaken sandboxing.",
+      "files": [],
+      "expectations": [
+        "Moves every network artifact into a fixed-output Nix fetch",
+        "Uses store paths and a system dependency during the build",
+        "Rejects curl/wget and sandbox-disabling workarounds"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "A systemd script embedded in an indented Nix string must pass the literal shell expression `${PORT}` to runtime and construct a Nix path for `configDir/app.toml`. Show the two correct forms and explain what layer expands each.",
+      "expected_output": "Uses `''${PORT}` for literal shell interpolation and path addition for the child path, clearly distinguishing Nix evaluation from shell runtime.",
+      "files": [],
+      "expectations": [
+        "Escapes the shell interpolation from Nix",
+        "Uses path composition rather than accidental string interpolation",
+        "Explains the evaluation layer for each expression"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Write a concise issue handoff for an observed NixOS option-does-not-exist error. The exact rebuild command, system, release, nixpkgs revision, stale option path, and likely replacement are known, but the replacement has not yet been evaluated. Separate evidence from hypothesis.",
+      "expected_output": "Classifies the failure as evaluation, includes exact reproduction and provenance, records the stale path as observed, labels the replacement as likely/unverified, and avoids claiming a confirmed root cause.",
+      "files": [],
+      "expectations": [
+        "Includes command, platform/release/revision, expected versus actual, and log evidence",
+        "Separates observed facts, likely fix, and unverified items",
+        "Does not overclaim runtime or confirmed-root-cause evidence"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "A flake input exports `packages.aarch64-darwin.release` but no `packages.aarch64-darwin.default`. The current flake references `.default` and fails. Explain the safe repair workflow and the validation commands.",
+      "expected_output": "Inspects the actual input outputs, selects the existing release attribute for the intended system, and validates flake output shape before building the exact installable.",
+      "files": [],
+      "expectations": [
+        "Does not invent or assume a default package",
+        "Keeps the target system explicit",
+        "Separates flake evaluation/show/check from a concrete build"
+      ]
+    }
+  ]
+}

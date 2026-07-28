@@ -89,7 +89,7 @@ When a language pack exists, load only the relevant pack. For Rust work, use the
 
 ## Language Packs (References + Scripts)
 
-- Python: `references/python.md` and `scripts/python_metrics.py`. For performance-sensitive Python simplifications, also follow the benchmark discipline used by the `python-performance-tuning` skill: baseline first, keep setup stable, use multiple repeats, and reject repeatable regressions. For Pydantic models, prefer class keyword config such as `class Model(BaseModel, extra="forbid"):` over `model_config = ConfigDict(extra="forbid")` when the keyword form expresses the same constraint.
+- Python: `references/python.md` and `scripts/python_metrics.py`. For performance-sensitive simplifications, establish a baseline first, keep setup stable, use multiple repeats, and reject repeatable regressions. For Pydantic models, prefer class keyword config such as `class Model(BaseModel, extra="forbid"):` over `model_config = ConfigDict(extra="forbid")` when the keyword form expresses the same constraint.
 - Rust: `references/rust.md` (use `cargo fmt`/`check`/`clippy`/`test`; if AST metrics matter, create the tiny `proc-macro2` + `syn` probe from the reference)
 - Add other languages by adding markdown files under `references/` (and `scripts/` helpers when useful).
 

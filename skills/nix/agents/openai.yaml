@@ -1,4 +1,4 @@
 interface:
   display_name: "Nix"
-  short_description: "Nix language & flakes: nix CLI workflows"
-  default_prompt: "Use $nix to explain Nix language syntax and common nix (build/run/develop/profile/flake) workflows."
+  short_description: "Validate Nix modules, flakes, and packages"
+  default_prompt: "Use $nix to inspect the local Nix contract, make a minimal semantics-correct change, and validate it at the narrowest applicable evaluation and build layers."

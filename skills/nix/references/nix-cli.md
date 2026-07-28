@@ -1,64 +1,74 @@
-# Nix CLI (quick cheat sheet)
+# Version-aware Nix CLI
 
-Primary references (official / canonical):
-- `nix build`: https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-build.html
-- `nix run`: https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-run.html
-- `nix profile`: https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-profile.html
-- `nix flake`: https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-flake.html
-- Install Nix (nix.dev): https://nix.dev/install-nix
+Use the installed CLI as the authority:
 
-## Package discovery
+```sh
+nix --version
+nix <command> --help
+```
 
-- Search (nixpkgs): `nix search nixpkgs <name>`
-- Show a flake: `nix flake show github:NixOS/nixpkgs`
+Official command reference:
+https://nix.dev/manual/nix/latest/command-ref/new-cli/nix.html
 
-## Build / run
+## Read-only inspection
 
-- Build a package (flake ref): `nix build nixpkgs#hello`
-- Build current flake default: `nix build .`
-- Build a specific attribute: `nix build .#myPkg`
-- Run an app/package: `nix run nixpkgs#hello`
-- Run current flake default app: `nix run .`
+```sh
+nix config show
+nix config check
+nix registry list
+nix store info
+nix flake metadata --no-write-lock-file .
+nix flake show --all-systems --no-write-lock-file .
+```
 
-Notes:
-- `nix build` typically creates a `./result` symlink unless you disable linking.
-- Add `-L` / `--print-build-logs` to surface build logs.
+`nix config show` is the current spelling. `nix show-config` is the pre-2.20
+spelling; use it only as a compatibility fallback.
 
-## Development shells
+Inspect outputs before selecting them:
 
-- Enter a dev shell from a flake: `nix develop`
-- Enter a named dev shell: `nix develop .#myShell`
-- Run a command inside the dev shell: `nix develop -c <cmd> ...`
+```sh
+nix flake show --all-systems --no-write-lock-file .
+nix eval --json --no-write-lock-file '.#packages.aarch64-darwin' \
+  --apply builtins.attrNames
+```
 
-Contrast (roughly):
-- `nix develop`: dev environment defined by `devShells` (flake output).
-- `nix shell`: ad-hoc environment with selected packages (more like `nix-shell -p`).
+Do not assume an input or project exports `packages.<system>.default`.
 
-If a user's Nix version lacks a subcommand or flag, fall back to `nix <cmd> --help`.
+## Evaluation and build
 
-## User profiles (install packages into your user environment)
+```sh
+nix eval --show-trace --no-write-lock-file INSTALLABLE
+nix flake check --no-build --show-trace --no-write-lock-file
+nix build -L --show-trace INSTALLABLE
+nix log INSTALLABLE
+```
 
-- Add a package: `nix profile add nixpkgs#jq`
-- List installed packages: `nix profile list`
-- Remove by index: `nix profile remove <index>`
-- Upgrade: `nix profile upgrade --all`
+`nix flake check --no-build` checks evaluation and output shape, not whether a
+derivation builds. `nix build` normally creates a `result` symlink; use
+`--no-link` when no local link is wanted.
 
-## Flake management
+## Lock-file changes
 
-- Initialize a new flake: `nix flake init`
-- Show outputs: `nix flake show .`
-- Update inputs (lock file): `nix flake update`
-- Update one input: `nix flake lock --update-input nixpkgs`
+These commands write `flake.lock`:
 
-## Debugging checklist
+```sh
+nix flake update
+nix flake update nixpkgs
+```
 
-- Evaluation errors:
-  - Re-run with `--show-trace`.
-  - Reduce to a minimal expression (`nix eval` / `nix repl`) when possible.
-- Build errors:
-  - Add `-L` / `--print-build-logs`.
-  - Ask for the failing derivation name and full log output.
-- Repro issues:
-  - Confirm `flake.lock` exists and is committed/pinned.
-  - Confirm the user's system (`x86_64-linux`, `aarch64-darwin`, etc.).
+`nix flake lock --update-input nixpkgs` is deprecated. Review and commit
+intentional lock-file changes; do not update unrelated inputs while debugging.
 
+## Configuration edits
+
+Configuration location and precedence vary by installation and platform.
+Inspect `nix config show` before editing; one `nix.conf` does not prove a setting
+is active.
+
+## Legacy compatibility
+
+Use `nix-build`, `nix-shell`, or pre-2.20 `nix show-config` only when the project
+or installed Nix requires them.
+
+When a flag is rejected, check that subcommand's local `--help` rather than
+guessing a replacement.

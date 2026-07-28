@@ -1,44 +1,69 @@
 ---
 name: nix
-description: Explain, write, and debug Nix expression language + common Nix workflows (flakes, nix CLI, nixpkgs). Use when working with *.nix files (flake.nix, flake.lock, shell.nix, default.nix), NixOS/home-manager configs, or commands like `nix build`, `nix run`, `nix develop`, `nix shell`, `nix profile`, and `nix flake`.
+description: Write, review, and debug Nix expressions, flakes, NixOS/Home Manager/nix-darwin modules, overlays, and derivations. Use for *.nix files; Nix evaluation or build failures; package, app, devShell, and system outputs; or nix build/run/develop/flake/config commands.
 ---
 
 # Nix
 
-## Overview
+Focus on Nix-specific semantic failures. Do not reteach basic syntax unless the
+user asks.
 
-Help users understand and author Nix code (the Nix expression language) and apply it via reproducible workflows (especially flakes + the `nix` CLI).
+## Work from the local contract
 
-## Workflow (do this first)
+Before editing:
 
-1. Identify the goal: language question vs. flake wiring vs. CLI invocation vs. packaging/debugging.
-2. Ask for the minimum context:
-   - OS (Linux/macOS/NixOS/WSL) + CPU arch
-   - Nix version (`nix --version`)
-   - flakes enabled? (`nix-command` + `flakes` experimental features)
-   - target output: package, app, dev shell, NixOS config, home-manager, etc.
-3. Prefer minimal, copy/pasteable deliverables:
-   - name exact files to create/edit
-   - provide a single command to run + what to expect
-4. When debugging, request the full error + stack trace:
-   - add `--show-trace` for evaluation errors
-   - add `-L` / `--print-build-logs` for build failures
+1. Read repository instructions, the task, nearby Nix files, and `flake.lock`.
+2. Identify the boundary: expression, flake output, NixOS/Home
+   Manager/nix-darwin module, overlay, or derivation.
+3. Inspect the supplied `lib`, packages, inputs, and outputs. Never assume a
+   package exists, an input exports `.default`, or a fake `lib` is complete.
+4. Check Nix version and target system when relevant. Use
+   `scripts/nix-diagnose.sh` if environment details are unclear.
+5. Run the narrowest existing evaluator or test before editing.
 
-## References (load as needed)
+Read `references/nixbench-lessons.md` for modules, packaging, purity, debugging,
+or escaping. Its guardrails come from GPT-5.6 Sol's NixBench failures.
 
-- Nix language fundamentals + idioms: `references/nix-language.md`
-- Flakes structure + lock file + inputs/outputs patterns: `references/flakes.md`
-- Nix CLI cheat sheet (build/run/develop/shell/profile/flake) + debugging flags: `references/nix-cli.md`
+## Non-negotiable checks
 
-## Common deliverables
+- Use the exact option/output namespace and keep NixOS, Home Manager,
+  nix-darwin, overlays, and derivations in their proper layers.
+- Extend module values with module merging; do not read an option while defining
+  the same option just to append to it.
+- Preserve unrelated definitions and gate new configuration at the narrowest
+  correct boundary.
+- Treat the project's dependency set as an API. Use only verified helpers and
+  package attributes.
+- Keep builds offline: fixed Nix inputs, store paths, and no sandbox bypass.
+- Distinguish native build tools from target dependencies; preserve phase,
+  `meta`, and `passthru` contracts.
+- Review Nix interpolation, shell interpolation, command substitution, and path
+  composition separately.
 
-- Minimal `flake.nix` that provides:
-  - `packages.<system>.default` and/or `apps.<system>.default`
-  - `devShells.<system>.default` for `nix develop`
-- Non-flake entrypoints:
-  - `default.nix` (for `nix-build` or `nix build --file/-f`)
-  - `shell.nix` (for `nix-shell`)
+## Validate in layers
 
-## Notes
+Prefer repository checks. Otherwise use the smallest applicable sequence:
 
-- The Nix 3 CLI and flakes are often documented as "experimental". Prefer version-aware guidance and fall back to `nix <cmd> --help` when behavior differs across versions.
+1. Format or parse check.
+2. Focused `nix eval --show-trace` of the changed value.
+3. `nix flake show --all-systems` or `nix flake check --no-build`.
+4. `nix build -L --show-trace <exact-installable>` when build behavior matters.
+5. A safe, authorized runtime or activation check when needed.
+
+Parsing is not module evaluation; evaluation is not a build. State which layers
+remain unverified.
+
+## Evidence and handoff
+
+- Classify the failure: parse, evaluation, fetch, build, activation, or
+  runtime.
+- Preserve the exact reproducer and first relevant error. Separate observations
+  from hypotheses and do not chase symptoms from a later layer.
+- Report the changed contract, checks and results, system/version assumptions,
+  and remaining unverified behavior.
+
+## Version-sensitive commands
+
+Read `references/nix-cli.md` before suggesting configuration, lock-file, profile,
+or other commands that have changed across Nix releases. Prefer the installed
+CLI's `--help` over remembered flags.

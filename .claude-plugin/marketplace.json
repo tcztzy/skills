@@ -30,15 +30,6 @@
       ]
     },
     {
-      "name": "answer-judging",
-      "description": "Judge response quality from thread-only evidence.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/answer-judging"
-      ]
-    },
-    {
       "name": "benchmark-builder",
       "description": "Build high-quality benchmark items, embedded scoring contracts, review examples, rubrics, evaluators, and release protocols for model and agent evaluation.",
       "source": "./",
@@ -112,7 +103,7 @@
     },
     {
       "name": "nix",
-      "description": "Explain, write, and debug Nix expression language + common Nix workflows (flakes, nix CLI, nixpkgs).",
+      "description": "Validate Nix modules, flakes, packages, and build purity against local contracts.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -153,15 +144,6 @@
       "strict": false,
       "skills": [
         "./skills/project-simplify"
-      ]
-    },
-    {
-      "name": "python-performance-tuning",
-      "description": "Improve Python runtime and memory performance with a profile-first workflow.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/python-performance-tuning"
       ]
     },
     {
