@@ -83,7 +83,7 @@ This is the unified entry point for skill lifecycle management in this repositor
 
 ### Design examples
 
-- Good split: `data-to-viz` routes first by research question and chart semantics, then chooses `matplotlib`, `ggplot2`, or `PGFPlots` inside the relevant family.
+- Good split: `paper-visualizer` routes first by research question and chart semantics, then chooses `matplotlib`, `ggplot2`, or `PGFPlots` inside the relevant family.
 - Bad split: if the user's task is still "make a paper figure," do not split top-level skills into `matplotlib-skill`, `seaborn-skill`, and `ggplot2-skill` first.
 - Reasonable exception: if the main artifact changes from a static figure to a browser automation app or native document source, a separate top-level skill may be warranted.
 
