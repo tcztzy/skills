@@ -3,40 +3,140 @@
   "title": "PaperReview",
   "type": "object",
   "required": [
-    "summary",
-    "strengths",
-    "weaknesses",
-    "questions",
-    "score"
+    "Summary",
+    "Strengths",
+    "Weaknesses",
+    "Originality",
+    "Quality",
+    "Clarity",
+    "Significance",
+    "Questions",
+    "Limitations",
+    "Ethical Concerns",
+    "Soundness",
+    "Presentation",
+    "Contribution",
+    "Overall",
+    "Confidence",
+    "Decision"
   ],
   "properties": {
-    "summary": {
+    "Summary": {
       "type": "string"
     },
-    "strengths": {
+    "Strengths": {
       "type": "array",
       "items": {
         "type": "string"
       }
     },
-    "weaknesses": {
+    "Weaknesses": {
       "type": "array",
       "items": {
         "type": "string"
       }
     },
-    "questions": {
+    "Originality": {
+      "$ref": "#/definitions/dimensionScore"
+    },
+    "Quality": {
+      "$ref": "#/definitions/dimensionScore"
+    },
+    "Clarity": {
+      "$ref": "#/definitions/dimensionScore"
+    },
+    "Significance": {
+      "$ref": "#/definitions/dimensionScore"
+    },
+    "Questions": {
       "type": "array",
       "items": {
         "type": "string"
       }
     },
-    "score": {
-      "type": "number"
+    "Limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
-    "confidence": {
-      "type": "number"
+    "Ethical Concerns": {
+      "type": "boolean"
+    },
+    "Soundness": {
+      "$ref": "#/definitions/dimensionScore"
+    },
+    "Presentation": {
+      "$ref": "#/definitions/dimensionScore"
+    },
+    "Contribution": {
+      "$ref": "#/definitions/dimensionScore"
+    },
+    "Overall": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "description": "Evidence-based, venue-calibrated overall score using SKILL.md. Publication and official-cover status are applied only by the post-validation procedure after the intrinsic score is justified."
+    },
+    "Confidence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "Decision": {
+      "type": "string",
+      "enum": [
+        "Accept",
+        "Reject"
+      ]
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false,
+  "definitions": {
+    "dimensionScore": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "Overall": {
+            "maximum": 5
+          }
+        },
+        "required": [
+          "Overall"
+        ]
+      },
+      "then": {
+        "properties": {
+          "Decision": {
+            "const": "Reject"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "Overall": {
+            "minimum": 6
+          }
+        },
+        "required": [
+          "Overall"
+        ]
+      },
+      "then": {
+        "properties": {
+          "Decision": {
+            "const": "Accept"
+          }
+        }
+      }
+    }
+  ]
 }
