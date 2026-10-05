@@ -1,9 +1,9 @@
 ---
 name: paper-writer
-description: Single entry point for drafting or revising scientific papers, generating profile-based LaTeX scaffolds, harvesting draft-local citations into BibTeX, and auditing figure-caption-figref alignment from paper PDFs. Use when writing or editing research papers, workshop submissions, technical reports, negative-results papers, venue-specific drafts such as standard conference papers and 4-page ICBINB manuscripts, manuscript-local bibliography repair, or figure QA while keeping claims grounded in experiment artifacts. When the manuscript is blocked by an evidence gap, actively recommend the smallest decisive supplementary experiment, and run simple statistics or lightweight analyses directly when the artifacts are already available. Route Zotero library management, collection export, and keep-updated bibliography sync to `zotero`.
+description: Draft or revise scientific papers from experiment artifacts; generate LaTeX scaffolds for conference papers, ICBINB, Molecular Plant, Plant Communications, Bioinformatics Application Notes, or SoftwareX; repair manuscript-local citations; and audit figure-caption-reference consistency. Use for research papers, technical reports, negative-results papers, journal drafts, bibliography repair, or figure QA. Keep claims grounded in supplied evidence. When evidence is missing, recommend the smallest decisive experiment and run lightweight analyses when local artifacts permit. Route Zotero library management and collection export to zotero.
 metadata:
   short_name: paper-writer
-  aliases: scientific-paper-writeup, paper-writeup, manuscript drafting, research writing, paper draft, writeup-normal, writeup-icbinb, ICBINB writeup, manuscript bibliography repair, manuscript citation harvest, figref audit
+  aliases: scientific-paper-writeup, paper-writeup, manuscript drafting, research writing, paper draft, writeup-normal, writeup-icbinb, ICBINB writeup, writeup-molecular-plant, writeup-plant-communications, writeup-bioinformatics, writeup-softwarex, journal scaffold, manuscript bibliography repair, manuscript citation harvest, figref audit
 ---
 
 # Paper Writer
@@ -21,7 +21,7 @@ It covers five bundled workflows:
 When a draft is blocked by missing evidence, do not stay passive. Surface the gap explicitly, recommend the smallest experiment that would unblock the claim, and run the easy version yourself when it is already feasible from local code, logs, tables, or predictions.
 
 Keep only genuinely adjacent tasks outside this skill:
-- Use `research-impact-strategy` first if the story or central claim is still blurry.
+- Use `research-idea` first if the story or central claim is still blurry.
 - Use `zotero` when the job is library management, connector capture, or collection export.
 - Use `paper-visualizer` to generate manuscript-ready figures.
 - Use `academic-zh-en-translation` for bilingual manuscript translation.
@@ -152,6 +152,11 @@ Use this when the user already has structured artifacts and wants a fast paper s
 2. **Choose a scaffold profile**
    - `conference`: default standard paper scaffold. Accepts the legacy aliases `standard` and `normal`.
    - `icbinb`: compact 4-page ICBINB scaffold.
+   - Journal profiles (see `references/journal-profiles.md` for constraints and venue fit):
+     - `molecular-plant` (aliases: `molplant`, `mp`): plant-research draft with optional Highlights, In Brief, and resource-availability sections; verify the journal requirements.
+     - `plant-communications` (aliases: `plantcom`, `pcom`): plant-research draft; verify its requirements independently of Molecular Plant.
+     - `bioinformatics` (aliases: `bioinf`, `oxbioinf`): OUP Application Note skeleton with structured abstract; production builds should switch to the official `oup-authoring-template` class.
+     - `softwarex` (aliases: `softx`): Original Software Publication skeleton with the mandatory software metadata table; content must be transferred into the official SoftwareX template before submission.
 3. **Generate the scaffold**
    - Offline first:
    - `uv run -s scripts/writeup_scaffold.py --profile conference --idea-json idea.json --summary-json summary.json --plots-manifest plot_manifest.json --out-dir writeup_out`
@@ -197,7 +202,8 @@ Use this when the user already has structured artifacts and wants a fast paper s
 - Idea schema: `references/idea.schema.json`
 - Summary schema: `references/summary.schema.json`
 - Plot manifest schema: `references/plot_manifest.schema.json`
-- Scaffold templates: `references/conference_template.tex`, `references/icbinb_template.tex`
+- Scaffold templates: `references/conference_template.tex`, `references/icbinb_template.tex`, `references/journal_molecular_plant.tex`, `references/journal_plant_communications.tex`, `references/journal_bioinformatics.tex`, `references/journal_softwarex.tex`
+- Journal profiles and constraints: `references/journal-profiles.md`
 - Citation harvester: `scripts/citation_harvest.py`
 - Figure extractor: `scripts/extract_figures_and_refs.py`
 - Offline-first scaffold runner: `scripts/writeup_scaffold.py`

@@ -1,4 +1,4 @@
 interface:
   display_name: "Benchmark Builder"
   short_description: "Build benchmark tasks, rubrics, and evaluators"
-  default_prompt: "Use $benchmark-builder to design an English benchmark set with analytic rubrics and multi-step reasoning checks."
+  default_prompt: "Use $benchmark-builder to design or audit benchmark tasks with scoring contracts, review examples, and evaluator checks."

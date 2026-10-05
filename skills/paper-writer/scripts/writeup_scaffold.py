@@ -49,6 +49,80 @@ PROFILE_SPECS = {
             "{DISCUSSION}": "discussion",
         },
     },
+    "molecular-plant": {
+        "template": "journal_molecular_plant.tex",
+        "target": "a Molecular Plant (Cell Press) research or resource article",
+        "sections": (
+            "abstract",
+            "introduction",
+            "methods",
+            "results",
+            "discussion",
+        ),
+        "placeholders": {
+            "{ABSTRACT}": "abstract",
+            "{INTRO}": "introduction",
+            "{METHODS}": "methods",
+            "{RESULTS}": "results",
+            "{DISCUSSION}": "discussion",
+        },
+    },
+    "plant-communications": {
+        "template": "journal_plant_communications.tex",
+        "target": "a Plant Communications (Cell Press partner) research or resource article",
+        "sections": (
+            "abstract",
+            "introduction",
+            "methods",
+            "results",
+            "discussion",
+        ),
+        "placeholders": {
+            "{ABSTRACT}": "abstract",
+            "{INTRO}": "introduction",
+            "{METHODS}": "methods",
+            "{RESULTS}": "results",
+            "{DISCUSSION}": "discussion",
+        },
+    },
+    "bioinformatics": {
+        "template": "journal_bioinformatics.tex",
+        "target": "a Bioinformatics (OUP) Application Note of at most 4 pages",
+        "sections": (
+            "abstract",
+            "introduction",
+            "methods",
+            "experiments",
+            "results",
+            "discussion",
+        ),
+        "placeholders": {
+            "{ABSTRACT}": "abstract",
+            "{INTRO}": "introduction",
+            "{METHODS}": "methods",
+            "{EXPERIMENTS}": "experiments",
+            "{RESULTS}": "results",
+            "{DISCUSSION}": "discussion",
+        },
+    },
+    "softwarex": {
+        "template": "journal_softwarex.tex",
+        "target": "a SoftwareX (Elsevier) Original Software Publication of at most 3000 words",
+        "sections": (
+            "abstract",
+            "introduction",
+            "methods",
+            "results",
+            "discussion",
+        ),
+        "placeholders": {
+            "{ABSTRACT}": "abstract",
+            "{INTRO}": "introduction",
+            "{METHODS}": "methods",
+            "{RESULTS}": "results",
+            "{DISCUSSION}": "discussion",
+        },
+    },
 }
 
 PROFILE_ALIASES = {
@@ -56,6 +130,17 @@ PROFILE_ALIASES = {
     "standard": "conference",
     "normal": "conference",
     "icbinb": "icbinb",
+    "molecular-plant": "molecular-plant",
+    "molplant": "molecular-plant",
+    "mp": "molecular-plant",
+    "plant-communications": "plant-communications",
+    "plantcom": "plant-communications",
+    "pcom": "plant-communications",
+    "bioinformatics": "bioinformatics",
+    "bioinf": "bioinformatics",
+    "oxbioinf": "bioinformatics",
+    "softwarex": "softwarex",
+    "softx": "softwarex",
 }
 
 
@@ -132,7 +217,8 @@ def _normalize_profile(raw: str) -> str:
     supported = ", ".join(sorted(PROFILE_SPECS))
     raise SystemExit(
         f"[ERROR] Unknown profile: {raw}. Use one of: {supported} "
-        "(aliases: standard, normal)."
+        "(conference aliases: standard, normal; journal aliases include "
+        "molplant/mp, plantcom/pcom, bioinf/oxbioinf, softx)."
     )
 
 
@@ -210,7 +296,11 @@ def main() -> int:
     ap.add_argument(
         "--profile",
         default="conference",
-        help="Scaffold profile: conference (aliases: standard, normal) or icbinb.",
+        help=(
+            "Scaffold profile: conference (aliases: standard, normal), icbinb, "
+            "or a journal profile: molecular-plant, plant-communications, "
+            "bioinformatics, softwarex (see references/journal-profiles.md)."
+        ),
     )
     ap.add_argument("--idea-json", help="Path to idea JSON.")
     ap.add_argument("--summary-json", help="Path to summary JSON.")

@@ -1,0 +1,40 @@
+{
+  "skill_name": "hpc-operator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I submitted an LSF array with 96 inputs but only 83 output files appeared. All tasks wrote to one shared log because my bsub command did not include %J.%I. What should I inspect before retrying anything?",
+      "expected_output": "Builds an exact missing-input and array-index mapping, requests per-index scheduler and accounting evidence, identifies the shared log and possible output collisions, and avoids resubmitting the entire array.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 2,
+      "prompt": "My LSF array has 400 elements. Many have stayed PEND for hours while a few are RUN. Help me determine whether the problem is resource requirements, queue limits, fair share, or unavailable hosts.",
+      "expected_output": "Uses bjobs pending-reason views first, then bqueues, bhosts, and lsload as needed; separates evidence from site-policy guesses and asks for the relevant queue and resource request.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 3,
+      "prompt": "Several LSF jobs are in EXIT. I suspect out-of-memory, but the failures occur only on some inputs. Tell me how to distinguish memory pressure, bad inputs, environment problems, and host-specific failures.",
+      "expected_output": "Correlates bjobs -l, bhist -l, bacct -l, stderr, inputs, and execution hosts; does not recommend more memory until the evidence supports it.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 4,
+      "prompt": "Our LSF queue looks saturated and job startup is slow. I want to know whether to reduce array concurrency or just wait.",
+      "expected_output": "Checks pending reasons, queue status and limits, host status, and load before recommending a change; proposes a canary and a measured concurrency adjustment only when supported.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 5,
+      "prompt": "I have proved that LSF array indices 3, 7, and 12 failed, while all other outputs are complete. Show me a safe retry plan without changing the input-to-index mapping.",
+      "expected_output": "Uses an explicit retry index list, preserves LSB_JOBINDEX identity, requires unique logs and outputs, checks idempotency, and avoids replaying successful indices.",
+      "files": [],
+      "expectations": []
+    }
+  ]
+}

@@ -22,7 +22,7 @@
     },
     {
       "name": "benchmark-builder",
-      "description": "Build high-quality benchmark items, embedded scoring contracts, review examples, rubrics, evaluators, and release protocols for model and agent evaluation.",
+      "description": "Build or audit benchmark tasks, scoring contracts, rubrics, evaluators, review examples, pilot plans, and release policies.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -30,26 +30,44 @@
       ]
     },
     {
-      "name": "experiment-bfts-runner",
-      "description": "Run the standalone BFTS experiment pipeline to execute multi-agent tree-search experiments from a prepared bfts_config.yaml. Use with an existing run configuration to produce logs, workspaces, and experiment artifacts.",
+      "name": "ddd",
+      "description": "Make source-code work follow Documentation-Driven Development (DDD) so each human-maintained file begins with an accurate, language-native contract that explains its purpose, system role, public surface, data flow, side effects, and constraints before implementation details.",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/experiment-bfts-runner"
+        "./skills/ddd"
       ]
     },
     {
-      "name": "hpc-batch",
-      "description": "Troubleshoot Slurm/LSF batch jobs, arrays, and stuck-job issues.",
+      "name": "evo2-opengenome2",
+      "description": "Work with Arc Institute's Evo 2 genomic language models and the OpenGenome2 dataset. Use for Evo 2 installation, checkpoint selection, inference, embeddings, generation, scoring, training or fine-tuning; OpenGenome2 downloads, Hugging Face cache inspection, FASTA/JSONL/tar streaming, dataset manifests, preprocessing, sampling, progress checks, and recovery from interrupted large downloads; or whenever a request mentions Evo2, Evo 2, OpenGenome2, arcinstitute/evo2, or arcinstitute/opengenome2.",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/hpc-batch"
+        "./skills/evo2-opengenome2"
+      ]
+    },
+    {
+      "name": "figure-to-prompt",
+      "description": "Inspect published or manuscript figures, map their visual evidence to the surrounding text, and write detailed reconstruction or redesign prompts. Use for figure reverse description, figure-text alignment, and screenshot critique before image generation; not for generating scientific data or vector tracing.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/figure-to-prompt"
+      ]
+    },
+    {
+      "name": "hpc-operator",
+      "description": "Operate and troubleshoot IBM Spectrum LSF batch jobs, job arrays, queues, and execution hosts.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/hpc-operator"
       ]
     },
     {
       "name": "latex-to-word",
-      "description": "Convert LaTeX (.tex) files to Word (.docx) using an automated preprocessing pipeline that resolves common pandoc incompatibilities such as custom commands, tabularx, and resizebox, minimizing manual cleanup afterward.",
+      "description": "Convert LaTeX files to Word with a deterministic preprocessing script and pandoc.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -94,7 +112,7 @@
     },
     {
       "name": "paper-writer",
-      "description": "Single entry point for drafting or revising scientific papers, generating profile-based LaTeX scaffolds, harvesting draft-local citations into BibTeX, and auditing figure-caption-figref alignment from paper PDFs.",
+      "description": "Draft or revise scientific papers from experiment artifacts; generate LaTeX scaffolds for conference papers, ICBINB, Molecular Plant, Plant Communications, Bioinformatics Application Notes, or SoftwareX; repair manuscript-local citations; and audit figure-caption-reference consistency. Use for research papers, technical reports, negative-results papers, journal drafts, bibliography repair, or figure QA. Keep claims grounded in supplied evidence. When evidence is missing, recommend the smallest decisive experiment and run lightweight analyses when local artifacts permit. Route Zotero library management and collection export to zotero.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -111,21 +129,12 @@
       ]
     },
     {
-      "name": "research-ideation-novelty-check",
-      "description": "Generate and refine research ideas and run a lightweight novelty sanity-check using Semantic Scholar.",
+      "name": "research-idea",
+      "description": "Generate, validate, novelty-check, triage, and reposition research ideas.",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/research-ideation-novelty-check"
-      ]
-    },
-    {
-      "name": "research-impact-strategy",
-      "description": "Decide whether a research idea, experiment thread, or paper draft is worth pursuing and how to sharpen it into one high-impact claim.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/research-impact-strategy"
+        "./skills/research-idea"
       ]
     },
     {
@@ -144,15 +153,6 @@
       "strict": false,
       "skills": [
         "./skills/typst"
-      ]
-    },
-    {
-      "name": "wsl-fs",
-      "description": "Use when the task needs to work with projects stored in the WSL Linux filesystem, including path translation, entering a distro, finding repos under /home, and running build or git commands in WSL instead of on Windows.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/wsl-fs"
       ]
     },
     {

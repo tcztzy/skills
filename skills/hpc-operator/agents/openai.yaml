@@ -1,0 +1,4 @@
+interface:
+  display_name: "HPC Operator (LSF)"
+  short_description: "Operate and troubleshoot LSF jobs, arrays, queues, and hosts"
+  default_prompt: "Use $hpc-operator to diagnose this LSF job or array from scheduler evidence, identify the failure layer, and propose only safe, targeted next actions."

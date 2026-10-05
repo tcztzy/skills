@@ -1,0 +1,7 @@
+interface:
+  display_name: "Documentation-Driven Development"
+  short_description: "Make every code change documentation-driven"
+  default_prompt: "Use $ddd to make this code task documentation-driven."
+
+policy:
+  allow_implicit_invocation: true

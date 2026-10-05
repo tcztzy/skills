@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evo 2 and OpenGenome2"
+  short_description: "Use Evo 2 models and OpenGenome2 genomic data"
+  default_prompt: "Use $evo2-opengenome2 to plan a reliable Evo 2 or OpenGenome2 workflow."

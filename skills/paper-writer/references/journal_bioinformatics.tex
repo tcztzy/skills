@@ -1,0 +1,74 @@
+% Bioinformatics (Oxford University Press) Application Note scaffold.
+% Hard constraints (verify against the live author guidelines before submission,
+% https://academic.oup.com/bioinformatics/pages/author-guidelines):
+%   - Application Notes: <= 4 printed journal pages (~2,600 words, or ~2,000
+%     words plus one figure); exceeding limits by 20%+ risks administrative return.
+%   - The software name must appear in the title.
+%   - Structured abstract with labelled parts (Summary / Availability and
+%     Implementation / Contact / Supplementary information), ~150 words.
+%   - Software must be freely available at a working URL with documentation and
+%     test data at submission time; editors check the link.
+%   - OUP author-year citation style.
+% For production builds use the official oup-authoring-template document class;
+% this scaffold keeps the same content skeleton without external dependencies.
+\documentclass[10pt,twocolumn]{article}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage[authoryear]{natbib}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=0.85in]{geometry}
+
+\title{{{TITLE}}} % must include the software name
+\author{{{AUTHORS}}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent\textbf{Summary:} {ABSTRACT}
+
+\noindent\textbf{Availability and Implementation:} TBD. % e.g. Python 3.12; URL; license
+
+\noindent\textbf{Contact:} TBD.
+
+\noindent\textbf{Supplementary Information:} TBD.
+\end{abstract}
+
+\textbf{Keywords:} TBD.
+
+\section{Introduction}
+{INTRO}
+% Keep short: problem, closest prior tools, the workflow-layer gap. Cite the
+% fairest comparators, not only flattering ones.
+
+\section{Implementation}
+{METHODS}
+% Architecture, interfaces, provenance records; one overview figure.
+
+\section{Evaluation}
+{EXPERIMENTS}
+{RESULTS}
+% Benchmark with committed tables/figures; report the exact configuration.
+% Application Note readers expect evidence the tool works, not an exhaustive
+% methods comparison.
+
+{FIGURES}
+
+\section{Discussion}
+{DISCUSSION}
+% Bounded claims; diagnosis value; limitations.
+
+\section*{Acknowledgements}
+TBD.
+
+\section*{Funding}
+TBD. % grant numbers, separate section
+
+\section*{Conflict of Interest}
+TBD.
+
+\bibliographystyle{plainnat} % OUP author-year; use the journal .bst in production
+\bibliography{references}
+
+\end{document}

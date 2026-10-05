@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Generate Claude marketplace metadata from local skills."""
+"""Generate Claude marketplace metadata from non-ignored skills in a Git checkout."""
 
 from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -68,13 +69,20 @@ def summarize_description(description: str) -> str:
 
 
 def collect_plugins(skills_root: Path) -> list[dict[str, Any]]:
+    skill_paths = subprocess.check_output(
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", "*/SKILL.md"],
+        cwd=skills_root,
+        text=True,
+    )
     plugins: list[dict[str, Any]] = []
-    for skill_dir in sorted(skills_root.iterdir()):
-        if not skill_dir.is_dir() or skill_dir.name.startswith("."):
+    for name in sorted(set(skill_paths.split("\0")) - {""}):
+        relative_path = Path(name)
+        if len(relative_path.parts) != 2 or relative_path.parts[0].startswith("."):
             continue
-        skill_file = skill_dir / "SKILL.md"
-        if not skill_file.exists():
+        skill_file = skills_root / relative_path
+        if not skill_file.is_file():
             continue
+        skill_dir = skill_file.parent
 
         meta = extract_frontmatter(skill_file)
         plugins.append(

@@ -91,10 +91,10 @@ The catalog is organized around user tasks instead of tool brands.
 
 | Track | What it covers | Representative skills |
 | --- | --- | --- |
-| Research strategy | idea generation, novelty checks, go/kill/pivot decisions | [`research-ideation-novelty-check`](./skills/research-ideation-novelty-check/SKILL.md), [`research-impact-strategy`](./skills/research-impact-strategy/SKILL.md) |
+| Research strategy | idea generation, novelty checks, go/kill/pivot decisions | [`research-idea`](./skills/research-idea/SKILL.md) |
 | Paper production | literature, figures, drafting, review, translation | [`zotero`](./skills/zotero/SKILL.md), [`paper-writer`](./skills/paper-writer/SKILL.md), [`paper-visualizer`](./skills/paper-visualizer/SKILL.md), [`paper-reviewer`](./skills/paper-reviewer/SKILL.md), [`academic-zh-en-translation`](./skills/academic-zh-en-translation/SKILL.md) |
-| Experiment and evaluation | experiment execution, benchmark design, and scoring | [`experiment-bfts-runner`](./skills/experiment-bfts-runner/SKILL.md), [`benchmark-builder`](./skills/benchmark-builder/SKILL.md) |
-| Engineering and systems | Python style, infra, batch systems, and environment handling | [`modern-python-style`](./skills/modern-python-style/SKILL.md), [`hpc-batch`](./skills/hpc-batch/SKILL.md), [`nix`](./skills/nix/SKILL.md), [`wsl-fs`](./skills/wsl-fs/SKILL.md) |
+| Experiment and evaluation | benchmark design and scoring | [`benchmark-builder`](./skills/benchmark-builder/SKILL.md) |
+| Engineering and systems | documentation-driven development, Python style, infra, and batch systems | [`ddd`](./skills/ddd/SKILL.md), [`modern-python-style`](./skills/modern-python-style/SKILL.md), [`hpc-operator`](./skills/hpc-operator/SKILL.md), [`nix`](./skills/nix/SKILL.md) |
 | Authoring and workflow maintenance | skill audits, format conversion, and document authoring | [`skill-manager`](./skills/skill-manager/SKILL.md), [`latex-to-word`](./skills/latex-to-word/SKILL.md), [`typst`](./skills/typst/SKILL.md) |
 
 <details>
@@ -103,28 +103,29 @@ The catalog is organized around user tasks instead of tool brands.
 ### Research and paper workflows
 
 - [`academic-zh-en-translation`](./skills/academic-zh-en-translation/SKILL.md): academic Chinese-English translation with fidelity and discipline-aware wording
+- [`figure-to-prompt`](./skills/figure-to-prompt/SKILL.md): inspect figure–text alignment and write grounded reconstruction or redesign prompts
 - [`paper-reviewer`](./skills/paper-reviewer/SKILL.md): bounded academic paper review with structured outputs
 - [`paper-visualizer`](./skills/paper-visualizer/SKILL.md): publication-grade figures, plots, and diagrams
 - [`paper-writer`](./skills/paper-writer/SKILL.md): drafting, revising, scaffolding, citation harvesting, and figure QA
-- [`research-ideation-novelty-check`](./skills/research-ideation-novelty-check/SKILL.md): idea generation and lightweight novelty sanity checks
-- [`research-impact-strategy`](./skills/research-impact-strategy/SKILL.md): go/kill/pivot/scope-down decisions for research directions
+- [`research-idea`](./skills/research-idea/SKILL.md): idea generation, novelty checks, research triage, and positioning
 - [`zotero`](./skills/zotero/SKILL.md): literature capture, collection management, and bibliography export
 
 ### Experiment and evaluation workflows
 
 - [`benchmark-builder`](./skills/benchmark-builder/SKILL.md): benchmark items, rubrics, evaluators, and release protocols
-- [`experiment-bfts-runner`](./skills/experiment-bfts-runner/SKILL.md): execute the standalone BFTS experiment pipeline
+- [`evo2-opengenome2`](./skills/evo2-opengenome2/SKILL.md): Evo 2 inference and training workflows, OpenGenome2 data access, and large-download checks
 
 ### Engineering, infra, and environment workflows
 
+- [`ddd`](./skills/ddd/SKILL.md): make code tasks documentation-driven with routing-useful file contracts
+- [`hpc-operator`](./skills/hpc-operator/SKILL.md): operate and troubleshoot LSF jobs, arrays, queues, and execution hosts
 - [`modern-python-style`](./skills/modern-python-style/SKILL.md): apply Python syntax and typing policies through project checks
-- [`hpc-batch`](./skills/hpc-batch/SKILL.md): troubleshoot Slurm or LSF jobs, arrays, and stuck queues
 - [`nix`](./skills/nix/SKILL.md): validate Nix modules, flakes, packages, and build purity
-- [`wsl-fs`](./skills/wsl-fs/SKILL.md): operate on repositories living inside WSL filesystems
 
 ### Documents, authoring, and workflow maintenance
 
 - [`latex-to-word`](./skills/latex-to-word/SKILL.md): automated LaTeX-to-Word conversion with preprocessing
+- [`raster-to-vector`](./skills/raster-to-vector/SKILL.md): reconstruct raster diagrams as editable vector graphics
 - [`skill-manager`](./skills/skill-manager/SKILL.md): audit skill scope, overlapping responsibilities, and useful decision guidance
 - [`typst`](./skills/typst/SKILL.md): draft, convert, debug, and validate Typst documents
 
@@ -137,8 +138,8 @@ The repository is strongest when multiple research-oriented skills are composed 
 ```mermaid
 flowchart TD
     A["Research question / initial observation / spark"] --> B{"Is the direction already shaped?"}
-    B -->|No| C["research-ideation-novelty-check<br/>Generate candidate ideas and run novelty sanity checks"]
-    B -->|Yes| D["research-impact-strategy<br/>Decide GO / KILL / PIVOT / SCOPE-DOWN"]
+    B -->|No| C["research-idea<br/>Generate candidates and run novelty sanity checks"]
+    B -->|Yes| D["research-idea<br/>Decide GO / KILL / PIVOT / SCOPE-DOWN"]
     C --> D
     D -->|KILL| Z["Stop this direction / change topics / tighten the scope again"]
     D -->|GO / PIVOT / SCOPE-DOWN| E["zotero + paper-writer<br/>Collect literature, harvest citations, export BibTeX"]
@@ -158,12 +159,11 @@ flowchart TD
 
 Recommended minimum loop:
 
-1. [`research-ideation-novelty-check`](./skills/research-ideation-novelty-check/SKILL.md)
-2. [`research-impact-strategy`](./skills/research-impact-strategy/SKILL.md)
-3. [`zotero`](./skills/zotero/SKILL.md) or [`paper-writer`](./skills/paper-writer/SKILL.md) for bibliography work
-4. [`paper-visualizer`](./skills/paper-visualizer/SKILL.md)
-5. [`paper-writer`](./skills/paper-writer/SKILL.md)
-6. [`paper-reviewer`](./skills/paper-reviewer/SKILL.md)
+1. [`research-idea`](./skills/research-idea/SKILL.md)
+2. [`zotero`](./skills/zotero/SKILL.md) or [`paper-writer`](./skills/paper-writer/SKILL.md) for bibliography work
+3. [`paper-visualizer`](./skills/paper-visualizer/SKILL.md)
+4. [`paper-writer`](./skills/paper-writer/SKILL.md)
+5. [`paper-reviewer`](./skills/paper-reviewer/SKILL.md)
 
 The intended operating model is:
 
@@ -188,6 +188,9 @@ Repository metadata is split by consumer:
 - [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json): Claude marketplace manifest generated from skill metadata
 
 Regenerate the Claude marketplace after adding, removing, renaming, or updating installable skills:
+
+Run these commands from a Git checkout. The generator includes tracked and new
+non-ignored skills, so private local skills excluded by Git are not published.
 
 ```bash
 python3 scripts/generate_claude_marketplace.py

@@ -1,0 +1,4 @@
+interface:
+  display_name: "LaTeX to Word"
+  short_description: "Preprocess LaTeX and convert it to DOCX"
+  default_prompt: "Use $latex-to-word to preprocess a LaTeX source safely, convert it to DOCX with pandoc, and report any manual cleanup risks."

@@ -1,0 +1,102 @@
+% SoftwareX (Elsevier) Original Software Publication scaffold.
+% Draft planning settings; the publisher guide could not be retrieved during
+% review on 2026-10-05. Confirm the current template and limits before submission:
+% https://www.sciencedirect.com/journal/softwarex/publish/guide-for-authors
+%   - Submissions are ONLY considered on the journal's own template; treat this
+%     scaffold as a content skeleton to transfer into the official LaTeX template.
+%   - Maximum 3,000 words including abstract, running text, captions and
+%     footnotes (excluding title, authors, affiliations, references, metadata).
+%   - Maximum 6 figures. Single column. Line numbers required.
+%   - At least one of the two mandatory metadata tables must be completed.
+%   - Supply the code, license, documentation, and a reproducible release link;
+%     confirm the publisher's current repository requirements.
+\documentclass[preprint,review,12pt]{elsarticle}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{lineno}
+
+\journal{SoftwareX}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{{{TITLE}}}
+\author{{{AUTHORS}}}
+
+\begin{abstract}
+{ABSTRACT} % <= 250 words, factual, self-contained, no references
+\end{abstract}
+
+\begin{keyword}
+TBD. % 1-7 keywords, single words preferred
+\end{keyword}
+
+\end{frontmatter}
+\linenumbers
+
+\section{Problems and background}
+{INTRO}
+% The scientific problem the software addresses and why existing options are
+% insufficient; the manuscript is an accompanying note to the software itself.
+
+\section{Software description}
+{METHODS}
+% Architecture, main functionalities, dependencies, installation.
+
+\subsection{Software architecture}
+TBD.
+
+\subsection{Software functionalities}
+TBD.
+
+\section{Illustrative examples}
+{RESULTS}
+% At least one concrete end-to-end example with inputs and expected outputs.
+
+{FIGURES}
+
+\section{Impact}
+{DISCUSSION}
+% Who benefits, what new research questions become feasible, reuse potential
+% beyond the original domain; SoftwareX weighs cross-domain reuse explicitly.
+
+\section{Conclusions}
+TBD.
+
+\section*{Declaration of competing interest}
+TBD.
+
+\section*{Acknowledgments}
+TBD.
+
+% ---------------- Mandatory metadata table ----------------
+% Fill and keep in the manuscript; the official template provides the exact
+% layout. At least one metadata table is mandatory.
+\begin{table}[h]
+\footnotesize
+\begin{tabular}{|l|p{5cm}|p{6cm}|}
+\hline
+\textbf{Nr.} & \textbf{Code metadata description} & \textbf{Fill in} \\
+\hline
+C1 & Current code version & TBD. \\
+C2 & Permanent link to code/repository & TBD. \\ % GitHub URL
+C3 & Permanent link to reproducible capsule & TBD. \\ % e.g. Zenodo DOI
+C4 & Legal code license & TBD. \\ % OSI-recognized license
+C5 & Code versioning system used & git \\
+C6 & Software code languages, tools, and services used & TBD. \\
+C7 & Compilation requirements, operating environments and dependencies & TBD. \\
+C8 & Link to developer documentation/manual & TBD. \\
+C9 & Support email for questions & TBD. \\
+\hline
+\end{tabular}
+\caption{Software metadata (mandatory).}
+\end{table}
+
+\bibliographystyle{elsarticle-num}
+\bibliography{references}
+
+\end{document}
