@@ -30,39 +30,12 @@
       ]
     },
     {
-      "name": "bfts-config-prep",
-      "description": "Prepare a BFTS run directory from idea JSON by generating idea.md and a configured bfts_config.yaml.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/bfts-config-prep"
-      ]
-    },
-    {
-      "name": "code-simplifier",
-      "description": "Safely simplify code with multi-metric quality gates.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/code-simplifier"
-      ]
-    },
-    {
       "name": "experiment-bfts-runner",
-      "description": "Run the standalone BFTS experiment pipeline to execute multi-agent tree-search experiments from a prepared bfts_config.yaml. Use after bfts-config-prep to produce logs, workspaces, and experiment artifacts.",
+      "description": "Run the standalone BFTS experiment pipeline to execute multi-agent tree-search experiments from a prepared bfts_config.yaml. Use with an existing run configuration to produce logs, workspaces, and experiment artifacts.",
       "source": "./",
       "strict": false,
       "skills": [
         "./skills/experiment-bfts-runner"
-      ]
-    },
-    {
-      "name": "experiment-log-summarizer",
-      "description": "Summarize an experiment run directory into a draft report (Markdown + JSON) by scanning logs, summary JSONs, figures, and artifacts without executing code.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/experiment-log-summarizer"
       ]
     },
     {
@@ -94,7 +67,7 @@
     },
     {
       "name": "nix",
-      "description": "Validate Nix modules, flakes, packages, and build purity against local contracts.",
+      "description": "Write, review, and debug Nix expressions, flakes, NixOS/Home Manager/nix-darwin modules, overlays, and derivations. Use for *.nix files; Nix evaluation or build failures; package, app, devShell, and system outputs; or nix build/run/develop/flake/config commands.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -103,7 +76,7 @@
     },
     {
       "name": "paper-reviewer",
-      "description": "Review academic papers (PDF/LaTeX/Markdown) with a ScholarEval-inspired dimension pass and produce both structured peer-review JSON (NeurIPS-style fields) and a concise human-readable review with prioritized, actionable feedback. Use for comprehensive, targeted, or comparative paper evaluation while keeping output bounded.",
+      "description": "Review academic papers (PDF/LaTeX/Markdown) with venue-calibrated 1-10 scoring, a ScholarEval-inspired dimension pass, structured peer-review JSON (NeurIPS-style fields), and concise actionable feedback. Use for comprehensive, targeted, or comparative paper evaluation while keeping output bounded and evidence-linked.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -126,15 +99,6 @@
       "strict": false,
       "skills": [
         "./skills/paper-writer"
-      ]
-    },
-    {
-      "name": "project-simplify",
-      "description": "Reduce repository complexity by de-vendoring large third-party sources and replacing them with pinned release artifacts, checksum verification, and minimal subset extraction.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/project-simplify"
       ]
     },
     {
@@ -166,20 +130,11 @@
     },
     {
       "name": "skill-manager",
-      "description": "Manage and evolve Codex skills: create, update, and audit SKILL.md files together with their scripts, references, and assets; inventory installed skills; validate and convert Claude Code skills; and check shared runtime readiness.",
+      "description": "Review existing skills for useful guidance, trigger scope, overlapping responsibilities, and maintenance cost.",
       "source": "./",
       "strict": false,
       "skills": [
         "./skills/skill-manager"
-      ]
-    },
-    {
-      "name": "token-cost-tracker",
-      "description": "Summarize token usage and cost records from JSON or JSONL logs.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/token-cost-tracker"
       ]
     },
     {

@@ -20,7 +20,6 @@ SHELL_INIT_FILENAME = "shell-init.sh"
 DOCS_SKILLS = {"doc", "pdf", "latex-to-word"}
 SCIENCE_SKILLS = {
     "jupyter-notebook",
-    "experiment-log-summarizer",
     "paper-visualizer",
 }
 ML_SKILLS: set[str] = set()

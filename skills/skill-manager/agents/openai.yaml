@@ -1,4 +1,4 @@
 interface:
   display_name: "Skill Manager"
-  short_description: "Author, audit, install, convert, and bundle Codex skills"
-  default_prompt: "Manage the full skill lifecycle: create or audit SKILL.md files and their scripts/references/assets, validate routing metadata, inventory/install/update skills, convert Claude Code skills into Codex skills, sync sources, build suites, or bootstrap shared runtimes. Ask for the target skill, desired output, and any source or compatibility constraints."
+  short_description: "Review skill scope, useful guidance, and overlap"
+  default_prompt: "Use $skill-manager to review the named skills against actual tasks and available instructions. Recommend what to keep, narrow, merge, remove, or move to an ordinary command, with evidence and possible losses. Count reliable enforcement of user requirements as useful guidance even when the steps are deterministic. Apply only authorized changes and report the checks performed."

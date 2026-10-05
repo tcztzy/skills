@@ -3,7 +3,7 @@
 [![Codex repo plugin](https://img.shields.io/badge/Codex-repo_plugin-0F766E?style=for-the-badge)](./.codex-plugin/plugin.json)
 [![Claude Code marketplace](https://img.shields.io/badge/Claude_Code-marketplace-CC785C?style=for-the-badge)](./.claude-plugin/marketplace.json)
 [![OpenClaw layout](https://img.shields.io/badge/OpenClaw-compatible_layout-4C6EF5?style=for-the-badge)](./skills)
-[![24 installable skills](https://img.shields.io/badge/24-installable_skills-334155?style=for-the-badge)](./skills)
+[![17 installable skills](https://img.shields.io/badge/17-installable_skills-334155?style=for-the-badge)](./skills)
 [![Research and developer workflows](https://img.shields.io/badge/Focus-research_%2B_dev_workflows-B45309?style=for-the-badge)](./README.md#research-workflow)
 
 Task-first agent skills for research, evaluation, developer tooling, and document workflows.
@@ -23,7 +23,7 @@ The repository is intentionally project-owned. First-party skills live here; off
 | Main skill root | [`skills/`](./skills) |
 | Codex distribution | [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) + [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) |
 | Claude Code distribution | [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) |
-| Current catalog size | 24 installable skills |
+| Current catalog size | 17 installable skills |
 | Main focus areas | research, evaluation, developer tooling, documents |
 
 ## Install
@@ -93,9 +93,9 @@ The catalog is organized around user tasks instead of tool brands.
 | --- | --- | --- |
 | Research strategy | idea generation, novelty checks, go/kill/pivot decisions | [`research-ideation-novelty-check`](./skills/research-ideation-novelty-check/SKILL.md), [`research-impact-strategy`](./skills/research-impact-strategy/SKILL.md) |
 | Paper production | literature, figures, drafting, review, translation | [`zotero`](./skills/zotero/SKILL.md), [`paper-writer`](./skills/paper-writer/SKILL.md), [`paper-visualizer`](./skills/paper-visualizer/SKILL.md), [`paper-reviewer`](./skills/paper-reviewer/SKILL.md), [`academic-zh-en-translation`](./skills/academic-zh-en-translation/SKILL.md) |
-| Experiment and evaluation | run preparation, execution, scoring, post-run summaries | [`bfts-config-prep`](./skills/bfts-config-prep/SKILL.md), [`experiment-bfts-runner`](./skills/experiment-bfts-runner/SKILL.md), [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md), [`benchmark-builder`](./skills/benchmark-builder/SKILL.md), [`token-cost-tracker`](./skills/token-cost-tracker/SKILL.md) |
-| Engineering and systems | code simplification, infra, batch systems, and environment handling | [`code-simplifier`](./skills/code-simplifier/SKILL.md), [`project-simplify`](./skills/project-simplify/SKILL.md), [`hpc-batch`](./skills/hpc-batch/SKILL.md), [`nix`](./skills/nix/SKILL.md), [`wsl-fs`](./skills/wsl-fs/SKILL.md) |
-| Authoring and workflow maintenance | skill authoring, format conversion, document authoring, hiring research | [`skill-manager`](./skills/skill-manager/SKILL.md), [`latex-to-word`](./skills/latex-to-word/SKILL.md), [`typst`](./skills/typst/SKILL.md) |
+| Experiment and evaluation | experiment execution, benchmark design, and scoring | [`experiment-bfts-runner`](./skills/experiment-bfts-runner/SKILL.md), [`benchmark-builder`](./skills/benchmark-builder/SKILL.md) |
+| Engineering and systems | Python style, infra, batch systems, and environment handling | [`modern-python-style`](./skills/modern-python-style/SKILL.md), [`hpc-batch`](./skills/hpc-batch/SKILL.md), [`nix`](./skills/nix/SKILL.md), [`wsl-fs`](./skills/wsl-fs/SKILL.md) |
+| Authoring and workflow maintenance | skill audits, format conversion, and document authoring | [`skill-manager`](./skills/skill-manager/SKILL.md), [`latex-to-word`](./skills/latex-to-word/SKILL.md), [`typst`](./skills/typst/SKILL.md) |
 
 <details>
 <summary>Full installable catalog</summary>
@@ -113,23 +113,19 @@ The catalog is organized around user tasks instead of tool brands.
 ### Experiment and evaluation workflows
 
 - [`benchmark-builder`](./skills/benchmark-builder/SKILL.md): benchmark items, rubrics, evaluators, and release protocols
-- [`bfts-config-prep`](./skills/bfts-config-prep/SKILL.md): prepare runnable BFTS experiment directories
 - [`experiment-bfts-runner`](./skills/experiment-bfts-runner/SKILL.md): execute the standalone BFTS experiment pipeline
-- [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md): grounded summaries of run directories and artifacts
-- [`token-cost-tracker`](./skills/token-cost-tracker/SKILL.md): summarize token usage and cost logs
 
 ### Engineering, infra, and environment workflows
 
-- [`code-simplifier`](./skills/code-simplifier/SKILL.md): simplify code while keeping quality gates
+- [`modern-python-style`](./skills/modern-python-style/SKILL.md): apply Python syntax and typing policies through project checks
 - [`hpc-batch`](./skills/hpc-batch/SKILL.md): troubleshoot Slurm or LSF jobs, arrays, and stuck queues
 - [`nix`](./skills/nix/SKILL.md): validate Nix modules, flakes, packages, and build purity
-- [`project-simplify`](./skills/project-simplify/SKILL.md): de-vendor large dependencies and replace them with pinned artifacts
 - [`wsl-fs`](./skills/wsl-fs/SKILL.md): operate on repositories living inside WSL filesystems
 
 ### Documents, authoring, and workflow maintenance
 
 - [`latex-to-word`](./skills/latex-to-word/SKILL.md): automated LaTeX-to-Word conversion with preprocessing
-- [`skill-manager`](./skills/skill-manager/SKILL.md): create, audit, validate, convert, and inventory skills
+- [`skill-manager`](./skills/skill-manager/SKILL.md): audit skill scope, overlapping responsibilities, and useful decision guidance
 - [`typst`](./skills/typst/SKILL.md): draft, convert, debug, and validate Typst documents
 
 </details>
@@ -148,8 +144,7 @@ flowchart TD
     D -->|GO / PIVOT / SCOPE-DOWN| E["zotero + paper-writer<br/>Collect literature, harvest citations, export BibTeX"]
     E --> F["Collect data / run experiments / organize raw artifacts"]
     F --> G["paper-visualizer<br/>Route chart family and generate manuscript-ready figures and plots"]
-    G --> J["experiment-log-summarizer<br/>Condense the run directory into summary.md / summary.json"]
-    J --> K{"Do the evidence and story now close the loop?"}
+    G --> K{"Does the evidence support the paper's claims?"}
     K -->|No: positioning or claim is weak| D
     K -->|No: data or experiments are still insufficient| F
     K -->|Yes| L["paper-writer<br/>Turn ideas, logs, plots, and citations into a paper draft"]
@@ -167,9 +162,8 @@ Recommended minimum loop:
 2. [`research-impact-strategy`](./skills/research-impact-strategy/SKILL.md)
 3. [`zotero`](./skills/zotero/SKILL.md) or [`paper-writer`](./skills/paper-writer/SKILL.md) for bibliography work
 4. [`paper-visualizer`](./skills/paper-visualizer/SKILL.md)
-5. [`experiment-log-summarizer`](./skills/experiment-log-summarizer/SKILL.md)
-6. [`paper-writer`](./skills/paper-writer/SKILL.md)
-7. [`paper-reviewer`](./skills/paper-reviewer/SKILL.md)
+5. [`paper-writer`](./skills/paper-writer/SKILL.md)
+6. [`paper-reviewer`](./skills/paper-reviewer/SKILL.md)
 
 The intended operating model is:
 

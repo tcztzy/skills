@@ -1,6 +1,6 @@
 ---
 name: experiment-bfts-runner
-description: Run the standalone BFTS experiment pipeline to execute multi-agent tree-search experiments from a prepared bfts_config.yaml. Use after bfts-config-prep to produce logs, workspaces, and experiment artifacts.
+description: Run the standalone BFTS experiment pipeline to execute multi-agent tree-search experiments from a prepared bfts_config.yaml. Use with an existing run configuration to produce logs, workspaces, and experiment artifacts.
 ---
 
 # Experiment BFTS Runner
@@ -10,7 +10,7 @@ Execute the full BFTS tree-search experiment workflow from a prepared bfts_confi
 
 ## Workflow
 1. Prepare a run directory
-   - Use bfts-config-prep to create runs/<timestamp>_<idea_name>/ with `idea.json`, `idea.md`, and `bfts_config.yaml`.
+   - Provide a run directory with `idea.json`, `idea.md`, and `bfts_config.yaml`; configure its input, log, and workspace paths.
 2. Run the experiment
    - Offline default:
      ~~~bash
@@ -21,7 +21,7 @@ Execute the full BFTS tree-search experiment workflow from a prepared bfts_confi
      uv run -s scripts/run_bfts.py --config runs/<run>/bfts_config.yaml --online
      ~~~
 3. Inspect outputs
-   - Logs and workspaces are placed under the run directory; use experiment-log-summarizer for summaries.
+   - Inspect the logs, workspaces, and per-node results under the run directory.
 
 ## Inputs
 - --config: path to bfts_config.yaml.
