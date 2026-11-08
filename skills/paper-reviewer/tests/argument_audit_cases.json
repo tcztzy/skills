@@ -1,0 +1,55 @@
+{
+  "purpose": "Manual semantic replay fixtures, not an automated reasoning evaluator. Cases are constructed and contain no confidential manuscript text.",
+  "protocol": "Review each input within scope using SKILL.md. Record objection, best manuscript rebuttal, unresolved premise, severity and smallest justified action. Check the required and forbidden judgments after writing the review. An independent old/new skill comparison requires separate fresh contexts, shuffled cases, the same model/tools, and no expected judgments in the reviewer input. No model call or payment is authorized by these fixtures.",
+  "cases": [
+    {
+      "id": "unsupported-system-inference",
+      "scope": "targeted: argument and evidence",
+      "input": "Introduction paragraph 1: A crop editing study must match guide coordinates, cultivar sequences and transcript models. Paragraph 2: Guide tools discover sequences, workflow engines organize execution, and language models can call tools. Paragraph 3: We provide an adaptive agent with persistent records. Results paragraph 1: Archived guide outputs from two assemblies were reanalysed. Results paragraph 2: CSV import, parameter reruns and failed-run retention passed deterministic component tests. No agent task trace or adaptive execution result is supplied.",
+      "required": ["Acknowledge the concrete domain task and real retrospective/component evidence.", "Explain the missing inference from useful evidence linkage to the retained adaptive-agent contribution; test the plausible scripted integration alternative.", "Separate explanation of the integration's value from evidence of adaptive behavior; offer claim narrowing or an appropriate task trace depending on the retained claim."],
+      "forbidden": ["Claim no biological motivation exists.", "Treat precise retrospective counts as proof of adaptive execution.", "Require a new wet-lab experiment or ablation irrespective of the retained claim."]
+    },
+    {
+      "id": "sufficient-integration-resource",
+      "scope": "targeted: contribution",
+      "input": "Abstract: We release a curated integration resource, without claiming a new algorithm or autonomous planning. Introduction paragraph 2: Existing tools produce valid per-assembly coordinates, but identifier/version mappings must currently be maintained by the study team. Methods paragraph 1: A typed record preserves assembly version, locus identity and transcript mapping. Results paragraph 1: On a documented public test set, changing the assembly produces a flagged remapping request rather than silently carrying an old coordinate forward. Reproduction instructions and a trace are included. Discussion: A carefully written script can implement the same checks; the contribution is the released checked mapping resource and its workflow.",
+      "required": ["Find that the bounded integration contribution has a task, mechanism, demonstrated behavior and explicit limits.", "Recognize that an equivalent script does not invalidate a useful resource."],
+      "forbidden": ["Demand agent uniqueness, a new algorithm or universal superiority.", "Invent a missing wet-lab validation requirement."]
+    },
+    {
+      "id": "different-article-form",
+      "scope": "targeted: argument",
+      "input": "A mechanistic paper opens with a surprising observation, then presents two competing explanations. Methods specify a discriminating perturbation and controls. Results report a differential response predicted by explanation A but not B, while discussing a residual alternative C. It does not introduce software or begin with a list of existing tools.",
+      "required": ["Evaluate how the perturbation and controls distinguish the competing explanations, within the supplied evidence.", "Allow the observation-first structure and recognize that insufficient experimental detail in the excerpt limits a full soundness judgment."],
+      "forbidden": ["Require a domain-task/tool-gap/agent sequence.", "Reject for lacking a software baseline."]
+    },
+    {
+      "id": "cross-component-example",
+      "scope": "targeted: inference and applicability",
+      "input": "Introduction paragraph 3: Independently acceptable sequence components may form an unintended recognition motif at their junction. Methods paragraph 2: A deterministic concatenation check rejects unintended motifs in the specified design window; designated assembly recognition sites are intentionally retained. Results paragraph 1: Boundary-spanning controls are rejected. The paper supplies no evidence that a language model invented or repaired this constraint.",
+      "required": ["Recognize the concrete failure mode and the supported cross-component check.", "Preserve the distinction between unintended internal/junction sites and intentional assembly sites, and the specified window.", "Do not attribute discovery or repair to the agent."],
+      "forbidden": ["Conclude only an LLM can solve the constraint.", "Exclude all recognition motifs universally.", "Present the example as an earlier review's available evidence without version support."]
+    },
+    {
+      "id": "persuasive-revision-factual-regression",
+      "scope": "comparative: framing and claim support",
+      "input": "Version A leads with evidence records and reports 40 guide designs at 20 loci in a retrospective study, without autonomous execution. Version B explains the researcher's objective and why cross-step constraints matter more clearly, but its highlight says 40 genes and its introduction claims autonomous experiments. Results and Methods are unchanged from A.",
+      "required": ["Recognize B's improved explanation and retain A's accurate counts and scope.", "Flag 40 genes versus 40 designs at 20 loci and the unsupported autonomy claim.", "Separate persuasive exposition from new empirical support."],
+      "forbidden": ["Rank B as wholly superior because a senior editor wrote it.", "Infer new experiments from improved narrative."]
+    },
+    {
+      "id": "targeted-visual-scope",
+      "scope": "targeted: figure label spelling only",
+      "input": "The user requests a spelling check of the label 'transcirpt annotation' in Figure 1. No introduction or results are provided.",
+      "required": ["Correct the label to transcript annotation and keep the stated scope.", "Avoid any whole-paper argument verdict."],
+      "forbidden": ["Demand a full argument audit before providing the spelling correction.", "Score scientific significance from the label alone."]
+    },
+    {
+      "id": "incremental-is-not-fresh",
+      "scope": "targeted: history investigation",
+      "input": "Review record R1 criticizes missing native execution evidence. R2 explicitly excludes native execution from a software-data QA and reports a scoped pass. Its script imports old paragraph judgments by exact text. R3 examines only Figure 1. The full launch context and subsequent disposition of R1 are unavailable. The user reports repeated context clearing.",
+      "required": ["Confirm the earlier related finding and R2/R3's actual scope; an exclusion is not a fix.", "Identify imported judgments in R2 without claiming that every review reused context.", "Leave the cause of any fresh-review miss and R1's later disposition unresolved where records are missing."],
+      "forbidden": ["Assert that context clearing failed.", "Treat all passes as comprehensive independent reviews.", "Infer that the user ignored R1."]
+    }
+  ]
+}

@@ -76,7 +76,7 @@
       "type": "integer",
       "minimum": 1,
       "maximum": 10,
-      "description": "Evidence-based, venue-calibrated overall score using SKILL.md. Publication and official-cover status are applied only by the post-validation procedure after the intrinsic score is justified."
+      "description": "Evidence-based score under SKILL.md, calibrated on the same scale to selected same-type published >=6 anchors and selected cover-exemplar 10 anchors. Report verified errors and calibration conflicts; identity alone does not guarantee a score."
     },
     "Confidence": {
       "type": "integer",

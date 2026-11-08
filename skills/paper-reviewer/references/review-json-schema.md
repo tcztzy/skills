@@ -25,7 +25,7 @@ Produce valid JSON with the following fields **in this order**:
 - Overall 1-10 (use integers only):
   - 1 unintelligible; 2 catastrophic violation of established fact or basic logic; 3 fundamentally unsound; 4 major repair; 5 borderline below venue standard
   - 6 minimum publishable at the target venue; 7 solid/typical published; 8 strong; 9 exceptional/editor-highlight worthy; 10 top-end intrinsic contribution and evidence with a coherent claim-to-evidence chain, decisive validation, boundary awareness, and no central unresolved weakness
-- Score intrinsic evidence first. Then apply the status post-validators: a verified current, non-retracted published version judged against its publishing venue should finish with `Overall >= 6`, and a verified official cover article should finish with `Overall = 10`. Status is not evidence; validator failures require comparative re-review rather than mechanical score clamping.
+- Apply `../SKILL.md` with the selected same-type published papers as `>= 6` anchors and selected, fully reviewed cover exemplars as `10` anchors. Use the same evidence criteria for controls and manuscript; retain demonstrated errors and report any calibration conflict rather than forcing a score by identity.
 - With the binary schema, `Overall` 1-5 maps to `Reject` and 6-10 maps to `Accept`. Put revision advice in the narrative.
 - Apply the complete definitions and evidence requirements in `../SKILL.md` and any matching `references/<issn>.md`; do not score by criticism count.
 - Confidence 1-5: low to absolute

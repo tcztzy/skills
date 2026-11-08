@@ -330,6 +330,37 @@ def command_validate(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_packet(args: argparse.Namespace) -> int:
+    root = Path(__file__).resolve().parents[1]
+    try:
+        request = json.loads(Path(args.request).read_text(encoding="utf-8"))
+        if (not isinstance(request, dict)
+                or request.get("scope") not in ("comprehensive", "targeted", "comparative")
+                or not all(key in request for key in ("target", "controls", "evidence"))
+                or not request["target"] or not request["evidence"]
+                or not isinstance(request["controls"], list)):
+            raise ValueError("Supply scope, target, controls, and actual evidence")
+        sources = [root / "SKILL.md", root / "references/review.schema.json"]
+        material = {"request": request}
+        if "issn" in request:
+            if not isinstance(request["issn"], str) or not re.fullmatch(r"\d{4}-\d{3}[\dX]", request["issn"]):
+                raise ValueError("Invalid ISSN")
+            material["journal_profile"] = (root / "references" / (request["issn"] + ".md")).read_text(encoding="utf-8")
+        instructions = "\n\n".join(
+            f"## {source.relative_to(root)}\n{source.read_text(encoding='utf-8')}"
+            for source in sources)
+        packet = {"instructions": instructions,
+                  "input": json.dumps(material, ensure_ascii=False)}
+        with Path(args.out).open("x", encoding="utf-8") as handle:
+            json.dump(packet, handle, ensure_ascii=False, indent=2)
+            handle.write("\n")
+    except (OSError, ValueError) as exc:
+        print(f"[ERROR] {exc}")
+        return 2
+    print(f"[OK] Wrote self-contained review request: {args.out}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Prepare or validate close-reading audit ledgers.")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -351,6 +382,11 @@ def build_parser() -> argparse.ArgumentParser:
     validate = subparsers.add_parser("validate", help="Validate a completed audit ledger.")
     validate.add_argument("--audit", default="close_reading_audit.jsonl", help="Completed audit JSONL.")
     validate.set_defaults(func=command_validate)
+
+    packet = subparsers.add_parser("packet", help="Embed review rules and evidence without model calls.")
+    packet.add_argument("--request", required=True, help="JSON request with scope, target, controls, evidence, optional issn.")
+    packet.add_argument("--out", required=True, help="New self-contained request JSON.")
+    packet.set_defaults(func=command_packet)
 
     return parser
 

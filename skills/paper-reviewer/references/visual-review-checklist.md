@@ -25,5 +25,5 @@ Use this checklist during the PDF page-image pass.
 - Prioritize the highest-impact visual issues instead of listing every cosmetic nit.
 - Track which major section each page range belongs to so later feedback can cite exact locations.
 - Use page numbers when possible.
-- The final review should mention every major section; if a section looks sound on close inspection, say so explicitly instead of skipping it.
+- Report every reviewed section, including sound sections, and identify excluded ranges under the agreed scope. A comprehensive review covers all major sections.
 - If the image resolution is insufficient, say so and lower confidence instead of guessing.
