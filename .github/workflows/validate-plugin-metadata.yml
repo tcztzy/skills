@@ -5,6 +5,7 @@ on:
     paths:
       - ".agents/plugins/marketplace.json"
       - ".claude-plugin/marketplace.json"
+      - ".claude-plugin/external-plugins.json"
       - ".codex-plugin/plugin.json"
       - ".github/workflows/validate-plugin-metadata.yml"
       - "scripts/generate_claude_marketplace.py"
@@ -17,6 +18,7 @@ on:
     paths:
       - ".agents/plugins/marketplace.json"
       - ".claude-plugin/marketplace.json"
+      - ".claude-plugin/external-plugins.json"
       - ".codex-plugin/plugin.json"
       - ".github/workflows/validate-plugin-metadata.yml"
       - "scripts/generate_claude_marketplace.py"

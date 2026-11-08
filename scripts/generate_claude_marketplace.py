@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Claude marketplace metadata from non-ignored skills in a Git checkout."""
+"""Generate Claude metadata from distributable local skills and pinned remote entries."""
 
 from __future__ import annotations
 
@@ -98,6 +98,13 @@ def collect_plugins(skills_root: Path) -> list[dict[str, Any]]:
 
 
 def build_marketplace(skills_root: Path) -> dict[str, Any]:
+    plugins = collect_plugins(skills_root)
+    external_path = skills_root.parent / ".claude-plugin" / "external-plugins.json"
+    if external_path.exists():
+        plugins.extend(json.loads(external_path.read_text(encoding="utf-8")))
+    names = [plugin["name"] for plugin in plugins]
+    if len(names) != len(set(names)):
+        raise ValueError("Local and external marketplace plugin names must be unique")
     return {
         "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
         "name": MARKETPLACE_NAME,
@@ -107,13 +114,13 @@ def build_marketplace(skills_root: Path) -> dict[str, Any]:
             "version": "1.0.0",
             "description": MARKETPLACE_DESCRIPTION,
         },
-        "plugins": collect_plugins(skills_root),
+        "plugins": sorted(plugins, key=lambda plugin: plugin["name"]),
     }
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Generate .claude-plugin/marketplace.json from skills/*/SKILL.md"
+        description="Generate Claude metadata from local skills and external-plugins.json"
     )
     parser.add_argument(
         "--skills-root",

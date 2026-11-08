@@ -3,3 +3,5 @@ __pycache__/
 .env
 .DS_Store
 .playwright-cli/
+# Local mount of the separately installed, pinned external skill documented in README.
+/skills/anti-defensive-writing

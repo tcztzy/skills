@@ -23,7 +23,8 @@ The repository is intentionally project-owned. First-party skills live here; off
 | Main skill root | [`skills/`](./skills) |
 | Codex distribution | [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) + [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) |
 | Claude Code distribution | [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) |
-| Current catalog size | 19 installable skills |
+| Bundled catalog size | 19 installable skills |
+| External companion | [`anti-defensive-writing`](#external-companion-skill), installed separately from its pinned upstream source |
 | Main focus areas | research, evaluation, developer tooling, documents |
 
 ## Install
@@ -66,7 +67,9 @@ After the repository is pushed to GitHub:
 1. Add the repository as a marketplace in Claude Code.
 2. Enable the individual plugins you want from that marketplace.
 
-The Claude manifest is generated from the installable skill directories under [`skills/`](./skills), so the plugin list stays aligned with the repository contents.
+The Claude manifest combines the 19 bundled skill directories under [`skills/`](./skills)
+with the pinned upstream entry in [`.claude-plugin/external-plugins.json`](./.claude-plugin/external-plugins.json).
+It offers 20 plugins; the external companion is fetched from its own repository.
 
 ### Manual Local Roots
 
@@ -84,6 +87,60 @@ That keeps skill lookup stable for repository-local helpers such as:
 - `$CODEX_HOME/skills/paper-visualizer/scripts/manuscript_figure.py`
 
 The same layout is also suitable for OpenClaw-compatible workflows that read a `skills/` directory directly.
+
+### External Companion Skill
+
+`paper-writer` and `gpt-intervention` can use
+[`anti-defensive-writing`](https://github.com/Kiterlin/anti-defensive-writing),
+an MIT-licensed skill maintained by Kiterlin. Its source remains upstream rather
+than being copied into this repository.
+
+The reproducible version is commit
+[`6345f09c9141be94df055fd048c94a4f26a8ed66`](https://github.com/Kiterlin/anti-defensive-writing/tree/6345f09c9141be94df055fd048c94a4f26a8ed66),
+at `skill/anti-defensive-writing`. This is the version of the existing local
+installation, not a floating reference to the latest upstream instructions.
+
+- **Claude Code:** install `anti-defensive-writing@blackscience-tech-skills`
+  from this marketplace. Its HTTPS Git source and full commit SHA are declared in
+  `external-plugins.json`; the generated entry selects the upstream skill directory.
+- **Codex:** install this companion separately into its skill root using the pinned
+  Git steps below.
+  The native repo plugin still contains only the 19 bundled skills. The pinned
+  upstream repository has no Codex plugin manifest, so a remote plugin entry is
+  not a substitute for installing the skill.
+- **Other local skill-root consumers:** install the same pinned directory into
+  the root that the application actually scans. A GitHub URL is source metadata,
+  not a filesystem symlink.
+
+For a fresh local installation, the following Git checkout and filesystem link
+use the same fixed version. The checkout retains the upstream license. Choose the
+application's actual skill root; Codex loads the shared `~/.agents/skills` root.
+The commands stop rather than replace an existing source directory or installed skill:
+
+```bash
+(
+  set -e
+  SOURCE_ROOT="$HOME/.local/share/agent-skill-sources"
+  SOURCE_DIR="$SOURCE_ROOT/anti-defensive-writing"
+  SKILL_ROOT="$HOME/.agents/skills"
+  test ! -e "$SKILL_ROOT/anti-defensive-writing"
+  test ! -L "$SKILL_ROOT/anti-defensive-writing"
+  mkdir -p "$SOURCE_ROOT" "$SKILL_ROOT"
+  mkdir "$SOURCE_DIR"
+  git -C "$SOURCE_DIR" init -q
+  git -C "$SOURCE_DIR" remote add origin https://github.com/Kiterlin/anti-defensive-writing.git
+  git -C "$SOURCE_DIR" fetch --depth=1 origin 6345f09c9141be94df055fd048c94a4f26a8ed66
+  git -C "$SOURCE_DIR" checkout --detach FETCH_HEAD
+  ln -s "$SOURCE_DIR/skill/anti-defensive-writing" "$SKILL_ROOT/anti-defensive-writing"
+)
+```
+
+If the skill is already installed, keep that installation and compare it before
+choosing any update; do not replace local edits.
+An existing `skills/anti-defensive-writing` symlink may remain as a local mount
+and is ignored by Git. Portable provenance is the upstream URL, directory, and
+commit above, not the mount's machine-specific path. Updating the pin is an
+explicit dependency update and should be checked against the installed version.
 
 ## Skill Map
 
@@ -188,11 +245,14 @@ Repository metadata is split by consumer:
 - [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json): native Codex plugin manifest
 - [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json): Codex marketplace entry for this repository
 - [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json): Claude marketplace manifest generated from skill metadata
+- [`.claude-plugin/external-plugins.json`](./.claude-plugin/external-plugins.json): pinned remote Claude entries for separately maintained companion skills
 
 Regenerate the Claude marketplace after adding, removing, renaming, or updating installable skills:
 
 Run these commands from a Git checkout. The generator includes tracked and new
-non-ignored skills, so private local skills excluded by Git are not published.
+non-ignored skills plus the explicit external entries, so local mounts and private
+skills excluded by Git are not published as bundled files. Regenerate after changing
+either source.
 
 ```bash
 python3 scripts/generate_claude_marketplace.py

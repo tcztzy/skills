@@ -21,6 +21,21 @@
       ]
     },
     {
+      "name": "anti-defensive-writing",
+      "description": "Reduce unnecessary caveats and defensive framing while preserving evidence, accuracy, and necessary limits. Maintained upstream by Kiterlin.",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/Kiterlin/anti-defensive-writing.git",
+        "sha": "6345f09c9141be94df055fd048c94a4f26a8ed66"
+      },
+      "strict": false,
+      "skills": [
+        "./skill/anti-defensive-writing"
+      ],
+      "homepage": "https://github.com/Kiterlin/anti-defensive-writing",
+      "license": "MIT"
+    },
+    {
       "name": "benchmark-builder",
       "description": "Build or audit benchmark tasks, scoring contracts, rubrics, evaluators, review examples, pilot plans, and release policies.",
       "source": "./",
