@@ -57,6 +57,15 @@
       ]
     },
     {
+      "name": "gpt-intervention",
+      "description": "Correct recurring GPT work failures by preserving user goals, checking real inputs, reconsidering costly choices, and verifying delivered outcomes. Apply proactively at the start of complex work, before consequential runtime, interface, or distribution changes, when fixes become a patch chain, and before declaring completion. Use proportionately; ordinary local edits need no separate audit ritual.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/gpt-intervention"
+      ]
+    },
+    {
       "name": "hpc-operator",
       "description": "Operate and troubleshoot IBM Spectrum LSF batch jobs, job arrays, queues, and execution hosts.",
       "source": "./",
@@ -90,6 +99,15 @@
       "strict": false,
       "skills": [
         "./skills/nix"
+      ]
+    },
+    {
+      "name": "overengineering",
+      "description": "Reduce avoidable implementation, test, specification, and collaboration costs under the same real requirements.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/overengineering"
       ]
     },
     {

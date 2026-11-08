@@ -3,7 +3,7 @@
 [![Codex repo plugin](https://img.shields.io/badge/Codex-repo_plugin-0F766E?style=for-the-badge)](./.codex-plugin/plugin.json)
 [![Claude Code marketplace](https://img.shields.io/badge/Claude_Code-marketplace-CC785C?style=for-the-badge)](./.claude-plugin/marketplace.json)
 [![OpenClaw layout](https://img.shields.io/badge/OpenClaw-compatible_layout-4C6EF5?style=for-the-badge)](./skills)
-[![17 installable skills](https://img.shields.io/badge/17-installable_skills-334155?style=for-the-badge)](./skills)
+[![19 installable skills](https://img.shields.io/badge/19-installable_skills-334155?style=for-the-badge)](./skills)
 [![Research and developer workflows](https://img.shields.io/badge/Focus-research_%2B_dev_workflows-B45309?style=for-the-badge)](./README.md#research-workflow)
 
 Task-first agent skills for research, evaluation, developer tooling, and document workflows.
@@ -23,7 +23,7 @@ The repository is intentionally project-owned. First-party skills live here; off
 | Main skill root | [`skills/`](./skills) |
 | Codex distribution | [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) + [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) |
 | Claude Code distribution | [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) |
-| Current catalog size | 17 installable skills |
+| Current catalog size | 19 installable skills |
 | Main focus areas | research, evaluation, developer tooling, documents |
 
 ## Install
@@ -121,9 +121,11 @@ The catalog is organized around user tasks instead of tool brands.
 - [`hpc-operator`](./skills/hpc-operator/SKILL.md): operate and troubleshoot LSF jobs, arrays, queues, and execution hosts
 - [`modern-python-style`](./skills/modern-python-style/SKILL.md): apply Python syntax and typing policies through project checks
 - [`nix`](./skills/nix/SKILL.md): validate Nix modules, flakes, packages, and build purity
+- [`overengineering`](./skills/overengineering/SKILL.md): reduce avoidable implementation and workflow costs under the same requirements
 
 ### Documents, authoring, and workflow maintenance
 
+- [`gpt-intervention`](./skills/gpt-intervention/SKILL.md): preserve task intent, check consequential choices, and verify delivered outcomes
 - [`latex-to-word`](./skills/latex-to-word/SKILL.md): automated LaTeX-to-Word conversion with preprocessing
 - [`raster-to-vector`](./skills/raster-to-vector/SKILL.md): reconstruct raster diagrams as editable vector graphics
 - [`skill-manager`](./skills/skill-manager/SKILL.md): audit skill scope, overlapping responsibilities, and useful decision guidance

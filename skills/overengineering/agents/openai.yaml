@@ -1,0 +1,4 @@
+interface:
+  display_name: "Overengineering"
+  short_description: "Reduce code, test, spec, and review costs under real requirements"
+  default_prompt: "Use $overengineering to simplify an evidenced cost in implementation, tests, specifications, or collaboration under the same real requirements. Measure relevant outcomes, edit current specs in place, and deliver when agreed acceptance passes without a concrete blocker."
