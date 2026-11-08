@@ -1,6 +1,6 @@
 ---
 name: modern-python-style
-description: Enforce modern Python 3.10+ syntax, static typing discipline, and anti-ceremony code style with deterministic checks. Use when prompts mention banning typing.List or Optional, banning from __future__ import annotations, treating Python like a statically typed language, enabling multiple type checkers, rejecting pointless tiny wrapper functions, or wiring pre-commit and CI to fail on obsolete compatibility syntax.
+description: Enforce modern Python 3.10+ syntax, static typing discipline, and anti-ceremony code style with deterministic checks. Use when prompts mention banning typing.List or Optional, banning from __future__ import annotations, preferring Pydantic class keyword configuration, treating Python like a statically typed language, enabling multiple type checkers, rejecting pointless tiny wrapper functions, or wiring pre-commit and CI to fail on obsolete compatibility syntax.
 ---
 
 # Modern Python Style
@@ -23,6 +23,7 @@ Do not add one-use tiny wrapper functions that add no abstraction, no reuse, and
 - Ban `typing.List`, `typing.Dict`, `typing.Set`, `typing.Tuple`, `typing.Optional`, `typing.Union`
 - Ban `from __future__ import annotations`
 - Prefer built-in generics such as `list[str]` and unions such as `T | None`
+- Configure Pydantic models with class keywords, e.g. `class Output(BaseModel, extra="forbid", strict=True):`, instead of a separate `model_config = ConfigDict(...)` assignment. This keeps configuration in the class declaration and removes an import.
 - Treat Python as a statically typed language in practice: annotate public surfaces, keep types specific, and run multiple type checkers in CI
 - Reject trivial single-use wrapper functions with no abstraction value; inline them or replace them with a real abstraction boundary
 
@@ -34,7 +35,9 @@ Use Ruff as the syntax enforcement layer. Current Ruff can express the exact ban
 - `UP007`: `Union[A, B]` -> `A | B`
 - `UP035`: deprecated `typing.List`, `typing.Dict`, `typing.Set`, `typing.Tuple` imports
 - `UP045`: `Optional[T]` -> `T | None`
-- `TID251`: configured project bans for `typing.*` names and `__future__.annotations`
+- `TID251`: configured project bans for `typing.*` names, `__future__.annotations`, and `pydantic.ConfigDict`
+
+The Pydantic check bans importing or accessing `ConfigDict`, including aliases; it does not detect a plain-dictionary `model_config` assignment. If a non-model API such as `TypeAdapter` needs `ConfigDict`, use a local `# noqa: TID251` with the reason rather than disabling the rule globally.
 
 Keep `FA100` and `FA102` ignored if the repo enables broader rule groups, because those rules suggest adding `from __future__ import annotations`, which this skill explicitly bans.
 

@@ -13,3 +13,4 @@ ignore = ["FA100", "FA102"]
 "typing.Tuple" = { msg = "Use tuple[...]" }
 "typing.Optional" = { msg = "Use T | None" }
 "typing.Union" = { msg = "Use A | B" }
+"pydantic.ConfigDict" = { msg = "Use class keyword arguments, e.g. class Model(BaseModel, extra=\"forbid\", strict=True)." }

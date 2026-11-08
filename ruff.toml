@@ -1,0 +1,5 @@
+[lint]
+select = ["TID251"]
+
+[lint.flake8-tidy-imports.banned-api]
+"pydantic.ConfigDict" = { msg = "Use class keyword arguments, e.g. class Model(BaseModel, extra=\"forbid\", strict=True)." }

@@ -1,4 +1,4 @@
-name: Validate Plugin Metadata
+name: Validate Plugin Metadata and Python Style
 
 on:
   push:
@@ -11,6 +11,8 @@ on:
       - "scripts/validate_plugin_metadata.py"
       - "scripts/tests/**"
       - "skills/**/SKILL.md"
+      - "**/*.py"
+      - "ruff.toml"
   pull_request:
     paths:
       - ".agents/plugins/marketplace.json"
@@ -21,6 +23,8 @@ on:
       - "scripts/validate_plugin_metadata.py"
       - "scripts/tests/**"
       - "skills/**/SKILL.md"
+      - "**/*.py"
+      - "ruff.toml"
 
 jobs:
   validate:
@@ -34,6 +38,11 @@ jobs:
 
       - name: Validate plugin metadata
         run: python3 scripts/validate_plugin_metadata.py
+
+      - name: Check Python style
+        run: |
+          python3 -m pip install ruff
+          ruff check .
 
       - name: Test marketplace inventory
         run: python3 -m unittest discover -s scripts/tests -p 'test_*.py'
