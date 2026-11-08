@@ -18,8 +18,6 @@ It covers five bundled workflows:
 - Extract figure-region images, captions, and figrefs into an audit bundle using `scripts/extract_figures_and_refs.py`.
 - Prepare journal-submission support materials such as cover letters, reviewer suggestions, and resubmission notes.
 
-When a draft is blocked by missing evidence, do not stay passive. Surface the gap explicitly, recommend the smallest experiment that would unblock the claim, and run the easy version yourself when it is already feasible from local code, logs, tables, or predictions.
-
 Keep only genuinely adjacent tasks outside this skill:
 - Use `research-idea` first if the story or central claim is still blurry.
 - Use `zotero` when the job is library management, connector capture, or collection export.
@@ -29,6 +27,8 @@ Keep only genuinely adjacent tasks outside this skill:
 - Use `paper-reviewer` for bounded peer-review style evaluation.
 
 ## Draft / Revise Workflow
+For GPT drafting or substantive revision, read [references/gpt.md](references/gpt.md) to build, revise, and validate the scientific argument.
+
 1. **Collect inputs**
    - Required: research idea or problem statement, experiment summaries/results, and available plots/tables.
    - Optional: prior draft, venue constraints (page limit, single/double column), and a references.bib file.
@@ -45,14 +45,15 @@ Keep only genuinely adjacent tasks outside this skill:
 
 4. **Check for evidence gaps before polishing prose**
    - Look for claims that still need support, such as missing variability estimates, missing baseline comparisons, absent ablations, weak error analysis, or unclear robustness checks.
-   - If a gap is real, treat it as a writing blocker rather than trying to write around it.
-   - Prefer the smallest decisive addition that would make the paper more convincing.
+   - A blocker must identify the affected claim or requirement, exact location, missing evidence, and consequence for validity or agreed acceptance. A useful optional analysis is not automatically a blocker.
+   - Resolve a blocker with the smallest decisive analysis, or accurately narrow/remove the unsupported claim when the agreed contribution permits it.
 
 5. **Draft the manuscript**
    - Write section by section.
+   - When revising prose with repeated caveats, stacked hedges, or defensive framing, use `anti-defensive-writing` for the affected text; preserve scientific facts, real uncertainty, and necessary methodological and scope qualifications.
+   - 逐句分类和原稿主张跟踪用 `scripts/audit_defensive_writing.py`；运行前读[脚本说明](references/defensive-writing-audit.md)中的外部调用批准、账本要求和指标边界。其 `--argument-annotations` 模式可离线核验并汇总锚定原句的论证关系标注；这是待验证的扩展，须固定比较单位和分母、保留不确定性并检查事实守恒，不能用作写作总分。
    - Cite related work using existing references only. If new citations are needed, follow `references/citation-workflow.md` and the bundled bibliography helper in `references/bibliography-harvest.md`.
    - Do not invent results or citations.
-   - Do not hide evidence gaps with vague wording. Either support the claim, soften the claim, or mark the need for a supplementary experiment.
    - Do not write local repository or filesystem paths in the manuscript body (for example `/Users/...` or checkout-specific paths). Refer to artifacts, scripts, or resources in paper-appropriate prose instead.
 
 6. **Run a submission-readiness pass when journal fit matters**
@@ -70,6 +71,7 @@ Keep only genuinely adjacent tasks outside this skill:
 
 8. **Safeguards and integrity checks**
    - Use `references/safeguards.md` to validate factuality, attribution, and responsible disclosure.
+   - Deliver when agreed acceptance passes; recheck affected material after fixes. Use `paper-reviewer` for calibrated scoring. External model review requires separate user approval and the existing `review_executor.py` ledger; if unavailable, report that step pending and continue local work without bypassing it.
 
 ## Evidence-Gap and Supplementary Experiment Workflow
 Use this when the manuscript is bottlenecked by missing support for an otherwise important claim.
@@ -81,7 +83,7 @@ Use this when the manuscript is bottlenecked by missing support for an otherwise
 
 2. **Default to action, not only advice**
    - For simple gaps, run the analysis directly if the needed artifacts are already present locally. This includes simple statistics, aggregation, plotting, and error breakdowns.
-   - For lightweight gaps, actively recommend the experiment and execute it when it is low-risk, cheap, and clearly within the current workspace setup.
+   - For lightweight gaps necessary to the agreed claim, execute when low-risk, cheap, and within authorized scope. Optional experiments remain suggestions.
    - For heavy gaps, do not launch it silently. Tell the user why it is important, propose the smallest decisive version, and explain what claim it would validate.
 
 3. **Prefer the smallest decisive experiment**
