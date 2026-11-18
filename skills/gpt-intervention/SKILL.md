@@ -67,8 +67,8 @@ necessary scientific methods and inferential limits, and put operational detail 
 readers need it. Turn feedback into scoped positive rules, with examples as illustrations.
 
 When drafting or revising prose with repeated disclaimers, stacked hedges, or defensive
-framing, use `anti-defensive-writing` for the affected text. Preserve facts, real
-uncertainty, and necessary methodological and scope qualifications.
+framing, use `anti-defensive-writing` for the affected text. Preserve facts, uncertainty,
+and qualifications that change how the reader should interpret or use the result.
 
 ## Mechanical checks
 

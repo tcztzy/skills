@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Run readiness checks and a safe local audit for migrated skills."""
+"""Report readiness and evaluation evidence for skills in a migration manifest.
+
+The audit inventories bundled cases and prepares local fixtures. It writes JSON
+and Markdown reports without running the cases or deciding which skills to retire.
+"""
 
 from __future__ import annotations
 
@@ -11,7 +15,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 if __package__ is None or __package__ == "":
     sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -22,16 +26,6 @@ from utils import dump_json, dump_text, ensure_lab_workspace, load_json, utc_now
 from validate_skill import validate_skill  # type: ignore  # noqa: E402
 
 DEFAULT_SKILLS_ROOT = Path.home() / ".codex" / "skills"
-SAFE_BENCHMARK_SKILLS = {
-    "doc",
-    "pdf",
-    "jupyter-notebook",
-    "latex-to-word",
-    "openai-docs",
-    "playwright",
-    "screenshot",
-    "gh-fix-ci",
-}
 READY_EXTERNAL_WRITE_SKILLS = set(NOTION_SKILLS) | {"yeet"}
 
 
@@ -272,7 +266,7 @@ def readiness_for_skill(skill_name: str, skill_path: Path, env: dict[str, Any]) 
         verdict = "ready"
         reason = "Python, notebook scaffolding script, and templates are available locally"
     elif skill_name == "latex-to-word":
-        checks.update({"pandoc_present": env["pandoc_present"], "runtime_domain": "docs-python"})
+        checks.update({"pandoc_present": env["pandoc_present"], "runtime_domain": "core-tools"})
         verdict = "ready" if env["pandoc_present"] else "env_blocked"
         reason = "Pandoc is installed locally" if env["pandoc_present"] else "Pandoc is missing"
     elif skill_name == "openai-docs":
@@ -294,11 +288,19 @@ def readiness_for_skill(skill_name: str, skill_path: Path, env: dict[str, Any]) 
 
 
 def load_bundled_evaluations(skill_path: Path, skill_name: str) -> dict[str, Any] | None:
+    evals: list[dict[str, Any]] = []
+    suite_path = skill_path / "evals" / "evals.json"
+    if suite_path.is_file():
+        suite = load_json(suite_path)
+        cases = suite.get("evals") if isinstance(suite, dict) else None
+        if not isinstance(cases, list) or not all(isinstance(case, dict) for case in cases):
+            raise ValueError(f"{suite_path} must contain an 'evals' list of case objects")
+        evals.extend(cases)
+
+    # Legacy files have no stable case IDs. Assign integers after the bundled IDs.
+    first_id = 1 + max((case["id"] for case in evals if isinstance(case.get("id"), int)), default=0)
     eval_dir = skill_path / "evaluations"
-    if not eval_dir.is_dir():
-        return None
-    evals = []
-    for index, path in enumerate(sorted(eval_dir.glob("*.json")), start=1):
+    for index, path in enumerate(sorted(eval_dir.glob("*.json")), start=first_id):
         payload = load_json(path)
         prompt = payload.get("query") or payload.get("prompt") or f"Use ${skill_name} on a representative task from {path.stem}."
         expected_bits = list(payload.get("success_criteria", [])) + list(payload.get("expected_behavior", []))
@@ -317,12 +319,14 @@ def load_bundled_evaluations(skill_path: Path, skill_name: str) -> dict[str, Any
                 },
             }
         )
+    if not evals:
+        return None
     return {
         "skill_name": skill_name,
         "status": "bundled_draft",
         "executable": False,
         "notes": [
-            "Converted from bundled skill evaluations for audit context; not auto-benchmarked in this run.",
+            "Bundled evaluation cases. Resolve their input files relative to the skill directory.",
         ],
         "evals": evals,
     }
@@ -610,18 +614,17 @@ def ensure_eval_pack_for_skill(
     pack_dir = workspace_root / skill_name
     pack_dir.mkdir(parents=True, exist_ok=True)
 
-    if use_bundled_if_available:
-        bundled = load_bundled_evaluations(skill_path, skill_name)
-        if bundled:
-            dump_json(pack_dir / "bundled_evaluations_simple_eval_spec.json", bundled)
-            return _compile_eval_pack(pack_dir, bundled)
-
     builders = {
         "doc": build_doc_eval_pack,
         "pdf": build_pdf_eval_pack,
         "screenshot": build_screenshot_eval_pack,
         "gh-fix-ci": build_gh_fix_ci_eval_pack,
     }
+    if use_bundled_if_available or skill_name not in builders:
+        bundled = load_bundled_evaluations(skill_path, skill_name)
+        if bundled:
+            dump_json(pack_dir / "bundled_evaluations_simple_eval_spec.json", bundled)
+            return _compile_eval_pack(pack_dir, bundled)
     if skill_name in builders:
         return builders[skill_name](skill_name=skill_name, pack_dir=pack_dir)
 
@@ -645,12 +648,15 @@ def write_markdown_report(payload: dict[str, Any], output_path: Path) -> None:
         f"- Manifest: `{payload['manifest_path']}`",
         f"- Skills root: `{payload['skills_root']}`",
         "",
-        "| Skill | Readiness | Retirement | Reason |",
-        "| --- | --- | --- | --- |",
+        "This audit inventories evaluation cases. A retirement decision requires evidence about the skill's contribution to real tasks.",
+        "",
+        "| Skill | Readiness | Cases | Execution | Retirement |",
+        "| --- | --- | ---: | --- | --- |",
     ]
     for item in payload["skills"]:
         lines.append(
-            f"| `{item['skill_name']}` | `{item['readiness_verdict']}` | `{item['retirement_verdict']}` | {item['retirement_reason']} |"
+            f"| `{item['skill_name']}` | `{item['readiness_verdict']}` | {item['eval_case_count']} "
+            f"| `{item['eval_execution_status']}` | `{item['retirement_verdict']}` |"
         )
     dump_text(output_path, "\n".join(lines) + "\n")
 
@@ -692,30 +698,22 @@ def audit_skills(
             "readiness_verdict": readiness["readiness_verdict"],
             "readiness_reason": readiness["readiness_reason"],
             "checks": readiness["checks"],
+            "eval_execution_status": "not_run",
+            "retirement_verdict": "needs_manual_review",
+            "retirement_reason": "no_behavioral_outcome_evidence",
         }
 
-        if readiness["readiness_verdict"] == "env_blocked":
-            record["retirement_verdict"] = "env_blocked"
-            record["retirement_reason"] = readiness["readiness_reason"]
-        elif skill_name in READY_EXTERNAL_WRITE_SKILLS:
-            record["retirement_verdict"] = "keep_active"
-            record["retirement_reason"] = "safe_skip_external_side_effects"
+        if readiness["readiness_verdict"] == "env_blocked" or skill_name in READY_EXTERNAL_WRITE_SKILLS:
+            eval_pack = load_bundled_evaluations(skill_path, skill_name) or {}
         else:
-            use_auto_pack = skill_name in SAFE_BENCHMARK_SKILLS or skill_name in rerun_targets
             eval_pack = ensure_eval_pack_for_skill(
                 record,
                 layout["eval_packs"],
-                use_bundled_if_available=not use_auto_pack,
+                use_bundled_if_available=skill_name not in rerun_targets,
             )
             record["eval_pack_executable"] = eval_pack["executable"]
             record["eval_pack_path"] = str(layout["eval_packs"] / skill_name / "compiled_evals.json")
-            if eval_pack["executable"]:
-                record["retirement_verdict"] = "keep_active"
-                record["retirement_reason"] = "safe_local_eval_pack"
-            else:
-                record["retirement_verdict"] = "needs_manual_review"
-                record["retirement_reason"] = "no_safe_local_eval_pack"
-
+        record["eval_case_count"] = len(eval_pack.get("evals", []))
         skills.append(record)
 
     readiness_payload = {

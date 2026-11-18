@@ -12,13 +12,13 @@ SCRIPT_ROOT = Path(__file__).resolve().parent
 if str(SCRIPT_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPT_ROOT))
 
-from runtime_registry import build_registry, refresh_helper_path, registry_path, resolve_runtime_root, shell_init_path  # type: ignore  # noqa: E402
+from runtime_registry import DOMAIN_SPECS, build_registry, refresh_helper_path, registry_path, resolve_runtime_root, shell_init_path  # type: ignore  # noqa: E402
 
 
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description="Bootstrap shared WSL2 runtimes for installed Codex skills")
     parser.add_argument("--runtime-root", default=None)
-    parser.add_argument("--domain", action="append", dest="domains", default=None)
+    parser.add_argument("--domain", action="append", dest="domains", choices=DOMAIN_SPECS)
     parser.add_argument("--no-install", action="store_true")
     args = parser.parse_args(argv)
 
@@ -35,7 +35,13 @@ def main(argv: list[str]) -> int:
         "refresh_helper_path": str(refresh_helper_path()),
         "domains": {name: info.get("status") for name, info in registry.get("domains", {}).items()},
     }, indent=2, ensure_ascii=False))
-    return 0
+    exit_code = 0
+    for domain in args.domains or DOMAIN_SPECS:
+        error = registry["domains"][domain]["install"].get("error")
+        if error:
+            print(f"{domain}: {error}", file=sys.stderr)
+            exit_code = 1
+    return exit_code
 
 
 if __name__ == "__main__":

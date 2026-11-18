@@ -1,0 +1,32 @@
+[
+  {
+    "id": "paired-time-difference",
+    "source": "To be clear, across 18 paired runs, the mean time difference (A minus B) was −3 ms (95% CI −8 to 2 ms). This may potentially indicate faster runs with A, although the interval includes zero.",
+    "preserve": [
+      "The mean difference is based on 18 paired runs.",
+      "A minus B is −3 ms. The 95% confidence interval extends from −8 to 2 ms.",
+      "The interval includes zero. Faster observed mean time does not establish a faster method overall."
+    ],
+    "near_miss": "Across 18 paired runs, A was conclusively faster than B by 3 ms (95% CI −8 to 2 ms)."
+  },
+  {
+    "id": "unobserved-weekends",
+    "source": "In an observational study at two campuses, longer gaps between buses were associated with lower weekday ridership. It is important to note that weekend ridership was not measured.",
+    "preserve": [
+      "The study is observational and covers two campuses.",
+      "The weekday result is an association between longer gaps and lower ridership.",
+      "Weekend ridership was unmeasured. Its response is unknown."
+    ],
+    "near_miss": "At two campuses, longer gaps between buses reduced weekday ridership and had no effect on weekends."
+  },
+  {
+    "id": "speed-and-missed-detections",
+    "source": "值得注意的是，在同一批 60 张印刷表格上，新方法将中位处理时间从 42 ms 降至 31 ms，但漏检数从 2 个增至 5 个。手写表格未纳入测试。",
+    "preserve": [
+      "两种方法比较的是同一批 60 张印刷表格。",
+      "中位处理时间从 42 ms 降至 31 ms，同时漏检数从 2 个增至 5 个。",
+      "手写表格未纳入测试，其性能未知。"
+    ],
+    "near_miss": "在 60 张表格上，新方法将平均处理时间从 42 ms 降至 31 ms，因而整体表现更优。"
+  }
+]

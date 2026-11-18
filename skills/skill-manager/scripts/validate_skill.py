@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import os
 import re
 import sys
 from pathlib import Path
@@ -22,7 +21,7 @@ ALLOWED_KEYS_DEFAULT = {
 }
 
 
-class ValidateError(Exception):
+class ValidateError(ValueError):
     pass
 
 
@@ -39,7 +38,7 @@ def _split_frontmatter(skill_md: str) -> tuple[str, str]:
     content = _normalize_newlines(skill_md)
     if not content.startswith("---\n"):
         raise ValidateError("No YAML frontmatter found (expected leading '---').")
-    match = re.match(r"^---\n(.*?)\n---\n?", content, re.DOTALL)
+    match = re.match(r"^---\n(.*?)\n---(?:\n|$)", content, re.DOTALL)
     if not match:
         raise ValidateError("Invalid YAML frontmatter format.")
     return match.group(1), content[match.end() :]
@@ -78,13 +77,15 @@ def _parse_top_level_frontmatter(frontmatter_text: str) -> dict[str, str]:
             i += 1
             continue
         key = match.group(1)
+        if key in out:
+            raise ValidateError(f"Duplicate frontmatter key: {key}")
         rest = (match.group(2) or "").rstrip()
         if rest.startswith("|") or rest.startswith(">"):
             block_lines: list[str] = []
             i += 1
             while i < len(lines):
                 nxt = lines[i]
-                if nxt.startswith((" ", "\t")):
+                if not nxt.strip() or nxt.startswith((" ", "\t")):
                     block_lines.append(nxt.lstrip())
                     i += 1
                     continue
@@ -94,8 +95,15 @@ def _parse_top_level_frontmatter(frontmatter_text: str) -> dict[str, str]:
                 value = re.sub(r"(?<!\n)\n(?!\n)", " ", value)
             out[key] = value
             continue
-        out[key] = _unquote_yaml_scalar(rest)
         i += 1
+        if key in {"name", "description"}:
+            # YAML also folds indented continuation lines in ordinary scalars.
+            while i < len(lines) and lines[i].startswith((" ", "\t")):
+                continuation = lines[i].strip()
+                if continuation and not continuation.startswith("#"):
+                    rest = f"{rest} {continuation}".strip()
+                i += 1
+        out[key] = _unquote_yaml_scalar(rest)
     return out
 
 
@@ -113,9 +121,9 @@ def _validate_name(name: str) -> None:
 
 
 def _validate_description(description: str) -> None:
-    if description is None:
-        raise ValidateError("Missing 'description' in frontmatter.")
     desc = description.strip()
+    if not desc:
+        raise ValidateError("Missing or empty 'description' in frontmatter.")
     if "<" in desc or ">" in desc:
         raise ValidateError("Description cannot contain angle brackets (< or >).")
     if len(desc) > MAX_DESCRIPTION_LENGTH:
@@ -124,29 +132,30 @@ def _validate_description(description: str) -> None:
         )
 
 
+def read_skill_metadata(skill_md: Path, *, strict: bool = False) -> dict[str, str]:
+    """Read and validate the scalar metadata shared by standalone and repository checks."""
+    front_text, _body = _split_frontmatter(skill_md.read_text(encoding="utf-8"))
+    fields = _parse_top_level_frontmatter(front_text)
+    allowed = {"name", "description"} if strict else ALLOWED_KEYS_DEFAULT
+    unexpected = fields.keys() - allowed
+    if unexpected:
+        raise ValidateError(
+            f"Unexpected key(s) in frontmatter: {', '.join(sorted(unexpected))}. "
+            f"Allowed keys: {', '.join(sorted(allowed))}."
+        )
+    name = fields.get("name", "")
+    _validate_name(name)
+    if name != skill_md.parent.name:
+        raise ValidateError(f"Skill name {name!r} must match its directory {skill_md.parent.name!r}.")
+    _validate_description(fields.get("description", ""))
+    return fields
+
+
 def validate_skill(skill_dir: str | Path, *, strict: bool = False) -> tuple[bool, str]:
     try:
-        skill_dir = Path(os.path.expanduser(str(skill_dir))).resolve()
-        skill_md = skill_dir / "SKILL.md"
-        if not skill_md.exists():
-            raise ValidateError(f"SKILL.md not found: {skill_dir}")
-        front_text, _body = _split_frontmatter(skill_md.read_text(encoding="utf-8"))
-        frontmatter = _parse_top_level_frontmatter(front_text)
-
-        allowed_keys = {"name", "description"} if strict else ALLOWED_KEYS_DEFAULT
-        unexpected = set(frontmatter.keys()) - allowed_keys
-        if unexpected:
-            unexpected_list = ", ".join(sorted(unexpected))
-            allowed_list = ", ".join(sorted(allowed_keys))
-            raise ValidateError(
-                f"Unexpected key(s) in frontmatter: {unexpected_list}. "
-                f"Allowed keys: {allowed_list}."
-            )
-
-        _validate_name(frontmatter.get("name", ""))
-        _validate_description(frontmatter.get("description", ""))
+        read_skill_metadata(Path(skill_dir).expanduser().resolve() / "SKILL.md", strict=strict)
         return True, "Skill is valid!"
-    except ValidateError as exc:
+    except (ValueError, OSError) as exc:
         return False, str(exc)
 
 

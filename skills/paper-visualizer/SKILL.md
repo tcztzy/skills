@@ -17,7 +17,7 @@ This skill now absorbs the former `data-to-viz*` routing layer:
 - then route by chart family,
 - then either return a shortlist with caveats or execute a manuscript-facing workflow / shared generator path.
 
-Treat this skill's packaged `agents/`, `references/`, `scripts/`, and `assets/` as the source of truth for manuscript-facing workflow contracts, chart-selection references, and deterministic generator helpers.
+Resolve `agents/`, `references/`, `scripts/`, and `assets/` relative to this installed `SKILL.md`. Set `VISUALIZER_DIR` to that absolute directory for the shell examples. Run the commands in the manuscript project so relative data and output paths belong to the project.
 
 ## When to Use
 
@@ -164,8 +164,10 @@ Use these helpers when the user wants a runnable first draft and the full staged
 - Use the packaged stage workers in `agents/` rather than inventing new stage names.
 - Pass explicit task labels (`diagram` or `plot`) to every stage worker.
 - Prefer file-based handoff over conversational summaries. If a stage result matters downstream, write it into the run directory before invoking the next stage.
-- For a simple manuscript request, prefer:
-  `uv run --script skills/paper-visualizer/scripts/manuscript_figure.py <manuscript> --figure <N>`
+- To generate and insert a manuscript figure, run
+  `uv run --script "$VISUALIZER_DIR/scripts/manuscript_figure.py" main.tex --figure 1`.
+  To produce just the local draft prompt, use Python 3.12+ with
+  `python3 "$VISUALIZER_DIR/scripts/manuscript_figure.py" main.tex --figure 1 --draft-only`.
 - Before returning success for a staged workflow, run `scripts/validate_run.py` and then `scripts/summarize_run.py`.
 - Do not advertise `refine`; this skill does not implement a general refine/image-edit backend.
 
@@ -233,5 +235,5 @@ Expected behavior:
 
 - write a run directory such as `runs/paper-visualizer/<run_id>/`
 - create `workflow_spec.json`
-- run `uv run --script skills/paper-visualizer/scripts/manuscript_figure.py main.tex --figure 1`
+- run the manuscript figure command above with `main.tex --figure 1`
 - save the generated image locally and update the manuscript when the format supports insertion

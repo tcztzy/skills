@@ -22,6 +22,10 @@ Route full manuscript drafting to `paper-writer`, formal peer review to
 
 ## Workflow
 
+Run the examples from the project containing the input files. Set
+`IDEA_SKILL_DIR` to the absolute directory containing this installed `SKILL.md`.
+Both helpers use the Python 3 standard library.
+
 1. Establish the decision context.
    - Identify stage: topic, idea, active experiments, draft, or pre-submission.
    - Record constraints: data, compute, time, expertise, venue, and risk.
@@ -37,7 +41,7 @@ Route full manuscript drafting to `paper-writer`, formal peer review to
    - For structured proposals, follow `references/idea-schema.md` and validate:
 
 ```bash
-uv run -s scripts/idea_schema_validate.py --in ideas.json
+python3 "$IDEA_SKILL_DIR/scripts/idea_schema_validate.py" --in ideas.json
 ```
 
 4. Check novelty cautiously.
@@ -47,8 +51,8 @@ uv run -s scripts/idea_schema_validate.py --in ideas.json
    - The helper is offline by default. Use `--online` only with user approval:
 
 ```bash
-uv run -s scripts/s2_search.py --query "task mechanism"
-uv run -s scripts/s2_search.py --online --query "task mechanism" --limit 10
+python3 "$IDEA_SKILL_DIR/scripts/s2_search.py" --query "task mechanism"
+python3 "$IDEA_SKILL_DIR/scripts/s2_search.py" --online --query "task mechanism" --limit 10
 ```
 
    - Read `references/novelty-check.md` before writing novelty claims.

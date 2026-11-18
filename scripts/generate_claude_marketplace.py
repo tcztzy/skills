@@ -5,9 +5,16 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import re
 import subprocess
-from pathlib import Path
+import sys
+from pathlib import Path, PurePosixPath
 from typing import Any
+
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "skills/skill-manager/scripts"))
+from validate_skill import ValidateError, read_skill_metadata
 
 
 MARKETPLACE_NAME = "blackscience-tech-skills"
@@ -20,46 +27,6 @@ OWNER = {
 }
 
 
-def extract_frontmatter(path: Path) -> dict[str, str]:
-    text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
-        raise ValueError(f"{path} is missing YAML frontmatter")
-
-    try:
-        raw_frontmatter = text.split("\n---\n", 1)[0].splitlines()[1:]
-    except IndexError as exc:
-        raise ValueError(f"{path} has an unterminated YAML frontmatter block") from exc
-
-    fields: dict[str, str] = {}
-    current_key: str | None = None
-    for line in raw_frontmatter:
-        if line and not line.startswith(" ") and ":" in line:
-            key, value = line.split(":", 1)
-            current_key = key.strip()
-            fields[current_key] = value.strip()
-            continue
-        if current_key is not None:
-            fields[current_key] = f"{fields[current_key]} {line.strip()}".strip()
-
-    if "name" not in fields or "description" not in fields:
-        raise ValueError(f"{path} frontmatter must include name and description")
-
-    return {
-        "name": unquote(fields["name"]),
-        "description": one_line(unquote(fields["description"])),
-    }
-
-
-def unquote(value: str) -> str:
-    if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
-        return value[1:-1]
-    return value
-
-
-def one_line(value: str) -> str:
-    return " ".join(value.split())
-
-
 def summarize_description(description: str) -> str:
     for marker in (". Use when", "。Use when", ". use when"):
         if marker in description:
@@ -68,27 +35,48 @@ def summarize_description(description: str) -> str:
     return description
 
 
-def collect_plugins(skills_root: Path) -> list[dict[str, Any]]:
-    skill_paths = subprocess.check_output(
-        ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", "*/SKILL.md"],
-        cwd=skills_root,
-        text=True,
-    )
-    plugins: list[dict[str, Any]] = []
-    for name in sorted(set(skill_paths.split("\0")) - {""}):
-        relative_path = Path(name)
-        if len(relative_path.parts) != 2 or relative_path.parts[0].startswith("."):
-            continue
-        skill_file = skills_root / relative_path
-        if not skill_file.is_file():
-            continue
-        skill_dir = skill_file.parent
+def distribution_files(root: Path) -> set[Path]:
+    """List files shipped from a checkout or present in a clean unpacked source archive."""
+    if (root / ".git").exists():
+        try:
+            listing = subprocess.check_output(
+                ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"], cwd=root
+            )
+        except (OSError, subprocess.CalledProcessError) as exc:
+            raise ValueError(f"Cannot read the Git inventory in {root}: {exc}") from exc
+        candidates = (Path(os.fsdecode(name)) for name in listing.split(b"\0") if name)
+    else:
+        # Packaged source already contains the publisher's chosen files. Do not
+        # follow private skill mounts or directories outside the archive.
+        candidates = (
+            (Path(directory) / name).relative_to(root)
+            for directory, _, names in os.walk(root, followlinks=False)
+            for name in names
+        )
+    return {path for path in candidates if (root / path).is_file() and not (root / path).is_symlink()}
 
-        meta = extract_frontmatter(skill_file)
+
+def collect_plugins(skills_root: Path) -> list[dict[str, Any]]:
+    skills_root = skills_root.resolve()
+    if not skills_root.is_dir():
+        raise ValueError(f"Missing skills directory: {skills_root}")
+    root = skills_root.parent
+    plugins: list[dict[str, Any]] = []
+    for path in sorted(distribution_files(root)):
+        if len(path.parts) != 3 or path.parts[0] != skills_root.name or path.name != "SKILL.md":
+            continue
+        if path.parts[1].startswith("."):
+            continue
+        skill_file = root / path
+        try:
+            meta = read_skill_metadata(skill_file)
+        except ValidateError as exc:
+            raise ValueError(f"{path.as_posix()}: {exc}") from exc
+        skill_dir = skill_file.parent
         plugins.append(
             {
                 "name": meta["name"],
-                "description": summarize_description(meta["description"]),
+                "description": summarize_description(" ".join(meta["description"].split())),
                 "source": "./",
                 "strict": False,
                 "skills": [f"./skills/{skill_dir.name}"],
@@ -97,11 +85,35 @@ def collect_plugins(skills_root: Path) -> list[dict[str, Any]]:
     return plugins
 
 
+def read_external_plugins(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    entries = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(entries, list):
+        raise ValueError(f"{path}: expected a list of external plugins")
+    for index, entry in enumerate(entries):
+        label = f"{path} entry {index + 1}"
+        if not isinstance(entry, dict) or not isinstance(entry.get("name"), str) or not entry["name"]:
+            raise ValueError(f"{label}: missing plugin name")
+        source = entry.get("source")
+        if not isinstance(source, dict) or not re.fullmatch(r"[0-9a-fA-F]{40}", str(source.get("sha", ""))):
+            raise ValueError(f"{label}: pin the external Git source with a full 40-digit commit SHA")
+        remote_key = {"github": "repo", "url": "url"}.get(str(source.get("source", "")))
+        if not remote_key or not isinstance(source.get(remote_key), str) or not source[remote_key].strip():
+            raise ValueError(f"{label}: expected a GitHub repository or Git URL source")
+        paths = entry.get("skills")
+        if not isinstance(paths, list) or not paths or any(
+            not isinstance(item, str) or not item.startswith("./") or ".." in PurePosixPath(item).parts
+            or "\\" in item for item in paths
+        ):
+            raise ValueError(f"{label}: skills must contain relative paths inside the pinned repository")
+    return entries
+
+
 def build_marketplace(skills_root: Path) -> dict[str, Any]:
     plugins = collect_plugins(skills_root)
     external_path = skills_root.parent / ".claude-plugin" / "external-plugins.json"
-    if external_path.exists():
-        plugins.extend(json.loads(external_path.read_text(encoding="utf-8")))
+    plugins.extend(read_external_plugins(external_path))
     names = [plugin["name"] for plugin in plugins]
     if len(names) != len(set(names)):
         raise ValueError("Local and external marketplace plugin names must be unique")
@@ -111,7 +123,6 @@ def build_marketplace(skills_root: Path) -> dict[str, Any]:
         "description": MARKETPLACE_DESCRIPTION,
         "owner": OWNER,
         "metadata": {
-            "version": "1.0.0",
             "description": MARKETPLACE_DESCRIPTION,
         },
         "plugins": sorted(plugins, key=lambda plugin: plugin["name"]),
@@ -141,12 +152,12 @@ def main() -> int:
     parser = build_parser()
     args = parser.parse_args()
 
-    marketplace = build_marketplace(args.skills_root)
+    try:
+        marketplace = build_marketplace(args.skills_root)
+    except (OSError, ValueError) as exc:
+        parser.exit(1, f"Marketplace generation failed: {exc}\n")
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(
-        json.dumps(marketplace, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    args.output.write_bytes((json.dumps(marketplace, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
     print(
         f"Wrote {args.output} with {len(marketplace['plugins'])} plugin entries.",
     )

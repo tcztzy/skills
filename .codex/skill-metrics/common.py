@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Shared helpers for local Codex skill metrics hooks."""
+"""Read Codex hook inputs, inventory local skills, and score labeled prompts.
+
+Hook entry points share event logging and prompt hashing here. Transcript paths
+come from the event. Gold rows distinguish an explicit empty label from a missing
+one so that unintended skill use can contribute to the false-positive count.
+"""
 
 from __future__ import annotations
 
@@ -266,30 +271,13 @@ def rough_candidate_skills(prompt: str, skills: list[dict[str, str]], limit: int
     return [row["skill"] for row in rough_candidate_skill_matches(prompt, skills, limit=limit)]
 
 
-def latest_transcript() -> Path | None:
-    session_root = HOME / ".codex" / "sessions"
-    if not session_root.exists():
-        return None
-    latest: Path | None = None
-    latest_mtime = -1.0
-    for path in session_root.rglob("*.jsonl"):
-        try:
-            mtime = path.stat().st_mtime
-        except OSError:
-            continue
-        if mtime > latest_mtime:
-            latest = path
-            latest_mtime = mtime
-    return latest
-
-
 def transcript_path_from_payload(payload: dict[str, Any]) -> Path | None:
     value = payload_get(payload, "transcript_path", "transcriptPath", "session_path", "sessionPath")
     if isinstance(value, str) and value:
         path = Path(value).expanduser()
-        if path.exists():
+        if path.is_file():
             return path
-    return latest_transcript()
+    return None
 
 
 def iter_transcript_items(path: Path) -> list[dict[str, Any]]:
@@ -374,13 +362,14 @@ def load_gold() -> list[dict[str, Any]]:
     return rows
 
 
-def expected_for_prompt(prompt: str) -> list[str]:
+def expected_for_prompt(prompt: str) -> list[str] | None:
     prompt_hash = sha256_text(prompt)
     for row in load_gold():
         if row.get("prompt_sha256") == prompt_hash:
-            skills = row.get("expected_skills", [])
-            return sorted(skills) if isinstance(skills, list) else []
-    return []
+            skills = row.get("expected_skills")
+            if isinstance(skills, list) and all(isinstance(skill, str) for skill in skills):
+                return sorted(skills)
+    return None
 
 
 def confusion(expected: list[str], observed: list[str]) -> dict[str, list[str]]:

@@ -3,25 +3,31 @@
 
 from __future__ import annotations
 
+import argparse
 import difflib
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote, urlsplit
 
-from generate_claude_marketplace import build_marketplace
+from generate_claude_marketplace import build_marketplace, distribution_files
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
-def load_json(path: Path) -> Any:
+def load_json(path: Path) -> dict[str, Any]:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError as exc:
         raise SystemExit(f"Missing required file: {path}") from exc
     except json.JSONDecodeError as exc:
         raise SystemExit(f"Invalid JSON in {path}: {exc}") from exc
+    if not isinstance(data, dict):
+        raise ValueError(f"{repo_label(path)} must contain a JSON object.")
+    return data
 
 
 def canonical_json(value: Any) -> str:
@@ -58,14 +64,10 @@ def validate_plugin_manifest(path: Path) -> tuple[dict[str, Any], list[str]]:
 
     plugin_root = path.parent.parent
     skills_rel = manifest.get("skills")
-    if not isinstance(skills_rel, str) or not skills_rel:
-        errors.append(f"{repo_label(path)} is missing a string 'skills' path.")
-    else:
-        skills_path = (plugin_root / skills_rel).resolve()
-        if not skills_path.exists():
-            errors.append(
-                f"{repo_label(path)} points to a missing skills path: {skills_rel}"
-            )
+    if not isinstance(skills_rel, str) or Path(skills_rel) != Path("skills"):
+        errors.append(f"{repo_label(path)} must point 'skills' at ./skills/.")
+    elif not (plugin_root / "skills").is_dir() or (plugin_root / "skills").is_symlink():
+        errors.append(f"{repo_label(path)} must point at the bundled skills directory.")
 
     return manifest, errors
 
@@ -167,10 +169,11 @@ def validate_codex_metadata(repo_root: Path) -> list[str]:
     return errors
 
 
-def validate_claude_metadata(repo_root: Path) -> list[str]:
+def validate_claude_metadata(repo_root: Path, expected_marketplace: dict[str, Any] | None = None) -> list[str]:
     marketplace_path = repo_root / ".claude-plugin" / "marketplace.json"
     actual_marketplace = load_json(marketplace_path)
-    expected_marketplace = build_marketplace(repo_root / "skills")
+    if expected_marketplace is None:
+        expected_marketplace = build_marketplace(repo_root / "skills")
 
     if actual_marketplace == expected_marketplace:
         return []
@@ -190,11 +193,89 @@ def validate_claude_metadata(repo_root: Path) -> list[str]:
     ]
 
 
+def published_docs(files: set[Path]) -> list[Path]:
+    """Only public skill documentation and the repository's user-facing index."""
+    skills = {p.parent for p in files if p.match("skills/*/SKILL.md") and len(p.parts) == 3}
+    return sorted(p for p in files if p == Path("README.md") or
+                  (p.suffix.lower() == ".md" and any(parent in skills for parent in p.parents)))
+
+
+INLINE_LINK = re.compile(r"""\]\(\s*(?:<([^>\n]+)>|([^()\s]+))(?:\s+["'][^)]*["'])?\s*\)""")
+
+
+def validate_doc_links(repo_root: Path, files: set[Path]) -> list[str]:
+    """Check ordinary local Markdown links against files in the distribution."""
+    directories = {parent for path in files for parent in path.parents}
+    root = repo_root.resolve()
+    errors = []
+    for doc in published_docs(files):
+        fence = ""
+        for number, line in enumerate((root / doc).read_text(encoding="utf-8").splitlines(), 1):
+            marker = re.match(r"^ {0,3}(`{3,}|~{3,})", line)
+            if marker:
+                if not fence:
+                    fence = marker[1]
+                elif marker[1].startswith(fence) and not line[marker.end():].strip():
+                    fence = ""
+                continue
+            if fence:
+                continue
+            for link in INLINE_LINK.finditer(line):
+                target = link[1] or link[2]
+                url = urlsplit(target)
+                if url.netloc or url.scheme or not url.path:
+                    continue
+                path = (root / doc.parent / unquote(url.path)).resolve()
+                relative = path.relative_to(root) if path.is_relative_to(root) else None
+                if relative not in files and relative not in directories:
+                    errors.append(f"{doc.as_posix()}:{number}: unpublished or missing link: {target}")
+    return errors
+
+
+def validate_retired_skills(repo_root: Path, retired: set[str]) -> list[str]:
+    """Check removed names in explicit skill invocations and routing instructions."""
+    if not retired:
+        return []
+    files = distribution_files(repo_root)
+    names = "|".join(re.escape(name) for name in sorted(retired))
+    # Ordinary commands can share a retired name. Treat a bare code span as a
+    # skill only in routing prose; explicit $skill and skills/name paths stand alone.
+    mentions = re.compile(
+        rf"(?<![\w$])\$(?:{names})(?![\w-])|"
+        rf"(?<![\w-])skills/(?:{names})(?=[/`\s)\]]|$)|"
+        rf"(?:\b(?:route|delegate|hand off)\b[^.\n]{{0,90}}|\b(?:use|invoke|load)\s+|"
+        rf"\b(?:skill|handoff)\s+|\bto\s+)`(?:{names})`",
+        re.IGNORECASE,
+    )
+    errors = []
+    for doc in published_docs(files):
+        content = (repo_root / doc).read_text(encoding="utf-8")
+        for match in mentions.finditer(content):
+            line = content.count("\n", 0, match.start()) + 1
+            mention = " ".join(match[0].split())
+            errors.append(f"{doc.as_posix()}:{line}: retired skill reference: {mention}")
+    return errors
+
+
 def main() -> int:
-    errors = [
-        *validate_codex_metadata(REPO_ROOT),
-        *validate_claude_metadata(REPO_ROOT),
-    ]
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--retired", action="append", default=[], metavar="NAME",
+                        help="Check for callers of a renamed or retired skill (repeatable)")
+    args = parser.parse_args()
+    retired = set(args.retired)
+    try:
+        marketplace = build_marketplace(REPO_ROOT / "skills")
+        active_names = {plugin["name"] for plugin in marketplace["plugins"]}
+        errors = [
+            *validate_codex_metadata(REPO_ROOT),
+            *validate_claude_metadata(REPO_ROOT, marketplace),
+            *validate_doc_links(REPO_ROOT, distribution_files(REPO_ROOT)),
+            *validate_retired_skills(REPO_ROOT, retired),
+        ]
+        if retired & active_names:
+            errors.append(f"Retired names are still published: {', '.join(sorted(retired & active_names))}")
+    except (OSError, ValueError) as exc:
+        errors = [str(exc)]
     if errors:
         print("Plugin metadata validation failed.\n", file=sys.stderr)
         for error in errors:
@@ -202,10 +283,9 @@ def main() -> int:
             print(file=sys.stderr)
         return 1
 
-    claude_marketplace = build_marketplace(REPO_ROOT / "skills")
     print(
         "Plugin metadata validation passed: "
-        f"1 Codex plugin entry and {len(claude_marketplace['plugins'])} Claude entries."
+        f"1 Codex plugin entry and {len(marketplace['plugins'])} Claude entries."
     )
     return 0
 

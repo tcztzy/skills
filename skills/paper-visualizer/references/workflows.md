@@ -27,8 +27,8 @@
 - For plot renders, save both code and image when the visualizer stage exposes both. Do not promise code artifacts for `vanilla`.
 - Runtime stages load packaged style guides from `assets/style_guides/`.
 - If a required style guide asset is missing or stale, refresh the matching file under `assets/style_guides/` before running stylist or polish.
-- Resolve benchmark assets with the packaged `scripts/resolve_paperbanana.py` rather than assuming a fixed on-disk location.
-  The resolver has only three priority levels: explicit `--dataset-dir`, packaged skill assets under `assets/paperbanana/`, then the current working directory target.
+- Resolve benchmark assets with `uv run --script "$VISUALIZER_DIR/scripts/resolve_paperbanana.py"` from the working project. Downloads use the [pinned archive revision](https://huggingface.co/datasets/dwzhu/PaperBananaBench/commit/a876264bcd1e826a0320f805f8fb1cd705cf510f) and verify the published SHA-256 before extraction.
+  The resolver can also reuse an explicit `--dataset-dir`, packaged assets under `assets/paperbanana/`, or a previous project extraction. For any of these local inputs, record the supplied version or checksum in the workflow specification. Use an empty target and the pinned download when an existing extraction's origin is unknown.
 
 ## Full
 

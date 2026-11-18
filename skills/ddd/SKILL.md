@@ -1,6 +1,6 @@
 ---
 name: ddd
-description: "Make source-code work follow Documentation-Driven Development (DDD) so each human-maintained file begins with an accurate, language-native contract that explains its purpose, system role, public surface, data flow, side effects, and constraints before implementation details. Use when performing any code-related task: exploring or explaining a repository; planning, writing, debugging, reviewing, testing, refactoring, or documenting code; adding files or APIs; changing behavior; or migrating legacy Python, TypeScript, C, C++, Rust, or mixed-language projects. Trigger even when documentation is not explicitly requested, and apply the touched-file rule unless the user asks for a repository-wide migration."
+description: "Write or review file-level contracts when adding source files, changing their public behavior, applying an established documentation-driven development policy, or migrating legacy modules. Use for explicit architecture or documentation audits and keep ordinary changes scoped to the files being edited."
 ---
 
 # Documentation-Driven Development
@@ -138,6 +138,6 @@ For a code change, produce:
 - updated docs for changed public or non-obvious contracts;
 - documentation/tool validation results.
 
-For repository exploration, produce a header-derived architecture map, identify which full files require inspection, and flag stale or missing contracts.
+For a requested architecture survey, use file headers to build a map and verify its claims against the relevant implementation. For a read-only question about one function, answer from its code and callers.
 
 For legacy migration, produce a measured baseline, chosen language profiles, prioritized batches, a pilot, a non-regression ratchet, and verified documentation changes.
