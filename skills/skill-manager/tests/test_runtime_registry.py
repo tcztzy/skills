@@ -3,6 +3,9 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -22,7 +25,7 @@ class RuntimeRegistryTests(unittest.TestCase):
 
     def test_runtime_domain_mapping(self) -> None:
         self.assertEqual(MODULE.runtime_domain_for_skill("doc"), "docs-python")
-        self.assertEqual(MODULE.runtime_domain_for_skill("latex-to-word"), "docs-python")
+        self.assertEqual(MODULE.runtime_domain_for_skill("latex-to-word"), "core-tools")
         self.assertEqual(MODULE.runtime_domain_for_skill("jupyter-notebook"), "science-python")
         self.assertEqual(MODULE.runtime_domain_for_skill("paper-visualizer"), "science-python")
         self.assertEqual(MODULE.runtime_domain_for_skill("openai-docs"), "core-tools")
@@ -54,7 +57,7 @@ class RuntimeRegistryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             target = MODULE.registry_path(root)
-            payload = {"cached": True}
+            payload = {"domains": {domain: {} for domain in MODULE.DOMAIN_SPECS}}
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(json.dumps(payload) + "\n", encoding="utf-8")
 
@@ -72,12 +75,51 @@ class RuntimeRegistryTests(unittest.TestCase):
             root = Path(tmp)
             target = MODULE.registry_path(root)
 
-            loaded = MODULE.load_or_probe_registry(runtime_root=root, install_missing=False)
+            with patch.dict(os.environ, {"HOME": tmp, "USERPROFILE": tmp, "PATH": tmp}):
+                loaded = MODULE.load_or_probe_registry(runtime_root=root, install_missing=False)
 
             self.assertIn("domains", loaded)
             self.assertEqual(loaded["runtime_root"], str(root.resolve()))
             self.assertFalse(target.exists())
             self.assertFalse(MODULE.shell_init_path(root).exists())
+
+    def test_partial_refresh_preserves_other_domains_and_rejects_typos(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "runtime"
+            with patch.dict(os.environ, {"HOME": tmp, "USERPROFILE": tmp, "PATH": tmp}):
+                before = MODULE.build_registry(runtime_root=root, domains={"core-tools"}, install_missing=False)
+                after = MODULE.build_registry(runtime_root=root, domains={"docs-python"}, install_missing=False)
+                self.assertEqual(after["domains"]["core-tools"], before["domains"]["core-tools"])
+                self.assertEqual(set(after["domains"]), {"core-tools", "docs-python"})
+                script = MODULE_PATH.with_name("bootstrap-global-skill-runtime.py")
+                typo = subprocess.run(
+                    [sys.executable, str(script), "--no-install", "--domain", "typo", "--runtime-root", str(root)],
+                    capture_output=True,
+                )
+                self.assertNotEqual(typo.returncode, 0)
+                self.assertEqual(MODULE.load_registry(root), after)
+
+    @unittest.skipUnless(os.name == "posix" and shutil.which("sh"), "POSIX shell integration")
+    def test_helpers_work_with_custom_installation_and_spaced_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp) / "someone's home"
+            runtime = home / "my $runtimes"
+            commands = home / ".nix-profile" / "bin"
+            commands.mkdir(parents=True)
+            with patch.dict(os.environ, {"HOME": str(home), "PATH": str(commands), "CODEX_SKILL_RUNTIME_ROOT": ""}):
+                MODULE.build_registry(runtime_root=runtime, domains={"docs-python"}, install_missing=False)
+                shell = subprocess.run(
+                    ["/bin/sh", "-ec", '. "$1"; . "$1"; echo "$CODEX_SKILL_RUNTIME_ROOT"; echo "$PATH"',
+                     "sh", str(MODULE.shell_init_path(runtime))],
+                    check=True, capture_output=True, text=True,
+                )
+                self.assertEqual(shell.stdout.splitlines(), [str(runtime.resolve()), str(commands)])
+                refresh = subprocess.run(
+                    [str(MODULE.refresh_helper_path()), "--no-install", "--domain", "science-python"],
+                    check=True, capture_output=True, text=True,
+                )
+                self.assertEqual(json.loads(refresh.stdout)["runtime_root"], str(runtime.resolve()))
+                self.assertEqual(set(MODULE.load_registry(runtime)["domains"]), {"docs-python", "science-python"})
 
 
 if __name__ == "__main__":

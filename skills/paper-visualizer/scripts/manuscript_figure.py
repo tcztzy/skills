@@ -7,6 +7,8 @@
 # ]
 # ///
 
+from __future__ import annotations
+
 import argparse
 import base64
 import json
@@ -18,12 +20,11 @@ import zipfile
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from xml.etree import ElementTree
 
-from dotenv import load_dotenv
-from google import genai
-from google.genai import types
+if TYPE_CHECKING:
+    from google import genai
 
 
 SCRIPT_PATH = Path(__file__).resolve()
@@ -642,6 +643,9 @@ def parse_json_object(text: str) -> dict[str, Any]:
 
 
 def gemini_client() -> genai.Client:
+    from dotenv import load_dotenv
+    from google import genai
+
     load_dotenv()
     return genai.Client()
 
@@ -677,6 +681,8 @@ def generate_diagram_image(
     prompt: str,
     aspect_ratio: str,
 ) -> tuple[bytes, str]:
+    from google.genai import types
+
     response = client.models.generate_content(
         model=image_model,
         contents=prompt,

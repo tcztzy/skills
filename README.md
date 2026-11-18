@@ -3,7 +3,6 @@
 [![Codex repo plugin](https://img.shields.io/badge/Codex-repo_plugin-0F766E?style=for-the-badge)](./.codex-plugin/plugin.json)
 [![Claude Code marketplace](https://img.shields.io/badge/Claude_Code-marketplace-CC785C?style=for-the-badge)](./.claude-plugin/marketplace.json)
 [![OpenClaw layout](https://img.shields.io/badge/OpenClaw-compatible_layout-4C6EF5?style=for-the-badge)](./skills)
-[![19 installable skills](https://img.shields.io/badge/19-installable_skills-334155?style=for-the-badge)](./skills)
 [![Research and developer workflows](https://img.shields.io/badge/Focus-research_%2B_dev_workflows-B45309?style=for-the-badge)](./README.md#research-workflow)
 
 Task-first agent skills for research, evaluation, developer tooling, and document workflows.
@@ -23,7 +22,6 @@ The repository is intentionally project-owned. First-party skills live here; off
 | Main skill root | [`skills/`](./skills) |
 | Codex distribution | [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) + [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) |
 | Claude Code distribution | [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) |
-| Bundled catalog size | 19 installable skills |
 | External companion | [`anti-defensive-writing`](#external-companion-skill), installed separately from its pinned upstream source |
 | Main focus areas | research, evaluation, developer tooling, documents |
 
@@ -41,6 +39,23 @@ Install this repository as a repo-local plugin when you already have the checkou
 4. Open the plugin directory, choose the `Blackscience Tech Skills` marketplace, and install the `Blackscience Tech Skills` plugin.
 
 The Codex marketplace entry points at the repository root, so Codex loads [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and the existing [`skills/`](./skills) tree without an extra wrapper directory.
+
+With the Codex CLI, register a local checkout once and install the plugin:
+
+```sh
+codex plugin marketplace add /path/to/skills
+codex plugin add skills@blackscience-tech-skills
+```
+
+After updating that checkout, repeat `codex plugin add skills@blackscience-tech-skills`
+to replace the cached plugin. For a Git-backed marketplace, use
+`codex plugin marketplace upgrade blackscience-tech-skills`. To reproduce a Git
+installation on another machine, register the same full commit:
+
+```sh
+codex plugin marketplace add https://github.com/tcztzy/skills --ref FULL_COMMIT_SHA
+codex plugin add skills@blackscience-tech-skills
+```
 
 ### Codex Remote Install
 
@@ -67,26 +82,41 @@ After the repository is pushed to GitHub:
 1. Add the repository as a marketplace in Claude Code.
 2. Enable the individual plugins you want from that marketplace.
 
-The Claude manifest combines the 19 bundled skill directories under [`skills/`](./skills)
-with the pinned upstream entry in [`.claude-plugin/external-plugins.json`](./.claude-plugin/external-plugins.json).
-It offers 20 plugins; the external companion is fetched from its own repository.
+The generated catalog lists the bundled skills and any pinned companion entries
+declared in [external-plugins.json](./.claude-plugin/external-plugins.json).
 
 ### Manual Local Roots
 
-If you prefer direct filesystem-based loading, point your local skill roots at this repository's [`skills/`](./skills) directory.
+For a reader with configurable search roots, add the `skills/` directory of a
+clean checkout at the desired commit. Adding and removing a skill there updates
+what the reader discovers when it next scans the root.
 
-```bash
-REPO_ROOT=/path/to/tcztzy-skills
-ln -sfn "$REPO_ROOT/skills" "$HOME/.codex/skills"
-ln -sfn "$REPO_ROOT/skills" "$HOME/.claude/skills"
+If your reader uses a fixed directory, link each selected skill by name into
+that directory. This POSIX example installs one skill and keeps existing entries:
+
+```sh
+REPO_ROOT=/absolute/path/to/skills
+SKILL_ROOT="$HOME/.codex/skills"  # use the directory scanned by your reader
+name=skill-manager
+(
+  set -eu
+  test -f "$REPO_ROOT/skills/$name/SKILL.md"
+  mkdir -p "$SKILL_ROOT"
+  target="$SKILL_ROOT/$name"
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    test "$target/SKILL.md" -ef "$REPO_ROOT/skills/$name/SKILL.md" ||
+      { echo "Existing skill at $target" >&2; exit 1; }
+  else
+    ln -s "$REPO_ROOT/skills/$name" "$target"
+  fi
+)
 ```
 
-That keeps skill lookup stable for repository-local helpers such as:
-
-- `$CODEX_HOME/skills/skill-manager/scripts/validate-skill.py`
-- `$CODEX_HOME/skills/paper-visualizer/scripts/manuscript_figure.py`
-
-The same layout is also suitable for OpenClaw-compatible workflows that read a `skills/` directory directly.
+When retiring a manually linked skill, remove its individual link after checking
+its destination. On hosts without symlink support, use the plugin installer or a
+reader with configurable search roots. Resolve commands shipped with a skill
+relative to its installed `SKILL.md`, and resolve input files against the user's
+project.
 
 ### External Companion Skill
 
@@ -247,21 +277,40 @@ Repository metadata is split by consumer:
 - [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json): Claude marketplace manifest generated from skill metadata
 - [`.claude-plugin/external-plugins.json`](./.claude-plugin/external-plugins.json): pinned remote Claude entries for separately maintained companion skills
 
-Regenerate the Claude marketplace after adding, removing, renaming, or updating installable skills:
+When changing a skill, regenerate its catalog and check the published paths:
 
-Run these commands from a Git checkout. The generator includes tracked and new
-non-ignored skills plus the explicit external entries, so local mounts and private
-skills excluded by Git are not published as bundled files. Regenerate after changing
-either source.
-
-```bash
+```sh
 python3 scripts/generate_claude_marketplace.py
+python3 scripts/validate_plugin_metadata.py
 ```
 
-Validate both Codex and Claude plugin metadata before pushing:
+In a Git checkout the generator includes tracked and new non-ignored skill
+directories. A clean source archive uses its packaged directories. For a
+reproducible checkout record the full SHA from `git rev-parse HEAD`.
 
-```bash
-python3 scripts/validate_plugin_metadata.py
+For a release that changes bundled skills, increment the numeric
+`MAJOR.MINOR.PATCH` version in the Codex manifest. Compare against the previous
+release commit (or the pull request base):
+
+```sh
+python3 scripts/check_plugin_release.py --base PREVIOUS_COMMIT
+```
+
+This compares the skill names and checks active references to retired names. For
+an intentional rename or merge, send a typical request to the replacement and
+check the resulting artifact. For a new executable workflow, run one example
+from a separate project directory and check the result with and without its
+declared dependencies. Keep special hardware, credentials and optional downloads
+scoped to the workflows that use them.
+
+Reproduce the full CI test suite with Python 3.12.13, Pandoc 3.13 and pdfLaTeX
+(including the journal classes). The first tokenizer run needs a network connection
+or a populated tiktoken cache. The core suite needs only Python and Git:
+
+```sh
+python scripts/run_tests.py --core
+python -m pip install -r scripts/test-requirements.txt
+python scripts/run_tests.py
 ```
 
 ## Repository Conventions

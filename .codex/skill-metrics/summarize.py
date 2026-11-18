@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Summarize local Codex skill metrics JSONL files."""
+"""Summarize observed use and labeled outcomes from local Codex JSONL logs.
+
+The CLI reads event and marker files and prints counts and micro-aggregated
+scores per skill. Unlabeled events have no confusion record and add no outcomes.
+"""
 
 from __future__ import annotations
 
@@ -84,7 +88,7 @@ def main() -> int:
         fp = stats[skill]["fp"]
         precision = ratio(tp, tp + fp)
         recall = ratio(tp, tp + fn)
-        f1 = None if precision is None or recall is None or precision + recall == 0 else 2 * precision * recall / (precision + recall)
+        f1 = ratio(2 * tp, 2 * tp + fp + fn)
         summary["skills"].append(
             {
                 "skill": skill,

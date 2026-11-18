@@ -79,7 +79,7 @@
       }
     },
     "gold_expected_skills": {
-      "type": "array",
+      "type": ["array", "null"],
       "items": {
         "type": "string"
       }

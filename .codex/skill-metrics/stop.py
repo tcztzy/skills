@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Codex Stop hook: record observed skill use and gold-set confusion."""
+"""Append a Stop event and score the current prompt against its gold label.
+
+The hook reads the transcript named by the event. Without a matching transcript,
+only the event's own fields can supply conversation evidence.
+"""
 
 from __future__ import annotations
 
@@ -31,18 +35,28 @@ def main() -> int:
     transcript_path = transcript_path_from_payload(payload)
     items = iter_transcript_items(transcript_path) if transcript_path else []
 
-    user_text = latest_message_text(items, "user")
+    session_id = payload_get(payload, "session_id", "sessionId")
+    if session_id and any(
+        row.get("type") == "session_meta" and isinstance(row.get("payload"), dict)
+        and row["payload"].get("id") not in (None, session_id)
+        for row in items
+    ):
+        transcript_path, items = None, []
+
+    user_text = payload_get(payload, "last_user_message", "lastUserMessage")
+    if not isinstance(user_text, str) or not user_text.strip():
+        user_text = latest_message_text(items, "user")
     assistant_text = payload_get(payload, "last_assistant_message", "lastAssistantMessage")
     if not isinstance(assistant_text, str) or not assistant_text.strip():
         assistant_text = latest_message_text(items, "assistant")
     observed = observed_skills_from_text(assistant_text or "", skill_names)
-    expected = expected_for_prompt(user_text) if user_text else []
+    expected = expected_for_prompt(user_text) if user_text else None
 
     event = {
         "event": "stop",
         "ts": now_iso(),
         "cwd": payload_get(payload, "cwd"),
-        "session_id": payload_get(payload, "session_id", "sessionId"),
+        "session_id": session_id,
         "transcript_path": str(transcript_path) if transcript_path else None,
         "prompt_sha256": sha256_text(user_text) if user_text else None,
         "prompt": maybe_store_text(compact_text(user_text)) if user_text else None,
@@ -50,7 +64,7 @@ def main() -> int:
         "assistant": maybe_store_text(compact_text(assistant_text or "")),
         "observed_skills": observed,
         "gold_expected_skills": expected,
-        "confusion": confusion(expected, observed) if expected else None,
+        "confusion": confusion(expected, observed) if expected is not None else None,
         "available_skill_count": len(skills),
     }
     append_jsonl(EVENT_LOG, event)

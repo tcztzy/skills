@@ -7,7 +7,6 @@
     "email": "tcztzy@gmail.com"
   },
   "metadata": {
-    "version": "1.0.0",
     "description": "Research, evaluation, developer tooling, and document workflow skills."
   },
   "plugins": [
@@ -46,7 +45,7 @@
     },
     {
       "name": "ddd",
-      "description": "Make source-code work follow Documentation-Driven Development (DDD) so each human-maintained file begins with an accurate, language-native contract that explains its purpose, system role, public surface, data flow, side effects, and constraints before implementation details.",
+      "description": "Write or review file-level contracts when adding source files, changing their public behavior, applying an established documentation-driven development policy, or migrating legacy modules. Use for explicit architecture or documentation audits and keep ordinary changes scoped to the files being edited.",
       "source": "./",
       "strict": false,
       "skills": [

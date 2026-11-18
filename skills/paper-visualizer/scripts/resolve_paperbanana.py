@@ -7,12 +7,15 @@
 # ///
 
 import argparse
+import hashlib
 import json
 import shutil
 from pathlib import Path
 from zipfile import ZipFile
 
 REPO_ID = "dwzhu/PaperBananaBench"
+DATASET_REVISION = "a876264bcd1e826a0320f805f8fb1cd705cf510f"
+ARCHIVE_SHA256 = "a980d23954c0cb47017cdaa8a9029dbea3598791fd269a457482033821927e37"
 ARCHIVE_NAME = "PaperBananaBench.zip"
 _, ARCHIVE_ROOT = REPO_ID.split("/")
 REQUIRED_FILES = ("diagram/ref.json", "plot/ref.json")
@@ -85,6 +88,7 @@ def download_archive_to_target(dataset_dir: Path) -> Path:
         hf_hub_download(
             repo_id=REPO_ID,
             repo_type="dataset",
+            revision=DATASET_REVISION,
             filename=ARCHIVE_NAME,
             local_dir=download_dir,
         )
@@ -92,6 +96,13 @@ def download_archive_to_target(dataset_dir: Path) -> Path:
     if not downloaded_archive.is_file():
         raise FileNotFoundError(
             f"Downloaded PaperBananaBench archive is missing: {downloaded_archive}"
+        )
+    with downloaded_archive.open("rb") as handle:
+        digest = hashlib.file_digest(handle, "sha256").hexdigest()
+    if digest != ARCHIVE_SHA256:
+        raise ValueError(
+            f"PaperBananaBench archive SHA-256 mismatch at {downloaded_archive}: "
+            f"expected {ARCHIVE_SHA256}, got {digest}"
         )
     return extract_archive(downloaded_archive, dataset_dir)
 

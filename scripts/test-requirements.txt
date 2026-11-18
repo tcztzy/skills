@@ -1,0 +1,30 @@
+# Python dependencies for the full CI suite (CPython 3.12). Direct test and lint tools:
+httpx2==2.16.0
+openai==2.54.0
+pydantic==2.14.1
+pysbd==0.3.4
+ruff==0.17.5
+tiktoken==0.12.0
+
+# Their resolved runtime dependencies. Install with pip -r scripts/test-requirements.txt.
+annotated-types==0.8.0
+anyio==4.15.1
+certifi==2026.10.19
+charset-normalizer==3.5.2
+colorama==0.4.6 ; platform_system == "Windows"
+distro==1.9.0
+h11==0.16.0
+httpcore==1.0.9
+httpcore2==2.16.0
+httpx==0.28.1
+idna==3.20
+jiter==0.17.0
+pydantic-core==2.50.1
+regex==2026.9.29
+requests==2.34.2
+sniffio==1.3.1
+tqdm==4.70.1
+truststore==0.10.5
+typing-extensions==4.16.0
+typing-inspection==0.4.4
+urllib3==2.8.0

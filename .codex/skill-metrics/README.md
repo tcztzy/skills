@@ -15,21 +15,28 @@ Local-only hooks for measuring skill triggering quality.
 
 ## Gold Labels
 
-Use one JSON object per line:
+Put one JSON object per line in `~/.codex/skill-metrics/gold/skills.jsonl`.
 
 ```json
 {"id":"001","prompt_sha256":"<sha256 from events.jsonl>","expected_skills":["caveman"],"notes":"Prompt explicitly requested caveman mode."}
 ```
 
-The hook records `prompt_sha256`; copy that hash into `gold/skills.jsonl` and add the expected skill names. Future matching prompts then get confusion metrics.
+Copy the hook's `prompt_sha256` and add the expected skill names. Set
+`"expected_skills":[]` when no skill applies. On future matching prompts,
+any observed skill then counts as a false positive. Unlabeled prompts have
+`gold_expected_skills: null` and `confusion: null`. In older logs an empty
+list with null confusion carries no usable label.
 
 ## Commands
 
-```bash
-python3 /Users/tcztzy/.codex/skill-metrics/summarize.py
-python3 /Users/tcztzy/.codex/skill-metrics/summarize.py --json
-python3 /Users/tcztzy/.codex/skill-metrics/sample_candidates.py imagegen --limit 25 --gold-template
-python3 /Users/tcztzy/.codex/skill-metrics/log_use.py caveman --source skill
+Run from this repository root with Python 3.10 or newer. Logs and labels live under
+`~/.codex/skill-metrics/`.
+
+```sh
+python3 .codex/skill-metrics/summarize.py
+python3 .codex/skill-metrics/summarize.py --json
+python3 .codex/skill-metrics/sample_candidates.py imagegen --limit 25 --gold-template
+python3 .codex/skill-metrics/log_use.py caveman --source skill
 ```
 
 Set `SKILL_METRICS_STORE_TEXT=0` before launching Codex to store only hashes instead of prompt/assistant text.
@@ -38,4 +45,11 @@ Set `SKILL_METRICS_STORE_TEXT=0` before launching Codex to store only hashes ins
 
 Candidate skills are hints, not expected labels. Each new event stores `candidate_skill_matches` with a score and reasons, while the legacy `candidate_expected_skills` field is kept for old readers. A high candidate count means "worth sampling", not "should have triggered".
 
-Codex hooks do not expose a native `skill_activated` field. Observed skills are inferred from explicit `$skill` mentions, assistant text patterns, and optional `log_use.py` markers. Precision/recall become meaningful only after `gold/skills.jsonl` has labels.
+The Stop hook uses the transcript path supplied by its event. A missing path or
+a transcript that declares a different session ID leaves only the event's own
+messages available for scoring.
+
+Observed skills are inferred from explicit `$skill` mentions and assistant text
+patterns. The summary counts explicit `log_use.py` markers separately. Compare
+scored outcomes with the underlying task before using them in a retirement
+decision.

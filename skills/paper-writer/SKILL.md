@@ -50,7 +50,8 @@ For GPT drafting or substantive revision, read [references/gpt.md](references/gp
 
 5. **Draft the manuscript**
    - Write section by section.
-   - When revising prose with repeated caveats, stacked hedges, or defensive framing, use `anti-defensive-writing` for the affected text; preserve scientific facts, real uncertainty, and necessary methodological and scope qualifications.
+   - When revising prose with repeated caveats, stacked hedges, or defensive framing, use `anti-defensive-writing` for the affected text. Combine repeated qualifications where the meaning is already clear.
+   - Check each revision against its source. Preserve numbers, units, comparison direction, uncertainty and tested scope. Keep adverse results and distinguish an observed absence from an outcome the study never measured. For maintenance, try the [qualified revision cases](tests/qualified-revision-cases.json).
    - 逐句分类和原稿主张跟踪用 `scripts/audit_defensive_writing.py`；运行前读[脚本说明](references/defensive-writing-audit.md)中的外部调用批准、账本要求和指标边界。其 `--argument-annotations` 模式可离线核验并汇总锚定原句的论证关系标注；这是待验证的扩展，须固定比较单位和分母、保留不确定性并检查事实守恒，不能用作写作总分。
    - Cite related work using existing references only. If new citations are needed, follow `references/citation-workflow.md` and the bundled bibliography helper in `references/bibliography-harvest.md`.
    - Do not invent results or citations.
